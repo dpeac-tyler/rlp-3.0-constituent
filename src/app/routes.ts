@@ -157,4 +157,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+], {
+  basename: "/rlp-3.0-constituent"
+});
