@@ -15,6 +15,12 @@ import {
   Phone,
   Mail,
   Building2,
+  RefreshCw,
+  CreditCard,
+  CheckCircle2,
+  Paperclip,
+  FileSearch,
+  Download,
 } from "lucide-react";
 
 // ── P.E.T.E.R. Government Seal ────────────────────────────────────────────────
@@ -202,6 +208,7 @@ interface Message {
   highlight?: string;
   isSearching?: boolean;
   prefillData?: Record<string, string>;
+  downloadLink?: { label: string; filename: string; content: string };
 }
 
 interface QuickReply {
@@ -219,6 +226,7 @@ interface Article {
 // ── Conversation Flow Data ─────────────────────────────────────────────────────
 
 const MAIN_MENU_REPLIES: QuickReply[] = [
+  { label: "Renew My License with P.E.T.E.R.", action: "renew_license", icon: <RefreshCw size={14} /> },
   { label: "Apply for a Permit", action: "apply_permit", icon: <FileText size={14} /> },
   { label: "Application Status", action: "app_status", icon: <Search size={14} /> },
   { label: "Fees & Payments", action: "fees", icon: <DollarSign size={14} /> },
@@ -276,6 +284,8 @@ export function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [isReadingDoc, setIsReadingDoc] = useState(false);
+  const [paymentMode, setPaymentMode] = useState(false);
   const [prefill, setPrefill] = useState<Record<string, string>>({});
   const [hasGreeted, setHasGreeted] = useState(false);
   const [contextMode, setContextMode] = useState<string | null>(null);
@@ -286,7 +296,7 @@ export function ChatBot() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isTyping, isSearching]);
+  }, [messages, isTyping, isSearching, isReadingDoc]);
 
   const addSystemMessage = useCallback(
     (content: string, extras?: Partial<Message>, delay = 800) => {
@@ -300,7 +310,7 @@ export function ChatBot() {
   );
 
   const addSearchThenRespond = useCallback(
-    (content: string, extras?: Partial<Message>) => {
+    (content: string, extras?: Partial<Message>, searchMs = 1500, typingMs = 900) => {
       setIsSearching(true);
       setTimeout(() => {
         setIsSearching(false);
@@ -308,8 +318,23 @@ export function ChatBot() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages((prev) => [...prev, createMsg("system", content, extras)]);
-        }, 900);
-      }, 1500);
+        }, typingMs);
+      }, searchMs);
+    },
+    []
+  );
+
+  const addReadDocThenRespond = useCallback(
+    (content: string, extras?: Partial<Message>) => {
+      setIsReadingDoc(true);
+      setTimeout(() => {
+        setIsReadingDoc(false);
+        setIsTyping(true);
+        setTimeout(() => {
+          setIsTyping(false);
+          setMessages((prev) => [...prev, createMsg("system", content, extras)]);
+        }, 1000);
+      }, 3200);
     },
     []
   );
@@ -796,6 +821,277 @@ export function ChatBot() {
         break;
       }
 
+      // ── Renewal flow ────────────────────────────────────────────────────────
+
+      case "renew_license":
+        addSearchThenRespond(
+          "I can help you renew your license. Based on your account, the following licenses are eligible for renewal:\n\nSelect a license to begin.",
+          {
+            quickReplies: [
+              { label: "LIC-2024-00876 — Type for Renewal-Workflow-Payment (Expired)", action: "renew_select_876" },
+              { label: "LIC-2024-00789 — DNR Business (Expiring in 54 days)", action: "renew_select_789" },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_select_876": {
+        setPrefill({
+          renewLicenseNumber: "LIC-2024-00876",
+          renewLicenseType: "Type for Renewal-Workflow-Payment",
+          renewFee: "$175.00",
+          renewAgency: "Department of Professional & Financial Regulation",
+          renewNewExpiration: "08/22/2026",
+        });
+        addSystemMessage(
+          "You've selected:\n\n  License Number: LIC-2024-00876\n  Type: Type for Renewal-Workflow-Payment\n  Status: Expired\n  Original Expiration: 08/22/2025\n  Issuing Agency: Department of Professional & Financial Regulation\n\nThis license is eligible for renewal. I will now collect the required documentation.\n\n  Renewal Fee: $175.00\n  Renewal Term: 1 Year",
+          {
+            quickReplies: [
+              { label: "Continue to Documents", action: "renew_doc_start", icon: <FileText size={14} /> },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+      }
+
+      case "renew_select_789": {
+        setPrefill({
+          renewLicenseNumber: "LIC-2024-00789",
+          renewLicenseType: "DNR Business",
+          renewFee: "$125.00",
+          renewAgency: "Bureau of Consumer Credit Protection",
+          renewNewExpiration: "10/22/2026",
+        });
+        addSystemMessage(
+          "You've selected:\n\n  License Number: LIC-2024-00789\n  Type: DNR Business\n  Status: Expiring in 54 days\n  Expiration: 10/22/2025\n  Issuing Agency: Bureau of Consumer Credit Protection\n\nThis license is eligible for early renewal. I will now collect the required documentation.\n\n  Renewal Fee: $125.00\n  Renewal Term: 1 Year",
+          {
+            quickReplies: [
+              { label: "Continue to Documents", action: "renew_doc_start", icon: <FileText size={14} /> },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+      }
+
+      case "renew_doc_start":
+        addSystemMessage(
+          "Document 1 of 2 required.\n\nPlease upload your Test Results PDF.\n\n  Requirements:\n  -- Dated within the last 12 months\n  -- Must include examiner's signature and official seal\n  -- PDF format, maximum 10MB\n\nSelect \"Upload\" to attach your file.",
+          {
+            quickReplies: [
+              { label: "Upload Test Results PDF", action: "renew_doc_test_upload", icon: <Paperclip size={14} /> },
+              { label: "I don't have this document", action: "renew_doc_missing" },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_doc_test_upload":
+        addReadDocThenRespond(
+          "✓ Test Results PDF read and verified — examiner signature confirmed, date within required window.\n\nDocument 2 of 2 required.\n\nPlease upload your Supervision Proof document.\n\n  Requirements:\n  -- Letter from supervising official on agency letterhead\n  -- Signed and dated within the last 6 months\n  -- PDF or JPEG format, maximum 10MB",
+          {
+            quickReplies: [
+              { label: "Upload Supervision Proof", action: "renew_doc_supervision_upload", icon: <Paperclip size={14} /> },
+              { label: "I don't have this document", action: "renew_doc_missing" },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_doc_supervision_upload":
+        addReadDocThenRespond(
+          `✓ Supervision Proof read and verified — supervising official signature and agency letterhead confirmed.\n\nAll required documents have been collected. Please review your renewal application:\n\n  License: ${prefill.renewLicenseNumber ?? "N/A"}\n  Type: ${prefill.renewLicenseType ?? "N/A"}\n  Applicant: Boring Company 155\n  Issuing Agency: ${prefill.renewAgency ?? "N/A"}\n  Documents Collected: Test Results PDF ✓, Supervision Proof ✓\n  Renewal Term: 1 Year\n  New Expiration: ${prefill.renewNewExpiration ?? "N/A"}\n  Renewal Fee: ${prefill.renewFee ?? "N/A"}\n\nPayment is required before this application can be submitted for agency review.`,
+          {
+            quickReplies: [
+              { label: `Proceed to Payment — ${prefill.renewFee ?? "fee"}`, action: "renew_pay_now", icon: <DollarSign size={14} /> },
+              { label: "Cancel", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_doc_missing":
+        addSystemMessage(
+          "This document is required to process your renewal. Without it the agency cannot approve the application.\n\nOptions available to you:\n\n  1. Contact the agency directly to request an extension or alternative documentation\n  2. Escalate to a support representative for guidance\n  3. Return to the main menu and try again when you have the document ready",
+          {
+            quickReplies: [
+              { label: "Escalate to Support", action: "escalate", icon: <Headphones size={14} /> },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_submit": {
+        const renewRef = `RNW-2026-${Math.floor(10000 + Math.random() * 90000)}`;
+        const submitDate = new Date().toLocaleDateString();
+        const submitTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        setPaymentMode(false);
+        const pdfContent = [
+          "RENEWAL APPLICATION CONFIRMATION",
+          "=".repeat(40),
+          `Generated: ${submitDate} at ${submitTime}`,
+          "",
+          "APPLICANT INFORMATION",
+          `License Number:  ${prefill.renewLicenseNumber ?? "N/A"}`,
+          `License Type:    ${prefill.renewLicenseType ?? "N/A"}`,
+          `Applicant:       Boring Company 155`,
+          "",
+          "RENEWAL DETAILS",
+          `Reference:       ${renewRef}`,
+          `Submitted To:    ${prefill.renewAgency ?? "N/A"}`,
+          `Date Submitted:  ${submitDate}`,
+          `New Expiration:  ${prefill.renewNewExpiration ?? "N/A"}`,
+          `Renewal Term:    1 Year`,
+          "",
+          "PAYMENT RECEIPT",
+          `Transaction ID:  ${prefill.txnId ?? "N/A"}`,
+          `Amount Paid:     ${prefill.renewFee ?? "N/A"}`,
+          `Payment Method:  Visa ****4832`,
+          `Payment Date:    ${prefill.paymentDate ?? submitDate}`,
+          "",
+          "STATUS: Submitted for Agency Review",
+          "Estimated Processing: 3–5 business days",
+          "Confirmation sent to: boring@boringcompany.com",
+        ].join("\n");
+        addSearchThenRespond(
+          `Renewal application submitted to ${prefill.renewAgency ?? "the agency"}.\n\n  Reference: ${renewRef}\n  License: ${prefill.renewLicenseNumber ?? "N/A"}\n  Date Submitted: ${submitDate}\n  Status: Submitted for Review\n  Estimated Processing: 3 -- 5 business days\n\nA confirmation has been sent to boring@boringcompany.com. You can track progress under Submissions.`,
+          {
+            quickReplies: [
+              { label: "View Submissions", action: "nav_submissions", icon: <ExternalLink size={14} /> },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+            downloadLink: {
+              label: `Download Confirmation — ${renewRef}.pdf`,
+              filename: `renewal-confirmation-${renewRef}.pdf`,
+              content: pdfContent,
+            },
+          },
+          2000,
+          1000
+        );
+        break;
+      }
+
+      // ── Payment flow ─────────────────────────────────────────────────────────
+
+      case "renew_pay_now":
+        setPaymentMode(true);
+        addSystemMessage(
+          "Select your payment method.",
+          {
+            quickReplies: [
+              { label: "Visa card on file (****4832)", action: "renew_pay_card_on_file", icon: <CreditCard size={14} /> },
+              { label: "New Credit / Debit Card", action: "renew_pay_new_card" },
+              { label: "ACH Bank Transfer", action: "renew_pay_ach" },
+              { label: "Cancel", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_pay_card_on_file":
+        addSystemMessage(
+          `Please confirm the following payment:\n\n  Amount: ${prefill.renewFee ?? "N/A"}\n  Card: Visa ending in 4832\n  Billing Name: Boring Company 155\n  Payable To: ${prefill.renewAgency ?? "N/A"}\n  Description: Renewal Fee — ${prefill.renewLicenseNumber ?? "N/A"}`,
+          {
+            quickReplies: [
+              { label: `Confirm Payment of ${prefill.renewFee ?? "fee"}`, action: "renew_pay_confirm", icon: <CheckCircle2 size={14} /> },
+              { label: "Use a Different Method", action: "renew_pay_now" },
+              { label: "Cancel", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_pay_confirm": {
+        const txnId = `TXN-${Math.floor(1000000 + Math.random() * 9000000)}`;
+        const now = new Date();
+        setPrefill((prev) => ({
+          ...prev,
+          txnId,
+          paymentDate: now.toLocaleDateString(),
+        }));
+        addSearchThenRespond(
+          `Payment processed successfully.\n\n  Transaction ID: ${txnId}\n  Amount Charged: ${prefill.renewFee ?? "N/A"}\n  Card: Visa ****4832\n  Date: ${now.toLocaleDateString()}\n  Time: ${now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}\n  Payee: ${prefill.renewAgency ?? "N/A"}\n  Description: Renewal Fee — ${prefill.renewLicenseNumber ?? "N/A"}\n\nPayment received. Your application is now ready to be submitted to the agency for review.`,
+          {
+            quickReplies: [
+              { label: "Submit Renewal to Agency", action: "renew_submit", icon: <ExternalLink size={14} /> },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          },
+          2200,
+          1200
+        );
+        break;
+      }
+
+      case "renew_pay_later":
+        setPaymentMode(false);
+        addSystemMessage(
+          `No problem. The ${prefill.renewFee ?? "renewal fee"} has been added to your Shopping Cart. You can complete payment at any time from the Shopping Cart section.\n\nYour renewal application will remain in a \"Payment Pending\" status until the fee is received.`,
+          {
+            quickReplies: [
+              { label: "Go to Shopping Cart", action: "nav_shopping_cart", icon: <ExternalLink size={14} /> },
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_pay_new_card":
+        addSystemMessage(
+          "For security purposes, new card entry is handled through the secure payment portal.\n\nSelecting \"Proceed\" will direct you to the portal with your renewal reference pre-populated. Your session and application data will be preserved.",
+          {
+            quickReplies: [
+              { label: "Proceed to Payment Portal", action: "renew_pay_portal", icon: <ExternalLink size={14} /> },
+              { label: "Use Card on File Instead", action: "renew_pay_card_on_file", icon: <CreditCard size={14} /> },
+              { label: "Cancel", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_pay_ach":
+        addSystemMessage(
+          "ACH bank transfer is handled through the secure payment portal. You will need your bank routing number and account number.\n\nNote: ACH processing takes 1 -- 3 business days. Your renewal will remain in \"Payment Pending\" status until funds clear.",
+          {
+            quickReplies: [
+              { label: "Proceed to Payment Portal", action: "renew_pay_portal", icon: <ExternalLink size={14} /> },
+              { label: "Use Card on File Instead", action: "renew_pay_card_on_file", icon: <CreditCard size={14} /> },
+              { label: "Cancel", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
+      case "renew_pay_portal":
+        setPaymentMode(false);
+        addSystemMessage(
+          `Redirecting to the secure payment portal. In production, this navigates to the payment portal with reference ${prefill.renewRef ?? "RNW-2026-XXXXX"} and the ${prefill.renewFee ?? "renewal fee"} pre-populated.`,
+          {
+            quickReplies: [
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          },
+          1000
+        );
+        break;
+
+      case "nav_shopping_cart":
+        addSystemMessage(
+          "Routing to the Shopping Cart. In production, this navigates to /shopping-cart/cart with your pending payment loaded.",
+          {
+            quickReplies: [
+              { label: "Return to Main Menu", action: "main_menu" },
+            ],
+          }
+        );
+        break;
+
       default:
         addSystemMessage(
           "That selection was not recognized. Please choose from the available options below.",
@@ -948,6 +1244,29 @@ export function ChatBot() {
             />
           </div>
 
+          {/* Payment mode banner */}
+          {paymentMode && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "7px 16px",
+                backgroundColor: "#1A4731",
+                fontSize: 11,
+                fontWeight: 600,
+                color: "#D1FAE5",
+                letterSpacing: "0.5px",
+                fontFamily: "'Roboto', sans-serif",
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="#D1FAE5" />
+              </svg>
+              SECURE PAYMENT — All transactions are encrypted
+            </div>
+          )}
+
           {/* Messages Area */}
           <div
             ref={scrollRef}
@@ -958,9 +1277,10 @@ export function ChatBot() {
               display: "flex",
               flexDirection: "column",
               gap: 12,
-              backgroundColor: "#F7F9FC",
+              backgroundColor: paymentMode ? "#F0FAF5" : "#F7F9FC",
               minHeight: 280,
               maxHeight: 400,
+              transition: "background-color 0.4s ease",
             }}
           >
             {messages.map((msg) => (
@@ -1124,6 +1444,56 @@ export function ChatBot() {
                   </div>
                 )}
 
+                {/* Download Link */}
+                {msg.downloadLink && (
+                  <div style={{ marginLeft: 36, marginTop: 8 }}>
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const blob = new Blob([msg.downloadLink!.content], { type: "text/plain" });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = msg.downloadLink!.filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                      }}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 7,
+                        padding: "8px 12px",
+                        backgroundColor: "#F0FAF5",
+                        borderRadius: 6,
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "#1A4731",
+                        textDecoration: "none",
+                        borderLeftWidth: 3,
+                        borderLeftStyle: "solid",
+                        borderLeftColor: "#2E8540",
+                        borderTopWidth: 0,
+                        borderTopStyle: "none",
+                        borderTopColor: "transparent",
+                        borderRightWidth: 0,
+                        borderRightStyle: "none",
+                        borderRightColor: "transparent",
+                        borderBottomWidth: 0,
+                        borderBottomStyle: "none",
+                        borderBottomColor: "transparent",
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#DCFCE7")}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#F0FAF5")}
+                    >
+                      <Download size={12} color="#2E8540" />
+                      {msg.downloadLink.label}
+                    </a>
+                  </div>
+                )}
+
                 {/* Quick Replies */}
                 {msg.quickReplies &&
                   msg.id === messages[messages.length - 1]?.id && (
@@ -1200,6 +1570,28 @@ export function ChatBot() {
                   )}
               </div>
             ))}
+
+            {/* Reading Document State */}
+            {isReadingDoc && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "8px 12px",
+                  backgroundColor: "#EEF4FF",
+                  borderRadius: 6,
+                  fontSize: 12,
+                  color: "#0A3161",
+                  fontWeight: 500,
+                  letterSpacing: "0.2px",
+                }}
+              >
+                <FileSearch size={14} className="animate-pulse" />
+                <span>Reading and analyzing document...</span>
+                <Loader2 size={13} className="animate-spin" />
+              </div>
+            )}
 
             {/* Searching State */}
             {isSearching && (

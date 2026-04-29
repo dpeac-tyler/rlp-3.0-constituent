@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import heroBg from "@/assets/28c9e8735508f793aebc982b410fd632f2bdc8d0.png";
 import { useIsMobile } from "../hooks/useIsMobile";
 
@@ -24,7 +25,10 @@ export function PageShell({ title, children, heroHeight = 80, titleStyle }: Page
           backgroundPosition: "left center",
         }}
       >
-        <h1
+        <motion.h1
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           style={{
             fontFamily: "'Roboto', sans-serif",
             color: "#1B1B1B",
@@ -36,16 +40,19 @@ export function PageShell({ title, children, heroHeight = 80, titleStyle }: Page
           }}
         >
           {title}
-        </h1>
+        </motion.h1>
       </div>
 
       {/* Content area below hero */}
-      <div
+      <motion.div
         className="flex-1"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.28, ease: "easeOut", delay: 0.05 }}
         style={{ backgroundColor: "#FAFAFA", padding: isMobile ? 12 : 20 }}
       >
         {children}
-      </div>
+      </motion.div>
     </>
   );
 }

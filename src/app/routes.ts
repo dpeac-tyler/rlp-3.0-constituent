@@ -158,5 +158,5 @@ export const router = createBrowserRouter([
     ],
   },
 ], {
-  basename: "/rlp-3.0-constituent"
+  basename: import.meta.env.BASE_URL,
 });

@@ -3,8 +3,8 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig({
-  base: '/rlp-3.0-constituent/',
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/rlp-3.0-constituent/' : '/',
   plugins: [
     react(),
     tailwindcss(),
@@ -18,4 +18,4 @@ export default defineConfig({
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
-})
+}))

@@ -154,12 +154,44 @@ const COL_WIDTHS = ["18%", "15%", "15%", "10%", "13%", "14%", "15%"];
 
 /* ── Status colors ─────────────────────────────────────── */
 
-const STATUS_COLOR: Record<string, string> = {
-  Active: "#2E8540",
-  Expired: "#D54309",
-  Suspended: "#E5A000",
-  Revoked: "#B50909",
+const STATUS_STYLE: Record<string, { color: string; bg: string; dot: string }> = {
+  Active: { color: "#2E8540", bg: "#F0F7F0", dot: "#2E8540" },
+  Expired: { color: "#D54309", bg: "#FEF2EE", dot: "#D54309" },
+  Suspended: { color: "#B66A00", bg: "#FFF8E6", dot: "#E5A000" },
+  Revoked: { color: "#B50909", bg: "#FFF0F0", dot: "#B50909" },
 };
+
+function StatusBadge({ status }: { status: string }) {
+  const s = STATUS_STYLE[status] ?? { color: "#565C65", bg: "#F0F0F0", dot: "#565C65" };
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 5,
+        padding: "3px 10px",
+        borderRadius: 100,
+        backgroundColor: s.bg,
+        fontFamily: "'Roboto', sans-serif",
+        fontSize: 12,
+        fontWeight: 600,
+        color: s.color,
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          backgroundColor: s.dot,
+          flexShrink: 0,
+        }}
+      />
+      {status}
+    </span>
+  );
+}
 
 /* ── Reusable border objects (longhand only) ───────────── */
 
@@ -642,16 +674,13 @@ export function CertificationsPage() {
                         <td
                           data-label="Status"
                           style={{
-                            padding: "14px 12px",
+                            padding: "10px 12px",
                             backgroundColor: bg,
-                            color: STATUS_COLOR[row.status] || "#1B1B1B",
                             lineHeight: "22px",
-                            wordWrap: "break-word",
-                            overflowWrap: "break-word",
                             ...cellBorder,
                           }}
                         >
-                          {row.status}
+                          <StatusBadge status={row.status} />
                         </td>
                         <td
                           data-label="Start Date"
