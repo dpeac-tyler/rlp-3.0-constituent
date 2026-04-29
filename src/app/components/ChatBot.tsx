@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   X,
   Send,
@@ -281,6 +282,8 @@ function createMsg(
 
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isWaving, setIsWaving] = useState(false);
+  const [showRipple, setShowRipple] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -297,6 +300,19 @@ export function ChatBot() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isTyping, isSearching, isReadingDoc]);
+
+  // One-time welcome wave on mount
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setShowRipple(true);
+      setIsWaving(true);
+      setTimeout(() => {
+        setIsWaving(false);
+        setTimeout(() => setShowRipple(false), 800);
+      }, 900);
+    }, 1500);
+    return () => clearTimeout(t);
+  }, []);
 
   const addSystemMessage = useCallback(
     (content: string, extras?: Partial<Message>, delay = 800) => {
@@ -1789,70 +1805,104 @@ export function ChatBot() {
       )}
 
       {/* Floating Launch Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label={
-          isOpen
-            ? "Close P.E.T.E.R. guidance panel"
-            : "Open P.E.T.E.R. guidance panel"
-        }
+      <div
         style={{
           position: "fixed",
           bottom: 24,
           right: 24,
-          width: 58,
-          height: 58,
-          borderRadius: "50%",
-          background: isOpen
-            ? "#4B5563"
-            : "linear-gradient(135deg, #0A3161 0%, #112E51 100%)",
-          borderTopWidth: 0,
-          borderTopStyle: "none",
-          borderTopColor: "transparent",
-          borderRightWidth: 0,
-          borderRightStyle: "none",
-          borderRightColor: "transparent",
-          borderBottomWidth: 0,
-          borderBottomStyle: "none",
-          borderBottomColor: "transparent",
-          borderLeftWidth: 0,
-          borderLeftStyle: "none",
-          borderLeftColor: "transparent",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: isOpen
-            ? "0 4px 12px rgba(0,0,0,0.2)"
-            : "0 4px 20px rgba(10,49,97,0.35), 0 0 0 3px rgba(10,49,97,0.08)",
+          width: 72,
+          height: 72,
           zIndex: 10000,
-          transition: "transform 0.2s, box-shadow 0.2s",
         }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.06)";
-          if (!isOpen) {
-            e.currentTarget.style.boxShadow =
-              "0 6px 24px rgba(10,49,97,0.4), 0 0 0 4px rgba(10,49,97,0.12)";
-          }
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-          if (!isOpen) {
-            e.currentTarget.style.boxShadow =
-              "0 4px 20px rgba(10,49,97,0.35), 0 0 0 3px rgba(10,49,97,0.08)";
-          }
-        }}
-        onFocus={(e) =>
-          (e.currentTarget.style.outline = "3px solid #73B3E7")
-        }
-        onBlur={(e) => (e.currentTarget.style.outline = "none")}
       >
-        {isOpen ? (
-          <X size={22} color="#FFFFFF" />
-        ) : (
-          <PeterSealLauncher size={32} />
-        )}
-      </button>
+        {/* Ripple rings — one-time welcome pulse */}
+        <AnimatePresence>
+          {showRipple && !isOpen && (
+            <>
+              <motion.div
+                initial={{ scale: 1, opacity: 0.55 }}
+                animate={{ scale: 1.9, opacity: 0 }}
+                exit={{}}
+                transition={{ duration: 0.9, ease: "easeOut" }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "50%",
+                  background: "rgba(10,49,97,0.22)",
+                  pointerEvents: "none",
+                }}
+              />
+              <motion.div
+                initial={{ scale: 1, opacity: 0.35 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                exit={{}}
+                transition={{ duration: 1.1, ease: "easeOut", delay: 0.1 }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "50%",
+                  background: "rgba(10,49,97,0.12)",
+                  pointerEvents: "none",
+                }}
+              />
+            </>
+          )}
+        </AnimatePresence>
+
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={
+            isOpen
+              ? "Close P.E.T.E.R. guidance panel"
+              : "Open P.E.T.E.R. guidance panel"
+          }
+          animate={
+            isWaving && !isOpen
+              ? { rotate: [0, -18, 18, -14, 14, -8, 8, 0], scale: [1, 1.08, 1.08, 1.05, 1.05, 1.02, 1.02, 1] }
+              : { rotate: 0, scale: 1 }
+          }
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.95 }}
+          onFocus={(e) =>
+            (e.currentTarget.style.outline = "3px solid #73B3E7")
+          }
+          onBlur={(e) => (e.currentTarget.style.outline = "none")}
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "50%",
+            background: isOpen
+              ? "#4B5563"
+              : "linear-gradient(135deg, #0A3161 0%, #112E51 100%)",
+            borderTopWidth: 0,
+            borderTopStyle: "none",
+            borderTopColor: "transparent",
+            borderRightWidth: 0,
+            borderRightStyle: "none",
+            borderRightColor: "transparent",
+            borderBottomWidth: 0,
+            borderBottomStyle: "none",
+            borderBottomColor: "transparent",
+            borderLeftWidth: 0,
+            borderLeftStyle: "none",
+            borderLeftColor: "transparent",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: isOpen
+              ? "0 4px 12px rgba(0,0,0,0.2)"
+              : "0 4px 20px rgba(10,49,97,0.35), 0 0 0 3px rgba(10,49,97,0.08)",
+          }}
+        >
+          {isOpen ? (
+            <X size={26} color="#FFFFFF" />
+          ) : (
+            <PeterSealLauncher size={40} />
+          )}
+        </motion.button>
+      </div>
 
       {/* CSS Animations */}
       <style>{`
