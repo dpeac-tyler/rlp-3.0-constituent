@@ -29,7 +29,7 @@ const MOCK_DATA: Submission[] = [
     applicationName: "FBLA - Company",
     submissionNumber: "700024500",
     constituentName: "Licensing",
-    status: "Approved",
+    status: "Pending",
     lastUpdated: "07/08/2025",
     isPacket: true,
     children: [
@@ -550,7 +550,22 @@ export function SubmissionsTable() {
                       overflowWrap: "break-word",
                     }}
                   >
-                    {row.applicationName}
+                    {row.isPacket ? (
+                      <span style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                        {row.applicationName}
+                        <span style={{
+                          display: "inline-block",
+                          fontSize: 11,
+                          color: "#fff",
+                          textTransform: "uppercase",
+                          backgroundColor: "#5c5c5c",
+                          borderRadius: 2,
+                          padding: "1px 6px",
+                          fontWeight: 700,
+                          letterSpacing: "0.04em",
+                        }}>Primary</span>
+                      </span>
+                    ) : row.applicationName}
                   </td>
                   {/* Submission Number */}
                   <td
