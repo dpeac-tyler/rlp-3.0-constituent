@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Download, ExternalLink, Eye, Minus, Plus } from "lucide-react";
+import { Download, ExternalLink, Eye, Minus, Plus, UserPen } from "lucide-react";
 import { useIsMobile } from "../hooks/useIsMobile";
 
 const SESSION_KEY = "icon-key-accordion-open";
@@ -21,6 +21,10 @@ const DEFAULT_ITEMS: IconItem[] = [
   {
     icon: <Eye size={16} color="#FFFFFF" />,
     label: "View Submission",
+  },
+  {
+    icon: <UserPen size={16} color="#FFFFFF" />,
+    label: "Reassign Applicant",
   },
 ];
 

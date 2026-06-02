@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Download, ExternalLink, Eye } from "lucide-react";
+import { Download, ExternalLink, Eye, UserPen } from "lucide-react";
 
 interface ChildSubmission {
   id: string;
@@ -28,7 +28,7 @@ const MOCK_DATA: Submission[] = [
     licenseType: "Firearms Business License",
     applicationName: "FBLA - Company",
     submissionNumber: "700024500",
-    constituentName: "Licensing",
+    constituentName: "Boring Company 155",
     status: "Pending",
     lastUpdated: "07/08/2025",
     isPacket: true,
@@ -37,7 +37,7 @@ const MOCK_DATA: Submission[] = [
         id: "1-1",
         applicationName: "FBLA - Owner",
         submissionNumber: "700024501",
-        constituentName: "",
+        constituentName: "Jerome Tinder",
         status: "Pending",
         lastUpdated: "07/08/2025",
       },
@@ -45,7 +45,7 @@ const MOCK_DATA: Submission[] = [
         id: "1-2",
         applicationName: "FBLA - Manager",
         submissionNumber: "700024502",
-        constituentName: "",
+        constituentName: "Shiela Benefits",
         status: "Pending",
         lastUpdated: "07/08/2025",
       },
@@ -53,8 +53,8 @@ const MOCK_DATA: Submission[] = [
         id: "1-3",
         applicationName: "FBLA - Officer",
         submissionNumber: "700024503",
-        constituentName: "",
-        status: "Pending",
+        constituentName: "Ricky Schuler",
+        status: "Denied",
         lastUpdated: "07/08/2025",
       },
     ],
@@ -497,7 +497,7 @@ export function SubmissionsTable() {
                           cursor: "pointer",
                           fontFamily: "'Roboto', sans-serif",
                           fontSize: 14,
-                          color: "#005EA2",
+                          color: "#1B1B1B",
                           display: "inline-flex",
                           alignItems: "center",
                           gap: 6,
@@ -512,7 +512,7 @@ export function SubmissionsTable() {
                           height: 18,
                           borderWidth: 1,
                           borderStyle: "solid",
-                          borderColor: "#005EA2",
+                          borderColor: "#1B1B1B",
                           borderRadius: 2,
                           fontSize: 14,
                           lineHeight: 1,
@@ -707,80 +707,51 @@ export function SubmissionsTable() {
                           justifyContent: "center",
                           cursor: "pointer",
                           padding: 0,
-                          borderTopWidth: 0,
-                          borderTopStyle: "solid",
-                          borderTopColor: "transparent",
-                          borderRightWidth: 0,
-                          borderRightStyle: "solid",
-                          borderRightColor: "transparent",
-                          borderBottomWidth: 0,
-                          borderBottomStyle: "solid",
-                          borderBottomColor: "transparent",
-                          borderLeftWidth: 0,
-                          borderLeftStyle: "solid",
-                          borderLeftColor: "transparent",
+                          border: "none",
                         }}
                       >
                         <Eye size={16} color="#FFFFFF" />
                       </button>
-                      <button
-                        title="Download Certificate"
-                        style={{
-                          width: 28,
-                          height: 28,
-                          minWidth: 28,
-                          backgroundColor: "#162E51",
-                          borderRadius: 4,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                          padding: 0,
-                          borderTopWidth: 0,
-                          borderTopStyle: "solid",
-                          borderTopColor: "transparent",
-                          borderRightWidth: 0,
-                          borderRightStyle: "solid",
-                          borderRightColor: "transparent",
-                          borderBottomWidth: 0,
-                          borderBottomStyle: "solid",
-                          borderBottomColor: "transparent",
-                          borderLeftWidth: 0,
-                          borderLeftStyle: "solid",
-                          borderLeftColor: "transparent",
-                        }}
-                      >
-                        <Download size={16} color="#FFFFFF" />
-                      </button>
-                      <button
-                        title="Renew Now"
-                        style={{
-                          width: 28,
-                          height: 28,
-                          minWidth: 28,
-                          backgroundColor: "#162E51",
-                          borderRadius: 4,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                          padding: 0,
-                          borderTopWidth: 0,
-                          borderTopStyle: "solid",
-                          borderTopColor: "transparent",
-                          borderRightWidth: 0,
-                          borderRightStyle: "solid",
-                          borderRightColor: "transparent",
-                          borderBottomWidth: 0,
-                          borderBottomStyle: "solid",
-                          borderBottomColor: "transparent",
-                          borderLeftWidth: 0,
-                          borderLeftStyle: "solid",
-                          borderLeftColor: "transparent",
-                        }}
-                      >
-                        <ExternalLink size={16} color="#FFFFFF" />
-                      </button>
+                      {!row.isPacket && (
+                        <>
+                          <button
+                            title="Download Certificate"
+                            style={{
+                              width: 28,
+                              height: 28,
+                              minWidth: 28,
+                              backgroundColor: "#162E51",
+                              borderRadius: 4,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                              padding: 0,
+                              border: "none",
+                            }}
+                          >
+                            <Download size={16} color="#FFFFFF" />
+                          </button>
+                          <button
+                            title="Renew Now"
+                            style={{
+                              width: 28,
+                              height: 28,
+                              minWidth: 28,
+                              backgroundColor: "#162E51",
+                              borderRadius: 4,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                              padding: 0,
+                              border: "none",
+                            }}
+                          >
+                            <ExternalLink size={16} color="#FFFFFF" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -799,6 +770,11 @@ export function SubmissionsTable() {
                         <button title="View Submission" style={{ width: 28, height: 28, minWidth: 28, backgroundColor: "#162E51", borderRadius: 4, display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0, border: "none" }}>
                           <Eye size={16} color="#FFFFFF" />
                         </button>
+                        {child.status === "Denied" && (
+                          <button title="Reassign Applicant" style={{ width: 28, height: 28, minWidth: 28, backgroundColor: "#162E51", borderRadius: 4, display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0, border: "none" }}>
+                            <UserPen size={16} color="#FFFFFF" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
