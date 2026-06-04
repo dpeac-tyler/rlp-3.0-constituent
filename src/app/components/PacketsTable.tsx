@@ -36,7 +36,7 @@ const MOCK_DATA: Packet[] = [
         applicationName: "FBLA - Owner",
         submissionNumber: "700024501",
         constituentName: "Jerome Tinder",
-        status: "Pending",
+        status: "Awaiting Application",
         lastUpdated: "07/08/2025",
       },
       {
@@ -44,7 +44,7 @@ const MOCK_DATA: Packet[] = [
         applicationName: "FBLA - Manager",
         submissionNumber: "700024502",
         constituentName: "Shiela Benefits",
-        status: "Pending",
+        status: "Awaiting Application",
         lastUpdated: "07/08/2025",
       },
       {
@@ -70,10 +70,11 @@ const COLUMNS = [
 
 const STATUS_COLOR: Record<string, string> = {
   Approved: "#2E8540",
-  Pending: "#E5A000",
+  Pending: "#8F5800",
   Rejected: "#D54309",
   Denied: "#B50909",
   Draft: "#71767A",
+  "Awaiting Application": "#8F5800",
 };
 
 const childCellStyle: React.CSSProperties = {
