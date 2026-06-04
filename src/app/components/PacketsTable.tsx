@@ -36,7 +36,7 @@ const MOCK_DATA: Packet[] = [
         applicationName: "FBLA - Owner",
         submissionNumber: "700024501",
         constituentName: "Jerome Tinder",
-        status: "Awaiting Application",
+        status: "Submitted",
         lastUpdated: "07/08/2025",
       },
       {
@@ -75,6 +75,7 @@ const STATUS_COLOR: Record<string, string> = {
   Denied: "#B50909",
   Draft: "#71767A",
   "Awaiting Application": "#8F5800",
+  Submitted: "#205493",
 };
 
 const childCellStyle: React.CSSProperties = {
