@@ -127,33 +127,32 @@ export function PacketsPage() {
         ) : (
           <>
             <IconKeyAccordion />
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
-              <h2
-                style={{
-                  fontFamily: "'Roboto', sans-serif",
-                  color: "#1B1B1B",
-                  margin: 0,
-                }}
-              >
-                My Packets
-              </h2>
-              <button
-                onClick={() => navigate("/packets/create")}
-                style={{
-                  fontFamily: "'Roboto', sans-serif",
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: "#FFFFFF",
-                  backgroundColor: "#1a4480",
-                  border: "none",
-                  borderRadius: 4,
-                  padding: "10px 20px",
-                  cursor: "pointer",
-                }}
-              >
-                Create Packet
-              </button>
-            </div>
+            <button
+              onClick={() => navigate("/packets/create")}
+              style={{
+                fontFamily: "'Roboto', sans-serif",
+                fontSize: 16,
+                fontWeight: 700,
+                color: "#FFFFFF",
+                backgroundColor: "#005EA2",
+                border: "none",
+                borderRadius: 4,
+                padding: "10px 20px",
+                cursor: "pointer",
+                marginBottom: 16,
+              }}
+            >
+              Create Packet
+            </button>
+            <h2
+              style={{
+                fontFamily: "'Roboto', sans-serif",
+                color: "#1B1B1B",
+                margin: "0 0 24px 0",
+              }}
+            >
+              My Packets
+            </h2>
             <PacketsTable />
           </>
         )}
