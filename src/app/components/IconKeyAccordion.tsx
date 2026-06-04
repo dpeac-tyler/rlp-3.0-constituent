@@ -31,16 +31,17 @@ const DEFAULT_ITEMS: IconItem[] = [
 interface IconKeyAccordionProps {
   items?: IconItem[];
   sessionKey?: string;
+  defaultOpen?: boolean;
 }
 
-export function IconKeyAccordion({ items, sessionKey }: IconKeyAccordionProps) {
+export function IconKeyAccordion({ items, sessionKey, defaultOpen = true }: IconKeyAccordionProps) {
   const storageKey = sessionKey || SESSION_KEY;
   const iconItems = items || DEFAULT_ITEMS;
   const isMobile = useIsMobile();
 
   const [isOpen, setIsOpen] = useState(() => {
     const stored = sessionStorage.getItem(storageKey);
-    return stored === null ? true : stored === "true";
+    return stored === null ? defaultOpen : stored === "true";
   });
 
   useEffect(() => {

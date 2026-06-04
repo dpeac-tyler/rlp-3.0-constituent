@@ -16,6 +16,8 @@ import { InvoicesPage } from "./pages/InvoicesPage";
 import { MyAssetsPage } from "./pages/MyAssetsPage";
 import { AssetCertificationsPage } from "./pages/AssetCertificationsPage";
 import { CorrespondencePage } from "./pages/CorrespondencePage";
+import { PacketsPage } from "./pages/PacketsPage";
+import { CreatePacketPage } from "./pages/CreatePacketPage";
 
 export const router = createBrowserRouter([
   {
@@ -106,6 +108,14 @@ export const router = createBrowserRouter([
       {
         path: "invoices",
         Component: InvoicesPage,
+      },
+      {
+        path: "packets",
+        Component: PacketsPage,
+      },
+      {
+        path: "packets/create",
+        Component: CreatePacketPage,
       },
       {
         path: "shopping-cart",
