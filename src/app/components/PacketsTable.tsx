@@ -82,6 +82,7 @@ const STATUS_COLOR: Record<string, string> = {
   Denied: "#B50909",
   Draft: "#13669A",
   "Awaiting Application": "#8F5800",
+  "Awaiting Applications": "#8F5800",
   Submitted: "#205493",
 };
 
@@ -166,8 +167,8 @@ export function PacketsTable() {
         p.id === packetId
           ? {
               ...p,
-              status: "Submitted",
-              children: p.children.map((c) => ({ ...c, status: "Awaiting Application" })),
+              status: "Awaiting Applications",
+              children: p.children.map((c) => ({ ...c, status: "Draft" })),
             }
           : p
       )
@@ -435,8 +436,8 @@ export function PacketsTable() {
                           <td style={childCellStyle}>{child.role}</td>
                           <td style={childCellStyle}></td>
                           <td style={childCellStyle}>{child.constituentName}</td>
-                          <td style={{ ...childCellStyle, color: row.status === "Submitted" ? STATUS_COLOR[child.status] || "#1B1B1B" : "#1B1B1B" }}>
-                            {row.status === "Submitted" ? child.status : ""}
+                          <td style={{ ...childCellStyle, color: row.status === "Awaiting Applications" ? STATUS_COLOR[child.status] || "#1B1B1B" : "#1B1B1B" }}>
+                            {row.status === "Awaiting Applications" ? child.status : ""}
                           </td>
                           <td style={childCellStyle}>{child.lastUpdated}</td>
                           <td style={childCellStyle}></td>
@@ -452,7 +453,7 @@ export function PacketsTable() {
       </div>
 
       {/* ── Reset Demo button ── */}
-      {packets.some((p) => p.status === "Submitted") && (
+      {packets.some((p) => p.status === "Awaiting Applications") && (
         <div style={{ marginTop: 24 }}>
           <button
             onClick={() => {
