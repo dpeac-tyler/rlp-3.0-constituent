@@ -17,11 +17,14 @@ interface Constituent {
   id: string;
   licenseNumber: string;
   constituentName: string;
+  username: string;
   email: string;
   address: string;
+  type: "Individual" | "Business";
 }
 
 interface AssignedParticipant {
+  id: number;
   role: string;
   constituentName: string;
   email: string;
@@ -57,14 +60,14 @@ const PACKET_TYPES: PacketType[] = [
 ];
 
 const MOCK_CONSTITUENTS: Constituent[] = [
-  { id: "1", licenseNumber: "FBL-2024-0041", constituentName: "Jerome Tinder", email: "j.tinder@portlandme.net", address: "145 Commerce St, Portland, ME 04101" },
-  { id: "2", licenseNumber: "FBL-2022-0178", constituentName: "Marcus Delray", email: "marcusdelray@outlook.com", address: "88 Oak Ave, Bangor, ME 04401" },
-  { id: "3", licenseNumber: "COS-2023-0052", constituentName: "Shiela Benefits", email: "s.benefits@gmail.com", address: "22 Harbor View Rd, Augusta, ME 04330" },
-  { id: "4", licenseNumber: "FBL-2025-0009", constituentName: "Ricky Schuler", email: "rschulerlew@yahoo.com", address: "310 Pine St, Lewiston, ME 04240" },
-  { id: "5", licenseNumber: "FHP-2021-0203", constituentName: "Angela Torres", email: "angela.torres@biddefordlaw.com", address: "77 Elm St, Biddeford, ME 04005" },
-  { id: "6", licenseNumber: "FBL-2023-0115", constituentName: "Derek Fontaine", email: "dfontaine@sacoriver.org", address: "501 River Rd, Saco, ME 04072" },
-  { id: "7", licenseNumber: "COS-2024-0087", constituentName: "Patricia Huang", email: "p.huang@brunswicksalon.com", address: "14 Main St, Brunswick, ME 04011" },
-  { id: "8", licenseNumber: "FHP-2022-0344", constituentName: "Tomas Reyes", email: "tomreyes@watervilleme.gov", address: "203 Maple Ave, Waterville, ME 04901" },
+  { id: "1", licenseNumber: "FBL-2024-0041", constituentName: "Jerome Tinder", username: "jtinder_me", email: "j.tinder@portlandme.net", address: "145 Commerce St, Portland, ME 04101", type: "Individual" },
+  { id: "2", licenseNumber: "FBL-2022-0178", constituentName: "Marcus Delray", username: "mdelray84", email: "marcusdelray@outlook.com", address: "88 Oak Ave, Bangor, ME 04401", type: "Individual" },
+  { id: "3", licenseNumber: "COS-2023-0052", constituentName: "Shiela Benefits LLC", username: "shielabiz", email: "s.benefits@gmail.com", address: "22 Harbor View Rd, Augusta, ME 04330", type: "Business" },
+  { id: "4", licenseNumber: "FBL-2025-0009", constituentName: "Ricky Schuler", username: "rschulerlew", email: "rschulerlew@yahoo.com", address: "310 Pine St, Lewiston, ME 04240", type: "Individual" },
+  { id: "5", licenseNumber: "FHP-2021-0203", constituentName: "Torres Food Group", username: "torresfoodgrp", email: "angela.torres@biddefordlaw.com", address: "77 Elm St, Biddeford, ME 04005", type: "Business" },
+  { id: "6", licenseNumber: "FBL-2023-0115", constituentName: "Derek Fontaine", username: "dfontaine501", email: "dfontaine@sacoriver.org", address: "501 River Rd, Saco, ME 04072", type: "Individual" },
+  { id: "7", licenseNumber: "COS-2024-0087", constituentName: "Huang Salon & Spa", username: "phuang_salon", email: "p.huang@brunswicksalon.com", address: "14 Main St, Brunswick, ME 04011", type: "Business" },
+  { id: "8", licenseNumber: "FHP-2022-0344", constituentName: "Tomas Reyes", username: "treyes_wv", email: "tomreyes@watervilleme.gov", address: "203 Maple Ave, Waterville, ME 04901", type: "Individual" },
 ];
 
 const inputStyle: React.CSSProperties = {
@@ -154,10 +157,9 @@ export function CreatePacketPage() {
 
   const [showModal, setShowModal] = useState(false);
   const [modalRole, setModalRole] = useState("");
-  const [searchCategory, setSearchCategory] = useState<"name" | "email" | "license" | "address">("name");
+  const [searchCategory, setSearchCategory] = useState<"name" | "email" | "address">("name");
   const [searchParticipantName, setSearchParticipantName] = useState("");
   const [searchEmail, setSearchEmail] = useState("");
-  const [searchLicense, setSearchLicense] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
   const [searchResults, setSearchResults] = useState<Constituent[] | null>(null);
   const [selectedResult, setSelectedResult] = useState<string>("");
@@ -198,7 +200,6 @@ export function CreatePacketPage() {
     setSearchCategory("name");
     setSearchParticipantName("");
     setSearchEmail("");
-    setSearchLicense("");
     setSearchAddress("");
     setSearchResults(null);
     setSelectedResult("");
@@ -210,7 +211,6 @@ export function CreatePacketPage() {
   const resetSearch = () => {
     setSearchParticipantName("");
     setSearchEmail("");
-    setSearchLicense("");
     setSearchAddress("");
     setSearchResults(null);
     setSelectedResult("");
@@ -226,9 +226,6 @@ export function CreatePacketPage() {
     } else if (searchCategory === "email") {
       const q = searchEmail.toLowerCase().trim();
       results = q ? MOCK_CONSTITUENTS.filter((c) => c.email.toLowerCase().includes(q)) : [...MOCK_CONSTITUENTS];
-    } else if (searchCategory === "license") {
-      const q = searchLicense.toLowerCase().trim();
-      results = q ? MOCK_CONSTITUENTS.filter((c) => c.licenseNumber.toLowerCase().includes(q)) : [...MOCK_CONSTITUENTS];
     } else {
       const q = searchAddress.toLowerCase().trim();
       results = q ? MOCK_CONSTITUENTS.filter((c) => c.address.toLowerCase().includes(q)) : [...MOCK_CONSTITUENTS];
@@ -242,19 +239,18 @@ export function CreatePacketPage() {
     const found = MOCK_CONSTITUENTS.find((c) => c.id === selectedResult);
     if (!found) return;
     setParticipants((prev) => [
-      ...prev.filter((p) => p.role !== modalRole),
-      { role: modalRole, constituentName: found.constituentName, email: found.email, address: found.address },
+      ...prev,
+      { id: Date.now(), role: modalRole, constituentName: found.constituentName, email: found.email, address: found.address },
     ]);
     showToast(`${found.constituentName} has been added as ${modalRole}.`);
     closeModal();
   };
 
-  const handleRemoveParticipant = (role: string) => {
-    setParticipants((prev) => prev.filter((p) => p.role !== role));
+  const handleRemoveParticipant = (id: number) => {
+    setParticipants((prev) => prev.filter((p) => p.id !== id));
   };
 
   const nonPrimaryRoles = selectedPacket ? selectedPacket.roles.slice(1) : [];
-  const allParticipantsAssigned = nonPrimaryRoles.length > 0 && participants.length >= nonPrimaryRoles.length;
 
   const sectionHeading: React.CSSProperties = {
     fontFamily: "'Roboto', sans-serif",
@@ -435,7 +431,7 @@ export function CreatePacketPage() {
                       {packet.name}
                     </div>
                     <div style={{ fontSize: 13, color: "#71767A", marginTop: 2 }}>
-                      {packet.agency} &nbsp;·&nbsp; {packet.roles.length} Participants
+                      {packet.agency} &nbsp;·&nbsp; {packet.roles.length} Roles
                     </div>
                   </li>
                 ))}
@@ -528,7 +524,7 @@ export function CreatePacketPage() {
                               letterSpacing: "0.04em",
                             }}
                           >
-                            Primary
+                            Packet Owner
                           </span>
                         </span>
                       </td>
@@ -539,32 +535,15 @@ export function CreatePacketPage() {
                     </tr>
 
                     {/* Added participants */}
-                    {participants.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan={4}
-                          style={{
-                            ...tdStyle,
-                            textAlign: "center",
-                            color: "#71767A",
-                            padding: "20px 12px",
-                            fontStyle: "italic",
-                            backgroundColor: "#F8F8F8",
-                          }}
-                        >
-                          No additional participants added yet. Use the button below to add participants.
-                        </td>
-                      </tr>
-                    ) : (
-                      participants.map((p, idx) => (
-                        <tr key={p.role} style={{ backgroundColor: idx % 2 === 0 ? "#F0F0F0" : "#FFFFFF" }}>
+                    {participants.map((p, idx) => (
+                        <tr key={p.id} style={{ backgroundColor: idx % 2 === 0 ? "#F0F0F0" : "#FFFFFF" }}>
                           <td style={tdStyle}>{p.role}</td>
                           <td style={tdStyle}>{p.constituentName}</td>
                           <td style={{ ...tdStyle, fontSize: 13 }}>{p.email}</td>
                           <td style={{ ...tdStyle, fontSize: 13, color: "#3D4551" }}>{p.address}</td>
                           <td style={tdStyle}>
                             <button
-                              onClick={() => handleRemoveParticipant(p.role)}
+                              onClick={() => handleRemoveParticipant(p.id)}
                               title="Remove participant"
                               style={{
                                 width: 28,
@@ -584,8 +563,7 @@ export function CreatePacketPage() {
                             </button>
                           </td>
                         </tr>
-                      ))
-                    )}
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -594,8 +572,6 @@ export function CreatePacketPage() {
                 <div>
                   <button
                     onClick={openModal}
-                    disabled={allParticipantsAssigned}
-                    title={allParticipantsAssigned ? "All required roles have been assigned" : undefined}
                     style={{
                       fontFamily: "'Roboto', sans-serif",
                       fontSize: 15,
@@ -605,25 +581,11 @@ export function CreatePacketPage() {
                       border: "none",
                       borderRadius: 4,
                       padding: "9px 18px",
-                      cursor: allParticipantsAssigned ? "not-allowed" : "pointer",
-                      opacity: allParticipantsAssigned ? 0.45 : 1,
+                      cursor: "pointer",
                     }}
                   >
                     Add Participant
                   </button>
-                  {allParticipantsAssigned && (
-                    <p
-                      style={{
-                        fontFamily: "'Roboto', sans-serif",
-                        fontSize: 13,
-                        color: "#2E8540",
-                        marginTop: 8,
-                        marginBottom: 0,
-                      }}
-                    >
-                      All required roles have been assigned.
-                    </p>
-                  )}
                 </div>
 
                 <div
@@ -637,7 +599,10 @@ export function CreatePacketPage() {
                   }}
                 >
                   <button
-                    disabled={!allParticipantsAssigned}
+                    onClick={() => {
+                      showToast("Draft saved successfully.");
+                      navigate("/packets");
+                    }}
                     style={{
                       fontFamily: "'Roboto', sans-serif",
                       fontSize: 16,
@@ -647,11 +612,10 @@ export function CreatePacketPage() {
                       border: "none",
                       borderRadius: 4,
                       padding: "10px 20px",
-                      cursor: allParticipantsAssigned ? "pointer" : "not-allowed",
-                      opacity: allParticipantsAssigned ? 1 : 0.45,
+                      cursor: "pointer",
                     }}
                   >
-                    Submit Packet
+                    Save Draft
                   </button>
                   <button
                     onClick={() => navigate("/packets")}
@@ -710,9 +674,8 @@ export function CreatePacketPage() {
                 justifyContent: "space-between",
                 alignItems: "center",
                 padding: "16px 20px",
-                borderBottomWidth: 1,
-                borderBottomStyle: "solid",
-                borderBottomColor: "#DFE1E2",
+                backgroundColor: "#162E51",
+                borderRadius: "4px 4px 0 0",
               }}
             >
               <h2
@@ -720,7 +683,7 @@ export function CreatePacketPage() {
                   fontFamily: "'Roboto', sans-serif",
                   fontSize: 20,
                   fontWeight: 700,
-                  color: "#1B1B1B",
+                  color: "#FFFFFF",
                   margin: 0,
                 }}
               >
@@ -730,14 +693,20 @@ export function CreatePacketPage() {
                 onClick={closeModal}
                 title="Close"
                 style={{
-                  background: "none",
-                  border: "none",
+                  background: "transparent",
+                  borderWidth: 2,
+                  borderStyle: "solid",
+                  borderColor: "#FFFFFF",
+                  borderRadius: "50%",
                   cursor: "pointer",
-                  padding: 4,
+                  width: 28,
+                  height: 28,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#1B1B1B",
+                  color: "#FFFFFF",
+                  padding: 0,
+                  flexShrink: 0,
                 }}
               >
                 <X size={20} />
@@ -783,7 +752,6 @@ export function CreatePacketPage() {
                   {[
                     { value: "name", label: "Participant Name" },
                     { value: "email", label: "Email Address" },
-                    { value: "license", label: "License Number" },
                     { value: "address", label: "Physical Address" },
                   ].map(({ value, label }) => (
                     <label
@@ -804,7 +772,7 @@ export function CreatePacketPage() {
                         value={value}
                         checked={searchCategory === value}
                         onChange={() => {
-                          setSearchCategory(value as "name" | "email" | "license" | "address");
+                          setSearchCategory(value as "name" | "email" | "address");
                           resetSearch();
                         }}
                         style={{ accentColor: "#005EA2", width: 16, height: 16, cursor: "pointer" }}
@@ -844,20 +812,6 @@ export function CreatePacketPage() {
                 </div>
               )}
 
-              {searchCategory === "license" && (
-                <div style={{ marginBottom: 16 }}>
-                  <label htmlFor="modal-license" style={labelStyle}>License Number</label>
-                  <input
-                    id="modal-license"
-                    type="text"
-                    value={searchLicense}
-                    onChange={(e) => setSearchLicense(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    placeholder="e.g. FBL-2024-0041"
-                    style={inputStyle}
-                  />
-                </div>
-              )}
 
               {searchCategory === "address" && (
                 <div style={{ marginBottom: 16 }}>
@@ -940,15 +894,19 @@ export function CreatePacketPage() {
                         }}
                       >
                         <colgroup>
-                          <col style={{ width: "6%" }} />
+                          <col style={{ width: "5%" }} />
+                          <col style={{ width: "13%" }} />
+                          <col style={{ width: "18%" }} />
+                          <col style={{ width: "14%" }} />
                           <col style={{ width: "22%" }} />
-                          <col style={{ width: "26%" }} />
-                          <col style={{ width: "46%" }} />
+                          <col style={{ width: "28%" }} />
                         </colgroup>
                         <thead>
                           <tr>
                             <th style={{ ...thStyle, fontSize: 12 }}>Select</th>
+                            <th style={{ ...thStyle, fontSize: 12 }}>Individual/Business</th>
                             <th style={{ ...thStyle, fontSize: 12 }}>Participant Name</th>
+                            <th style={{ ...thStyle, fontSize: 12 }}>Username</th>
                             <th style={{ ...thStyle, fontSize: 12 }}>Email Address</th>
                             <th style={{ ...thStyle, fontSize: 12 }}>Address</th>
                           </tr>
@@ -973,7 +931,9 @@ export function CreatePacketPage() {
                                   style={{ accentColor: "#005EA2", width: 15, height: 15, cursor: "pointer" }}
                                 />
                               </td>
-                              <td style={{ ...tdStyle, fontSize: 13 }}>{c.constituentName}</td>
+                              <td style={{ ...tdStyle, fontSize: 12 }}>{c.type}</td>
+                              <td style={{ ...tdStyle, fontSize: 12 }}>{c.constituentName}</td>
+                              <td style={{ ...tdStyle, fontSize: 12 }}>{c.username}</td>
                               <td style={{ ...tdStyle, fontSize: 12 }}>{c.email}</td>
                               <td style={{ ...tdStyle, fontSize: 12, color: "#3D4551" }}>{c.address}</td>
                             </tr>

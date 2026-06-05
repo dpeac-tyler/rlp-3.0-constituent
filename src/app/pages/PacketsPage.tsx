@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { Eye, Pencil, SendHorizontal, Trash2, UserPen } from "lucide-react";
 import { PageShell } from "../components/PageShell";
 import { PacketsTable } from "../components/PacketsTable";
 import { IconKeyAccordion } from "../components/IconKeyAccordion";
@@ -126,7 +127,15 @@ export function PacketsPage() {
           </p>
         ) : (
           <>
-            <IconKeyAccordion />
+            <IconKeyAccordion
+              items={[
+                { icon: <Eye size={16} color="#FFFFFF" />, label: "View Packet" },
+                { icon: <Pencil size={16} color="#FFFFFF" />, label: "Edit Packet" },
+                { icon: <SendHorizontal size={16} color="#FFFFFF" />, label: "Send Applications" },
+                { icon: <Trash2 size={16} color="#FFFFFF" />, label: "Delete Packet" },
+                { icon: <UserPen size={16} color="#FFFFFF" />, label: "Reassign Applicant" },
+              ]}
+            />
             <button
               onClick={() => navigate("/packets/create")}
               style={{

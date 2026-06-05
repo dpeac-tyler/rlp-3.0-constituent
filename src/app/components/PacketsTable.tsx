@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import { Eye, UserPen } from "lucide-react";
+import { Eye, Pencil, SendHorizontal, Trash2, UserPen, X } from "lucide-react";
 
 interface ChildSubmission {
   id: string;
   applicationName: string;
+  role: string;
   submissionNumber: string;
   constituentName: string;
+  email: string;
   status: string;
   lastUpdated: string;
+  isPacketOwner?: boolean;
 }
 
 interface Packet {
   id: string;
-  licenseType: string;
-  applicationName: string;
-  submissionNumber: string;
-  constituentName: string;
+  packetName: string;
+  packetNumber: string;
   status: string;
   lastUpdated: string;
   children: ChildSubmission[];
@@ -24,34 +25,49 @@ interface Packet {
 const MOCK_DATA: Packet[] = [
   {
     id: "1",
-    licenseType: "Firearms Business License",
-    applicationName: "FBLA - Company",
-    submissionNumber: "700024500",
-    constituentName: "Boring Company 155",
-    status: "Pending",
+    packetName: "Firearms Business License Packet",
+    packetNumber: "28491",
+    status: "Draft",
     lastUpdated: "07/08/2025",
     children: [
       {
+        id: "1-0",
+        applicationName: "FBLA - Company",
+        role: "Company Representative",
+        submissionNumber: "700024500",
+        constituentName: "Boring Company 155",
+        email: "boring@boringcompany.com",
+        status: "Pending",
+        lastUpdated: "07/08/2025",
+        isPacketOwner: true,
+      },
+      {
         id: "1-1",
         applicationName: "FBLA - Owner",
+        role: "Owner",
         submissionNumber: "700024501",
         constituentName: "Jerome Tinder",
+        email: "j.tinder@portlandme.net",
         status: "Submitted",
         lastUpdated: "07/08/2025",
       },
       {
         id: "1-2",
         applicationName: "FBLA - Manager",
+        role: "Manager",
         submissionNumber: "700024502",
         constituentName: "Shiela Benefits",
+        email: "s.benefits@gmail.com",
         status: "Awaiting Application",
         lastUpdated: "07/08/2025",
       },
       {
         id: "1-3",
         applicationName: "FBLA - Officer",
+        role: "Officer",
         submissionNumber: "700024503",
         constituentName: "Ricky Schuler",
+        email: "rschulerlew@yahoo.com",
         status: "Denied",
         lastUpdated: "07/08/2025",
       },
@@ -59,23 +75,68 @@ const MOCK_DATA: Packet[] = [
   },
 ];
 
-const COLUMNS = [
-  { key: "licenseType", label: "License Type" },
-  { key: "applicationName", label: "Application Name" },
-  { key: "submissionNumber", label: "Submission Number" },
-  { key: "constituentName", label: "Constituent Name" },
-  { key: "status", label: "Status" },
-  { key: "lastUpdated", label: "Last Updated" },
-];
-
 const STATUS_COLOR: Record<string, string> = {
   Approved: "#2E8540",
   Pending: "#8F5800",
   Rejected: "#D54309",
   Denied: "#B50909",
-  Draft: "#71767A",
+  Draft: "#13669A",
   "Awaiting Application": "#8F5800",
   Submitted: "#205493",
+};
+
+const noBorder: React.CSSProperties = {
+  borderTopWidth: 0,
+  borderTopStyle: "solid",
+  borderTopColor: "transparent",
+  borderLeftWidth: 0,
+  borderLeftStyle: "solid",
+  borderLeftColor: "transparent",
+  borderRightWidth: 0,
+  borderRightStyle: "solid",
+  borderRightColor: "transparent",
+};
+
+const parentThStyle: React.CSSProperties = {
+  backgroundColor: "#F0F0F0",
+  color: "#1B1B1B",
+  fontWeight: 700,
+  fontSize: 13,
+  lineHeight: "20px",
+  padding: "12px 12px",
+  textAlign: "left",
+  whiteSpace: "nowrap",
+  borderBottomWidth: 1,
+  borderBottomStyle: "solid",
+  borderBottomColor: "#A9AEB1",
+  ...noBorder,
+};
+
+const parentCellStyle: React.CSSProperties = {
+  padding: "14px 12px",
+  backgroundColor: "#FFFFFF",
+  color: "#1B1B1B",
+  lineHeight: "22px",
+  borderBottomWidth: 1,
+  borderBottomStyle: "solid",
+  borderBottomColor: "#DFE1E2",
+  ...noBorder,
+  wordWrap: "break-word",
+  overflowWrap: "break-word",
+};
+
+const subHeaderStyle: React.CSSProperties = {
+  backgroundColor: "#C8D9EA",
+  color: "#1B1B1B",
+  fontWeight: 700,
+  fontSize: 12,
+  padding: "8px 12px",
+  textAlign: "left",
+  whiteSpace: "nowrap",
+  borderBottomWidth: 1,
+  borderBottomStyle: "solid",
+  borderBottomColor: "#A9AEB1",
+  ...noBorder,
 };
 
 const childCellStyle: React.CSSProperties = {
@@ -86,23 +147,18 @@ const childCellStyle: React.CSSProperties = {
   borderBottomWidth: 1,
   borderBottomStyle: "solid",
   borderBottomColor: "#DFE1E2",
-  borderTopWidth: 0,
-  borderTopStyle: "solid",
-  borderTopColor: "transparent",
-  borderLeftWidth: 0,
-  borderLeftStyle: "solid",
-  borderLeftColor: "transparent",
-  borderRightWidth: 0,
-  borderRightStyle: "solid",
-  borderRightColor: "transparent",
+  ...noBorder,
   wordWrap: "break-word",
   overflowWrap: "break-word",
   fontSize: 13,
 };
 
 export function PacketsTable() {
+  const [packets, setPackets] = useState<Packet[]>(MOCK_DATA);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
+  const [confirmSendId, setConfirmSendId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
     setExpandedRows((prev) => {
@@ -112,8 +168,7 @@ export function PacketsTable() {
     });
   };
 
-  const totalEntries = MOCK_DATA.length;
-  const start = 1;
+  const totalEntries = packets.length;
   const end = Math.min(pageSize, totalEntries);
 
   return (
@@ -130,7 +185,7 @@ export function PacketsTable() {
         }}
       >
         <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
-          Showing {start} - {end} of {totalEntries} Entries
+          Showing 1 - {end} of {totalEntries} Entries
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
@@ -173,9 +228,8 @@ export function PacketsTable() {
       </div>
 
       {/* Table */}
-      <div style={{ overflowX: "hidden" }}>
+      <div style={{ overflowX: "auto" }}>
         <table
-          className="usa-table-stacked"
           style={{
             width: "100%",
             borderCollapse: "collapse",
@@ -184,104 +238,37 @@ export function PacketsTable() {
             tableLayout: "fixed",
           }}
         >
+          {/* 7 columns sized for the child row layout */}
           <colgroup>
-            <col style={{ width: "16%" }} />
-            <col style={{ width: "22%" }} />
-            <col style={{ width: "14%" }} />
-            <col style={{ width: "14%" }} />
-            <col style={{ width: "9%" }} />
-            <col style={{ width: "12%" }} />
+            <col style={{ width: "20%" }} />
             <col style={{ width: "13%" }} />
+            <col style={{ width: "14%" }} />
+            <col style={{ width: "16%" }} />
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "12%" }} />
+            <col style={{ width: "15%" }} />
           </colgroup>
+
+          {/* Parent header — 5 cells spanning all 7 columns */}
           <thead>
             <tr>
-              {COLUMNS.map((col) => (
-                <th
-                  key={col.key}
-                  style={{
-                    backgroundColor: "#F0F0F0",
-                    color: "#1B1B1B",
-                    fontWeight: 700,
-                    fontSize: 13,
-                    lineHeight: "20px",
-                    padding: "12px 12px",
-                    textAlign: "left",
-                    whiteSpace: "nowrap",
-                    borderBottomWidth: 1,
-                    borderBottomStyle: "solid",
-                    borderBottomColor: "#A9AEB1",
-                    borderTopWidth: 0,
-                    borderTopStyle: "solid",
-                    borderTopColor: "transparent",
-                    borderLeftWidth: 0,
-                    borderLeftStyle: "solid",
-                    borderLeftColor: "transparent",
-                    borderRightWidth: 0,
-                    borderRightStyle: "solid",
-                    borderRightColor: "transparent",
-                  }}
-                >
-                  {col.label}
-                </th>
-              ))}
-              <th
-                style={{
-                  backgroundColor: "#F0F0F0",
-                  color: "#1B1B1B",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  lineHeight: "20px",
-                  padding: "12px 12px",
-                  textAlign: "left",
-                  whiteSpace: "nowrap",
-                  borderBottomWidth: 1,
-                  borderBottomStyle: "solid",
-                  borderBottomColor: "#A9AEB1",
-                  borderTopWidth: 0,
-                  borderTopStyle: "solid",
-                  borderTopColor: "transparent",
-                  borderLeftWidth: 0,
-                  borderLeftStyle: "solid",
-                  borderLeftColor: "transparent",
-                  borderRightWidth: 0,
-                  borderRightStyle: "solid",
-                  borderRightColor: "transparent",
-                }}
-              >
-                Controls
-              </th>
+              <th colSpan={3} style={parentThStyle}>Packet Name</th>
+              <th style={parentThStyle}>Packet Number</th>
+              <th style={parentThStyle}>Status</th>
+              <th style={parentThStyle}>Last Updated</th>
+              <th style={parentThStyle}>Controls</th>
             </tr>
           </thead>
+
           <tbody>
-            {MOCK_DATA.map((row, idx) => {
-              const isStripe = idx % 2 === 1;
+            {packets.map((row) => {
               const isExpanded = expandedRows.has(row.id);
-              const cellBase: React.CSSProperties = {
-                padding: "14px 12px",
-                backgroundColor: isStripe ? "#F0F0F0" : "#FFFFFF",
-                color: "#1B1B1B",
-                lineHeight: "22px",
-                borderBottomWidth: 1,
-                borderBottomStyle: "solid",
-                borderBottomColor: "#DFE1E2",
-                borderTopWidth: 0,
-                borderTopStyle: "solid",
-                borderTopColor: "transparent",
-                borderLeftWidth: 0,
-                borderLeftStyle: "solid",
-                borderLeftColor: "transparent",
-                borderRightWidth: 0,
-                borderRightStyle: "solid",
-                borderRightColor: "transparent",
-                wordWrap: "break-word",
-                overflowWrap: "break-word",
-              };
 
               return (
                 <React.Fragment key={row.id}>
+                  {/* Parent row */}
                   <tr>
-                    {/* License Type */}
-                    <td data-label="License Type" style={cellBase}>
+                    <td colSpan={3} style={parentCellStyle}>
                       <button
                         onClick={() => toggleExpand(row.id)}
                         title={isExpanded ? "Collapse" : "Expand"}
@@ -295,7 +282,7 @@ export function PacketsTable() {
                           color: "#1B1B1B",
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: 6,
+                          gap: 8,
                           textAlign: "left",
                         }}
                       >
@@ -317,45 +304,18 @@ export function PacketsTable() {
                         >
                           {isExpanded ? "−" : "+"}
                         </span>
-                        {row.licenseType}
+                        {row.packetName}
                       </button>
                     </td>
-                    {/* Application Name */}
-                    <td data-label="Application Name" style={cellBase}>
-                      <span style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                        {row.applicationName}
-                        <span
-                          style={{
-                            display: "inline-block",
-                            fontSize: 11,
-                            color: "#fff",
-                            textTransform: "uppercase",
-                            backgroundColor: "#5c5c5c",
-                            borderRadius: 2,
-                            padding: "1px 6px",
-                            fontWeight: 700,
-                            letterSpacing: "0.04em",
-                          }}
-                        >
-                          Primary
-                        </span>
-                      </span>
-                    </td>
-                    {/* Submission Number */}
-                    <td data-label="Submission Number" style={cellBase}>{row.submissionNumber}</td>
-                    {/* Constituent Name */}
-                    <td data-label="Constituent Name" style={cellBase}>{row.constituentName}</td>
-                    {/* Status */}
-                    <td data-label="Status" style={{ ...cellBase, color: STATUS_COLOR[row.status] || "#1B1B1B" }}>
+                    <td style={parentCellStyle}>{row.packetNumber}</td>
+                    <td style={{ ...parentCellStyle, color: STATUS_COLOR[row.status] || "#1B1B1B" }}>
                       {row.status}
                     </td>
-                    {/* Last Updated */}
-                    <td data-label="Last Updated" style={cellBase}>{row.lastUpdated}</td>
-                    {/* Controls */}
-                    <td data-label="Controls" style={cellBase}>
+                    <td style={parentCellStyle}>{row.lastUpdated}</td>
+                    <td style={parentCellStyle}>
                       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                         <button
-                          title="View Packet"
+                          title="Edit Packet"
                           style={{
                             width: 28,
                             height: 28,
@@ -370,56 +330,375 @@ export function PacketsTable() {
                             border: "none",
                           }}
                         >
-                          <Eye size={16} color="#FFFFFF" />
+                          <Pencil size={16} color="#FFFFFF" />
+                        </button>
+                        {row.status === "Draft" && (
+                          <button
+                            title="Send Applications"
+                            onClick={() => setConfirmSendId(row.id)}
+                            style={{
+                              width: 28,
+                              height: 28,
+                              minWidth: 28,
+                              backgroundColor: "#162E51",
+                              borderRadius: 4,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                              padding: 0,
+                              border: "none",
+                            }}
+                          >
+                            <SendHorizontal size={16} color="#FFFFFF" />
+                          </button>
+                        )}
+                        <button
+                          title="Delete Packet"
+                          onClick={() => setConfirmDeleteId(row.id)}
+                          style={{
+                            width: 28,
+                            height: 28,
+                            minWidth: 28,
+                            backgroundColor: "#162E51",
+                            borderRadius: 4,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            padding: 0,
+                            border: "none",
+                          }}
+                        >
+                          <Trash2 size={16} color="#FFFFFF" />
                         </button>
                       </div>
                     </td>
                   </tr>
 
-                  {/* Child rows */}
-                  {isExpanded &&
-                    row.children.map((child) => (
-                      <tr key={child.id}>
-                        <td data-label="License Type" style={{ ...childCellStyle, paddingLeft: 32 }}>—</td>
-                        <td data-label="Application Name" style={childCellStyle}>{child.applicationName}</td>
-                        <td data-label="Submission Number" style={childCellStyle}>{child.submissionNumber}</td>
-                        <td data-label="Constituent Name" style={childCellStyle}>{child.constituentName}</td>
-                        <td data-label="Status" style={{ ...childCellStyle, color: STATUS_COLOR[child.status] || "#1B1B1B" }}>
-                          {child.status}
-                        </td>
-                        <td data-label="Last Updated" style={childCellStyle}>{child.lastUpdated}</td>
-                        <td data-label="Controls" style={childCellStyle}>
-                          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                            {child.status === "Denied" && (
-                              <button
-                                title="Reassign Applicant"
-                                style={{
-                                  width: 28,
-                                  height: 28,
-                                  minWidth: 28,
-                                  backgroundColor: "#162E51",
-                                  borderRadius: 4,
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  cursor: "pointer",
-                                  padding: 0,
-                                  border: "none",
-                                }}
-                              >
-                                <UserPen size={16} color="#FFFFFF" />
-                              </button>
-                            )}
-                          </div>
-                        </td>
+                  {/* Child sub-header + child rows */}
+                  {isExpanded && (
+                    <>
+                      <tr>
+                        <th style={subHeaderStyle}>Application Name</th>
+                        <th style={subHeaderStyle}>Role</th>
+                        <th style={subHeaderStyle}>Submission Number</th>
+                        <th style={subHeaderStyle}>Constituent Name</th>
+                        <th style={subHeaderStyle}>Status</th>
+                        <th style={subHeaderStyle}>Last Updated</th>
+                        <th style={subHeaderStyle}>Controls</th>
                       </tr>
-                    ))}
+                      {row.children.map((child) => (
+                        <tr key={child.id}>
+                          <td style={childCellStyle}>
+                            <span style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                              {child.applicationName}
+                              {child.isPacketOwner && (
+                                <span
+                                  style={{
+                                    fontSize: 11,
+                                    color: "#fff",
+                                    textTransform: "uppercase",
+                                    backgroundColor: "#5c5c5c",
+                                    borderRadius: 2,
+                                    padding: "1px 6px",
+                                    fontWeight: 700,
+                                    letterSpacing: "0.04em",
+                                  }}
+                                >
+                                  Packet Owner
+                                </span>
+                              )}
+                            </span>
+                          </td>
+                          <td style={childCellStyle}>{child.role}</td>
+                          <td style={childCellStyle}></td>
+                          <td style={childCellStyle}>{child.constituentName}</td>
+                          <td style={childCellStyle}></td>
+                          <td style={childCellStyle}>{child.lastUpdated}</td>
+                          <td style={childCellStyle}></td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
                 </React.Fragment>
               );
             })}
           </tbody>
         </table>
       </div>
+
+      {/* ── Send Applications confirm dialog ── */}
+      {confirmSendId && (() => {
+        const packet = packets.find((p) => p.id === confirmSendId);
+        if (!packet) return null;
+        return (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(0,0,0,0.55)",
+              padding: 16,
+            }}
+            onMouseDown={(e) => { if (e.target === e.currentTarget) setConfirmSendId(null); }}
+          >
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: 4,
+                width: "100%",
+                maxWidth: 680,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+                fontFamily: "'Roboto', sans-serif",
+              }}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  backgroundColor: "#162E51",
+                  borderRadius: "4px 4px 0 0",
+                }}
+              >
+                <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: "#FFFFFF" }}>
+                  Send Applications
+                </h2>
+                <button
+                  onClick={() => setConfirmSendId(null)}
+                  title="Close"
+                  style={{
+                    background: "transparent",
+                    borderWidth: 2,
+                    borderStyle: "solid",
+                    borderColor: "#FFFFFF",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    width: 28,
+                    height: 28,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#FFFFFF",
+                    padding: 0,
+                    flexShrink: 0,
+                  }}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div style={{ padding: "20px 20px 0" }}>
+                <p style={{ fontSize: 15, color: "#1B1B1B", marginTop: 0, marginBottom: 16, lineHeight: "24px" }}>
+                  Are you sure you want to send applications for <strong>{packet.packetName}</strong>? Applications will be sent to the following participants:
+                </p>
+                <ul style={{ margin: "0 0 20px", padding: "0 0 0 20px", display: "flex", flexDirection: "column", gap: 6 }}>
+                  {packet.children.map((child) => (
+                    <li key={child.id} style={{ fontSize: 14, color: "#1B1B1B", lineHeight: "22px" }}>
+                      <strong>{child.constituentName}</strong> — {child.role} &nbsp;
+                      <span style={{ color: "#1B1B1B", fontSize: 14 }}>({child.email})</span>
+                      {child.isPacketOwner && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            color: "#fff",
+                            textTransform: "uppercase",
+                            backgroundColor: "#5c5c5c",
+                            borderRadius: 2,
+                            padding: "1px 6px",
+                            fontWeight: 700,
+                            letterSpacing: "0.04em",
+                            marginLeft: 8,
+                          }}
+                        >
+                          Packet Owner
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Footer */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  padding: "16px 20px",
+                  borderTopWidth: 1,
+                  borderTopStyle: "solid",
+                  borderTopColor: "#DFE1E2",
+                }}
+              >
+                <button
+                  onClick={() => setConfirmSendId(null)}
+                  style={{
+                    fontFamily: "'Roboto', sans-serif",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#005EA2",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "9px 18px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Send Applications
+                </button>
+                <button
+                  onClick={() => setConfirmSendId(null)}
+                  style={{
+                    fontFamily: "'Roboto', sans-serif",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#B50909",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "9px 18px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+      {/* ── Delete Packet confirm dialog ── */}
+      {confirmDeleteId && (() => {
+        const packet = packets.find((p) => p.id === confirmDeleteId);
+        if (!packet) return null;
+        return (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(0,0,0,0.55)",
+              padding: 16,
+            }}
+            onMouseDown={(e) => { if (e.target === e.currentTarget) setConfirmDeleteId(null); }}
+          >
+            <div
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: 4,
+                width: "100%",
+                maxWidth: 480,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+                fontFamily: "'Roboto', sans-serif",
+              }}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  backgroundColor: "#162E51",
+                  borderRadius: "4px 4px 0 0",
+                }}
+              >
+                <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: "#FFFFFF" }}>
+                  Delete Packet
+                </h2>
+                <button
+                  onClick={() => setConfirmDeleteId(null)}
+                  title="Close"
+                  style={{
+                    background: "transparent",
+                    borderWidth: 2,
+                    borderStyle: "solid",
+                    borderColor: "#FFFFFF",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    width: 28,
+                    height: 28,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#FFFFFF",
+                    padding: 0,
+                    flexShrink: 0,
+                  }}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div style={{ padding: "20px 20px 0" }}>
+                <p style={{ fontSize: 15, color: "#1B1B1B", marginTop: 0, marginBottom: 20, lineHeight: "24px" }}>
+                  Are you sure you want to delete <strong>{packet.packetName}</strong>? This action cannot be undone.
+                </p>
+              </div>
+
+              {/* Footer */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  padding: "16px 20px",
+                  borderTopWidth: 1,
+                  borderTopStyle: "solid",
+                  borderTopColor: "#DFE1E2",
+                }}
+              >
+                <button
+                  onClick={() => {
+                    setPackets((prev) => prev.filter((p) => p.id !== confirmDeleteId));
+                    setExpandedRows((prev) => { const next = new Set(prev); next.delete(confirmDeleteId); return next; });
+                    setConfirmDeleteId(null);
+                  }}
+                  style={{
+                    fontFamily: "'Roboto', sans-serif",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#B50909",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "9px 18px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete Packet
+                </button>
+                <button
+                  onClick={() => setConfirmDeleteId(null)}
+                  style={{
+                    fontFamily: "'Roboto', sans-serif",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#005EA2",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "9px 18px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
