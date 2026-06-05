@@ -160,6 +160,27 @@ export function PacketsTable() {
   const [confirmSendId, setConfirmSendId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
+  const handleSend = (packetId: string) => {
+    setPackets((prev) =>
+      prev.map((p) =>
+        p.id === packetId
+          ? {
+              ...p,
+              status: "Submitted",
+              children: p.children.map((c) => ({ ...c, status: "Awaiting Application" })),
+            }
+          : p
+      )
+    );
+    setConfirmSendId(null);
+  };
+
+  const handleResetDemo = (packetId: string) => {
+    const original = MOCK_DATA.find((p) => p.id === packetId);
+    if (!original) return;
+    setPackets((prev) => prev.map((p) => (p.id === packetId ? { ...original } : p)));
+  };
+
   const toggleExpand = (id: string) => {
     setExpandedRows((prev) => {
       const next = new Set(prev);
@@ -313,7 +334,7 @@ export function PacketsTable() {
                     </td>
                     <td style={parentCellStyle}>{row.lastUpdated}</td>
                     <td style={parentCellStyle}>
-                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "nowrap" }}>
                         <button
                           title="Edit Packet"
                           style={{
@@ -414,7 +435,9 @@ export function PacketsTable() {
                           <td style={childCellStyle}>{child.role}</td>
                           <td style={childCellStyle}></td>
                           <td style={childCellStyle}>{child.constituentName}</td>
-                          <td style={childCellStyle}></td>
+                          <td style={{ ...childCellStyle, color: row.status === "Submitted" ? STATUS_COLOR[child.status] || "#1B1B1B" : "#1B1B1B" }}>
+                            {row.status === "Submitted" ? child.status : ""}
+                          </td>
                           <td style={childCellStyle}>{child.lastUpdated}</td>
                           <td style={childCellStyle}></td>
                         </tr>
@@ -427,6 +450,32 @@ export function PacketsTable() {
           </tbody>
         </table>
       </div>
+
+      {/* ── Reset Demo button ── */}
+      {packets.some((p) => p.status === "Submitted") && (
+        <div style={{ marginTop: 24 }}>
+          <button
+            onClick={() => {
+              setPackets(MOCK_DATA.map((p) => ({ ...p, children: [...p.children] })));
+            }}
+            style={{
+              fontFamily: "'Roboto', sans-serif",
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#71767A",
+              backgroundColor: "transparent",
+              borderWidth: 1,
+              borderStyle: "solid",
+              borderColor: "#71767A",
+              borderRadius: 4,
+              padding: "6px 14px",
+              cursor: "pointer",
+            }}
+          >
+            Reset Demo
+          </button>
+        </div>
+      )}
 
       {/* ── Send Applications confirm dialog ── */}
       {confirmSendId && (() => {
@@ -538,7 +587,7 @@ export function PacketsTable() {
                 }}
               >
                 <button
-                  onClick={() => setConfirmSendId(null)}
+                  onClick={() => handleSend(confirmSendId)}
                   style={{
                     fontFamily: "'Roboto', sans-serif",
                     fontSize: 15,
