@@ -184,11 +184,14 @@ const COL_WIDTHS = ["13%", "16%", "18%", "9%", "11%", "11%", "9%", "13%"];
 /* ── Status colors ─────────────────────────────────────── */
 
 const STATUS_COLOR: Record<string, string> = {
-  Initiated: "#71767A",
-  Open: "#005EA2",
-  Paid: "#2E8540",
-  "Past Due": "#D54309",
-  Withdrawn: "#71767A",
+  Active: "#417505", Approved: "#417505", Live: "#417505", Paid: "#417505", Completed: "#417505", Sent: "#417505",
+  Pending: "#8F5800", Open: "#8F5800", Assigned: "#8F5800", "Approved - Awaiting Payment": "#8F5800", "Awaiting Application": "#8F5800", "Awaiting Applications": "#8F5800", Generated: "#8F5800",
+  Rejected: "#CD2026", Denied: "#CD2026", Cancelled: "#CD2026", "Past Due": "#CD2026", Terminated: "#CD2026",
+  Expired: "#80252A", Revoked: "#80252A", Withdrawn: "#80252A", Decommissioned: "#80252A", Retired: "#80252A",
+  "In Progress": "#205493", "Rejected for Resubmission": "#205493", "In Cart": "#205493", Submitted: "#205493",
+  "On Hold": "#A34900", Suspended: "#A34900", "Payment in Process": "#A34900", Inactive: "#A34900",
+  "In Review": "#13669A", Draft: "#13669A", Initiated: "#13669A",
+  Archived: "#5C5F66",
 };
 
 /* ── Reusable border objects (longhand only) ───────────── */

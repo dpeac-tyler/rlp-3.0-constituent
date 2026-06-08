@@ -110,11 +110,14 @@ const COLUMNS: { key: SortKey; label: string }[] = [
 ];
 
 const STATUS_COLOR: Record<string, string> = {
-  Approved: "#2E8540",
-  Pending: "#E5A000",
-  Rejected: "#D54309",
-  Denied: "#B50909",
-  Draft: "#71767A",
+  Active: "#417505", Approved: "#417505", Live: "#417505", Paid: "#417505", Completed: "#417505", Sent: "#417505",
+  Pending: "#8F5800", Open: "#8F5800", Assigned: "#8F5800", "Approved - Awaiting Payment": "#8F5800", "Awaiting Application": "#8F5800", "Awaiting Applications": "#8F5800", Generated: "#8F5800",
+  Rejected: "#CD2026", Denied: "#CD2026", Cancelled: "#CD2026", "Past Due": "#CD2026", Terminated: "#CD2026",
+  Expired: "#80252A", Revoked: "#80252A", Withdrawn: "#80252A", Decommissioned: "#80252A", Retired: "#80252A",
+  "In Progress": "#205493", "Rejected for Resubmission": "#205493", "In Cart": "#205493", Submitted: "#205493",
+  "On Hold": "#A34900", Suspended: "#A34900", "Payment in Process": "#A34900", Inactive: "#A34900",
+  "In Review": "#13669A", Draft: "#13669A", Initiated: "#13669A",
+  Archived: "#5C5F66",
 };
 
 function SortIcon({ dir }: { dir: SortDir }) {

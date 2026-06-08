@@ -14,6 +14,7 @@ import { CertificationsPage } from "./pages/CertificationsPage";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 import { InvoicesPage } from "./pages/InvoicesPage";
 import { MyAssetsPage } from "./pages/MyAssetsPage";
+import { AssetInstancePage } from "./pages/AssetInstancePage";
 import { AssetCertificationsPage } from "./pages/AssetCertificationsPage";
 import { CorrespondencePage } from "./pages/CorrespondencePage";
 import { PacketsPage } from "./pages/PacketsPage";
@@ -156,6 +157,10 @@ export const router = createBrowserRouter([
       {
         path: "my-assets",
         Component: MyAssetsPage,
+      },
+      {
+        path: "my-assets/:id",
+        Component: AssetInstancePage,
       },
       {
         path: "asset-submissions",

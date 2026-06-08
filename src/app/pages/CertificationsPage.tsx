@@ -154,44 +154,16 @@ const COL_WIDTHS = ["18%", "15%", "15%", "10%", "13%", "14%", "15%"];
 
 /* ── Status colors ─────────────────────────────────────── */
 
-const STATUS_STYLE: Record<string, { color: string; bg: string; dot: string }> = {
-  Active: { color: "#2E8540", bg: "#F0F7F0", dot: "#2E8540" },
-  Expired: { color: "#D54309", bg: "#FEF2EE", dot: "#D54309" },
-  Suspended: { color: "#B66A00", bg: "#FFF8E6", dot: "#E5A000" },
-  Revoked: { color: "#B50909", bg: "#FFF0F0", dot: "#B50909" },
+const STATUS_COLOR: Record<string, string> = {
+  Active: "#417505", Approved: "#417505", Live: "#417505", Paid: "#417505", Completed: "#417505", Sent: "#417505",
+  Pending: "#8F5800", Open: "#8F5800", Assigned: "#8F5800", "Approved - Awaiting Payment": "#8F5800", "Awaiting Application": "#8F5800", "Awaiting Applications": "#8F5800", Generated: "#8F5800",
+  Rejected: "#CD2026", Denied: "#CD2026", Cancelled: "#CD2026", "Past Due": "#CD2026", Terminated: "#CD2026",
+  Expired: "#80252A", Revoked: "#80252A", Withdrawn: "#80252A", Decommissioned: "#80252A", Retired: "#80252A",
+  "In Progress": "#205493", "Rejected for Resubmission": "#205493", "In Cart": "#205493", Submitted: "#205493",
+  "On Hold": "#A34900", Suspended: "#A34900", "Payment in Process": "#A34900", Inactive: "#A34900",
+  "In Review": "#13669A", Draft: "#13669A", Initiated: "#13669A",
+  Archived: "#5C5F66",
 };
-
-function StatusBadge({ status }: { status: string }) {
-  const s = STATUS_STYLE[status] ?? { color: "#565C65", bg: "#F0F0F0", dot: "#565C65" };
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 5,
-        padding: "3px 10px",
-        borderRadius: 100,
-        backgroundColor: s.bg,
-        fontFamily: "'Roboto', sans-serif",
-        fontSize: 12,
-        fontWeight: 600,
-        color: s.color,
-        whiteSpace: "nowrap",
-      }}
-    >
-      <span
-        style={{
-          width: 6,
-          height: 6,
-          borderRadius: "50%",
-          backgroundColor: s.dot,
-          flexShrink: 0,
-        }}
-      />
-      {status}
-    </span>
-  );
-}
 
 /* ── Reusable border objects (longhand only) ───────────── */
 
@@ -680,7 +652,7 @@ export function CertificationsPage() {
                             ...cellBorder,
                           }}
                         >
-                          <StatusBadge status={row.status} />
+                          <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B", fontFamily: "'Roboto', sans-serif", fontSize: 14 }}>{row.status}</span>
                         </td>
                         <td
                           data-label="Start Date"

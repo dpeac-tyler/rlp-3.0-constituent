@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router";
 import { Eye } from "lucide-react";
 import { PageShell } from "../components/PageShell";
 import { IconKeyAccordion } from "../components/IconKeyAccordion";
@@ -20,7 +21,7 @@ interface AssetInstance {
 
 /* ── Mock data ─────────────────────────────────────────── */
 
-const MOCK_DATA: AssetInstance[] = [
+export const MOCK_ASSET_DATA: AssetInstance[] = [
   {
     id: "ent1",
     idType: "Serial #",
@@ -79,8 +80,14 @@ const COL_WIDTHS = ["11%", "14%", "14%", "13%", "13%", "10%", "12%", "13%"];
 /* ── Status colors ─────────────────────────────────────── */
 
 const STATUS_COLOR: Record<string, string> = {
-  Active: "#2E8540",
-  Inactive: "#71767A",
+  Active: "#417505", Approved: "#417505", Live: "#417505", Paid: "#417505", Completed: "#417505", Sent: "#417505",
+  Pending: "#8F5800", Open: "#8F5800", Assigned: "#8F5800", "Approved - Awaiting Payment": "#8F5800", "Awaiting Application": "#8F5800", "Awaiting Applications": "#8F5800", Generated: "#8F5800",
+  Rejected: "#CD2026", Denied: "#CD2026", Cancelled: "#CD2026", "Past Due": "#CD2026", Terminated: "#CD2026",
+  Expired: "#80252A", Revoked: "#80252A", Withdrawn: "#80252A", Decommissioned: "#80252A", Retired: "#80252A",
+  "In Progress": "#205493", "Rejected for Resubmission": "#205493", "In Cart": "#205493", Submitted: "#205493",
+  "On Hold": "#A34900", Suspended: "#A34900", "Payment in Process": "#A34900", Inactive: "#A34900",
+  "In Review": "#13669A", Draft: "#13669A", Initiated: "#13669A",
+  Archived: "#5C5F66",
 };
 
 /* ── Reusable border objects (longhand only) ───────────── */
@@ -208,6 +215,7 @@ const parseDateForSort = (d: string) => {
 /* ── Component ─────────────────────────────────────────── */
 
 export function MyAssetsPage() {
+  const navigate = useNavigate();
   const { selectedAgency, setSelectedAgency } = useAgency();
   const [statusFilter, setStatusFilter] = useState("In Use");
   const [searchBy, setSearchBy] = useState("");
@@ -221,11 +229,11 @@ export function MyAssetsPage() {
   /* ── Filtering ─────────────────────────────────────────── */
 
   const filteredData = useMemo(() => {
-    if (!statusFilter) return MOCK_DATA;
+    if (!statusFilter) return MOCK_ASSET_DATA;
     if (statusFilter === "In Use") {
-      return MOCK_DATA.filter((row) => row.status === "Active");
+      return MOCK_ASSET_DATA.filter((row) => row.status === "Active");
     }
-    return MOCK_DATA.filter((row) => row.status !== "Active");
+    return MOCK_ASSET_DATA.filter((row) => row.status !== "Active");
   }, [statusFilter]);
 
   /* ── Sorting ───────────────────────────────────────────── */
@@ -795,6 +803,7 @@ export function MyAssetsPage() {
                             <button
                               title="View Asset Instance"
                               style={controlBtnStyle}
+                              onClick={() => navigate(`/my-assets/${row.id}`)}
                             >
                               <Eye size={16} color="#FFFFFF" />
                             </button>

@@ -3,13 +3,14 @@ import heroBg from "@/assets/28c9e8735508f793aebc982b410fd632f2bdc8d0.png";
 import { useIsMobile } from "../hooks/useIsMobile";
 
 interface PageShellProps {
-  title: string;
+  title: React.ReactNode;
   children: React.ReactNode;
   heroHeight?: number;
   titleStyle?: React.CSSProperties;
+  titleRight?: React.ReactNode;
 }
 
-export function PageShell({ title, children, heroHeight = 80, titleStyle }: PageShellProps) {
+export function PageShell({ title, children, heroHeight = 80, titleStyle, titleRight }: PageShellProps) {
   const isMobile = useIsMobile();
 
   return (
@@ -23,6 +24,10 @@ export function PageShell({ title, children, heroHeight = 80, titleStyle }: Page
           backgroundImage: `url(${heroBg})`,
           backgroundSize: "cover",
           backgroundPosition: "left center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: `0 ${isMobile ? 16 : 35}px`,
         }}
       >
         <motion.h1
@@ -32,15 +37,21 @@ export function PageShell({ title, children, heroHeight = 80, titleStyle }: Page
           style={{
             fontFamily: "'Roboto', sans-serif",
             color: "#1B1B1B",
-            position: "absolute",
-            left: isMobile ? 16 : 35,
-            top: "50%",
-            transform: "translateY(-50%)",
+            margin: 0,
             ...titleStyle,
           }}
         >
           {title}
         </motion.h1>
+        {titleRight && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            {titleRight}
+          </motion.div>
+        )}
       </div>
 
       {/* Content area below hero */}
