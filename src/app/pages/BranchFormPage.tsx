@@ -362,9 +362,10 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
           ...noBorder,
         }}
       >
-        <ArrowLeft size={16} />
         Back to Branches
       </button>
+
+      <div style={{ backgroundColor: "#FFFFFF", borderRadius: 4, padding: 24 }}>
 
       {/* ── View mode: read-only ── */}
       {mode === "view" ? (
@@ -415,7 +416,6 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             gap: "20px 40px",
-            maxWidth: 800,
           }}
         >
           {FIELDS.map((f) => {
@@ -434,7 +434,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
                 >
                   {f.label}
                   {f.required && (
-                    <span style={{ color: "#D54309", marginLeft: 2 }}>*</span>
+                    <span style={{ fontStyle: "italic", fontWeight: 400, fontSize: 14, color: "#71767A", marginLeft: 6 }}>Required</span>
                   )}
                 </label>
                 {f.type === "select" && f.options ? (
@@ -562,18 +562,24 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
               style={{
                 fontFamily: "'Roboto', sans-serif",
                 fontSize: 16,
-                backgroundColor: "transparent",
-                color: "#005EA2",
-                textDecoration: "underline",
+                fontWeight: 700,
+                lineHeight: "24px",
+                padding: "10px 20px",
+                backgroundColor: "#B50909",
+                color: "#FFFFFF",
+                borderWidth: 0,
+                borderStyle: "none",
+                borderColor: "transparent",
+                borderRadius: 4,
                 cursor: "pointer",
-                padding: 0,
-                ...noBorder,
               }}
             >
               Cancel
             </button>
           </>
         )}
+      </div>
+
       </div>
     </PageShell>
   );

@@ -64,7 +64,6 @@ function LayoutContent() {
       <Header
         isAddressVisible={isExpanded}
         onToggleAddress={() => setIsExpanded((prev) => !prev)}
-        onAvatarClick={() => navigate("/account")}
       />
 
       {/* Content area below header */}
@@ -313,10 +312,10 @@ function LayoutContent() {
             <NavGroup
               isExpanded={isExpanded}
               isSectionActive={isShoppingCartActive}
-              flyoutLabel="Shopping Cart"
+              flyoutLabel="Cart"
               navItem={
                 <NavItem
-                  label="Shopping Cart"
+                  label="Shopping Cart (0)"
                   isActive={isShoppingCartActive}
                   isExpanded={isExpanded}
                   to="/shopping-cart"
@@ -330,7 +329,7 @@ function LayoutContent() {
               }
               subNavItems={
                 <>
-                  <SubNavItem label="Shopping Cart" to="/shopping-cart/cart" isActive={isActive("/shopping-cart/cart")} />
+                  <SubNavItem label="Cart" to="/shopping-cart/cart" isActive={isActive("/shopping-cart/cart")} />
                   <SubNavItem label="Payment Summary" to="/shopping-cart/payment-summary" isActive={isActive("/shopping-cart/payment-summary")} />
                 </>
               }

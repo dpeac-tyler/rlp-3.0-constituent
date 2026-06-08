@@ -495,12 +495,16 @@ function DeleteConfirmModal({
             style={{
               fontFamily: "'Roboto', sans-serif",
               fontSize: 16,
-              backgroundColor: "transparent",
-              color: "#005EA2",
-              textDecoration: "underline",
+              fontWeight: 700,
+              lineHeight: "24px",
+              padding: "10px 20px",
+              backgroundColor: "#B50909",
+              color: "#FFFFFF",
+              borderWidth: 0,
+              borderStyle: "none",
+              borderColor: "transparent",
+              borderRadius: 4,
               cursor: "pointer",
-              padding: 0,
-              ...noBorder,
             }}
           >
             Cancel
@@ -871,12 +875,16 @@ function UploadDocumentModal({
             style={{
               fontFamily: "'Roboto', sans-serif",
               fontSize: 16,
-              backgroundColor: "transparent",
-              color: "#005EA2",
-              textDecoration: "underline",
+              fontWeight: 700,
+              lineHeight: "24px",
+              padding: "10px 20px",
+              backgroundColor: "#B50909",
+              color: "#FFFFFF",
+              borderWidth: 0,
+              borderStyle: "none",
+              borderColor: "transparent",
+              borderRadius: 4,
               cursor: "pointer",
-              padding: 0,
-              ...noBorder,
             }}
           >
             Cancel

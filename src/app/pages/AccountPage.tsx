@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { PageShell } from "../components/PageShell";
 import { Eye, EyeOff, Check, X } from "lucide-react";
-import { useAccountOnboarding } from "../components/AccountOnboardingContext";
 import { useIsMobile } from "../hooks/useIsMobile";
 
 export function AccountPage() {
-  const { showOnboarding, dismiss } = useAccountOnboarding();
   const isMobile = useIsMobile();
   const [email, setEmail] = useState("boring@boringcompany.com");
   const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -90,14 +88,16 @@ export function AccountPage() {
   const buttonSecondaryStyle: React.CSSProperties = {
     fontFamily: "'Roboto', sans-serif",
     fontSize: 16,
-    backgroundColor: "transparent",
-    color: "#005EA2",
-    textDecoration: "underline",
-    cursor: "pointer",
-    padding: 0,
+    fontWeight: 700,
+    lineHeight: "24px",
+    padding: "10px 20px",
+    backgroundColor: "#B50909",
+    color: "#FFFFFF",
     borderWidth: 0,
     borderStyle: "none",
     borderColor: "transparent",
+    borderRadius: 4,
+    cursor: "pointer",
   };
 
   const buttonLinkStyle: React.CSSProperties = {
@@ -116,62 +116,6 @@ export function AccountPage() {
 
   return (
     <PageShell title="Account">
-      {/* Onboarding callout — shown on first visit */}
-      {showOnboarding && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "8px 16px",
-            marginBottom: 24,
-            backgroundColor: "#E7F6F8",
-            borderLeftWidth: 8,
-            borderLeftStyle: "solid",
-            borderLeftColor: "#00BDE3",
-            borderTopWidth: 0,
-            borderTopStyle: "solid",
-            borderTopColor: "transparent",
-            borderRightWidth: 0,
-            borderRightStyle: "solid",
-            borderRightColor: "transparent",
-            borderBottomWidth: 0,
-            borderBottomStyle: "solid",
-            borderBottomColor: "transparent",
-            borderRadius: 0,
-          }}
-          role="status"
-        >
-          <p
-            style={{
-              fontFamily: "'Roboto', sans-serif",
-              fontSize: 16,
-              lineHeight: "24px",
-              color: "#1B1B1B",
-              margin: 0,
-              flex: 1,
-            }}
-          >
-            Manage your account settings here.
-          </p>
-          <button
-            onClick={dismiss}
-            aria-label="Dismiss alert"
-            style={{
-              flexShrink: 0,
-              backgroundColor: "transparent",
-              cursor: "pointer",
-              padding: 4,
-              display: "inline-flex",
-              alignItems: "center",
-              borderWidth: 0,
-              borderStyle: "none",
-              borderColor: "transparent",
-            }}
-          >
-            <X size={16} color="#71767A" />
-          </button>
-        </div>
-      )}
 
       {/* Intro text */}
       <p
@@ -244,39 +188,13 @@ export function AccountPage() {
           <p
             style={{
               fontFamily: "'Roboto', sans-serif",
-              fontSize: 14,
+              fontSize: 16,
               lineHeight: "20px",
-              color: "#71767A",
+              color: "#1B1B1B",
               margin: "8px 0 0 0",
             }}
           >
-            Your username cannot be changed. Contact{" "}
-            <button
-              onClick={() => {
-                window.dispatchEvent(
-                  new CustomEvent("peter:open", {
-                    detail: { context: "username_support" },
-                  })
-                );
-              }}
-              style={{
-                fontFamily: "'Roboto', sans-serif",
-                fontSize: 14,
-                fontWeight: 700,
-                color: "#005EA2",
-                backgroundColor: "transparent",
-                borderWidth: 0,
-                borderStyle: "none",
-                borderColor: "transparent",
-                cursor: "pointer",
-                padding: 0,
-                textDecoration: "underline",
-                lineHeight: "20px",
-              }}
-            >
-              support
-            </button>{" "}
-            if you need assistance.
+            Your username cannot be changed. Contact support if you need assistance.
           </p>
         </div>
 

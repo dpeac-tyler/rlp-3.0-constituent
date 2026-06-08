@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PageShell } from "../components/PageShell";
-import { Pencil, X, Check, Copy } from "lucide-react";
+import { X } from "lucide-react";
 import { useProfile } from "../components/ProfileContext";
 import { useIsMobile } from "../hooks/useIsMobile";
 
@@ -116,23 +116,16 @@ const buttonPrimaryStyle: React.CSSProperties = {
 const buttonSecondaryStyle: React.CSSProperties = {
   fontFamily: "'Roboto', sans-serif",
   fontSize: 16,
-  backgroundColor: "transparent",
-  color: "#005EA2",
-  textDecoration: "underline",
+  fontWeight: 700,
+  lineHeight: "24px",
+  padding: "10px 20px",
+  backgroundColor: "#B50909",
+  color: "#FFFFFF",
+  borderWidth: 0,
+  borderStyle: "none",
+  borderColor: "transparent",
+  borderRadius: 4,
   cursor: "pointer",
-  padding: 0,
-  borderTopWidth: 0,
-  borderTopStyle: "solid",
-  borderTopColor: "transparent",
-  borderRightWidth: 0,
-  borderRightStyle: "solid",
-  borderRightColor: "transparent",
-  borderBottomWidth: 0,
-  borderBottomStyle: "solid",
-  borderBottomColor: "transparent",
-  borderLeftWidth: 0,
-  borderLeftStyle: "solid",
-  borderLeftColor: "transparent",
 };
 
 const sectionBorder: React.CSSProperties = {
@@ -338,13 +331,6 @@ export function LocationPage() {
                 >
                   {tabs.find((t) => t.key === activeTab)?.label}
                 </h2>
-                <button
-                  onClick={handleEdit}
-                  style={buttonPrimaryStyle}
-                >
-                  <Pencil size={16} />
-                  Edit
-                </button>
               </div>
 
               <div
@@ -368,6 +354,12 @@ export function LocationPage() {
                   <ReadOnlyField label="County" value={currentAddress.county} />
                 )}
                 <ReadOnlyField label="Zip Code" value={currentAddress.zip} />
+              </div>
+
+              <div style={{ marginTop: 24 }}>
+                <button onClick={handleEdit} style={buttonPrimaryStyle}>
+                  Edit
+                </button>
               </div>
             </>
           ) : (
@@ -411,7 +403,6 @@ export function LocationPage() {
                       gap: 6,
                     }}
                   >
-                    <Copy size={14} />
                     Copy from Mailing
                   </button>
                 )}
@@ -552,7 +543,6 @@ export function LocationPage() {
                         : "pointer",
                   }}
                 >
-                  <Check size={16} />
                   Save
                 </button>
                 <button onClick={handleCancel} style={buttonSecondaryStyle}>

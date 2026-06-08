@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { PageShell } from "../components/PageShell";
-import { Pencil, Check } from "lucide-react";
 import { useToast } from "../components/ToastContext";
 import { useProfile } from "../components/ProfileContext";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -201,23 +200,16 @@ const buttonPrimaryStyle: React.CSSProperties = {
 const buttonCancelStyle: React.CSSProperties = {
   fontFamily: "'Roboto', sans-serif",
   fontSize: 16,
-  backgroundColor: "transparent",
-  color: "#005EA2",
-  textDecoration: "underline",
+  fontWeight: 700,
+  lineHeight: "24px",
+  padding: "10px 20px",
+  backgroundColor: "#B50909",
+  color: "#FFFFFF",
+  borderWidth: 0,
+  borderStyle: "none",
+  borderColor: "transparent",
+  borderRadius: 4,
   cursor: "pointer",
-  padding: 0,
-  borderTopWidth: 0,
-  borderTopStyle: "solid",
-  borderTopColor: "transparent",
-  borderRightWidth: 0,
-  borderRightStyle: "solid",
-  borderRightColor: "transparent",
-  borderBottomWidth: 0,
-  borderBottomStyle: "solid",
-  borderBottomColor: "transparent",
-  borderLeftWidth: 0,
-  borderLeftStyle: "solid",
-  borderLeftColor: "transparent",
 };
 
 /* ── ReadOnlyField ─────────────────────────────────────── */
@@ -406,7 +398,6 @@ export function ProfilePage() {
             {/* Edit button */}
             <div style={{ marginTop: 24 }}>
               <button onClick={handleEdit} style={buttonPrimaryStyle}>
-                <Pencil size={16} />
                 Edit
               </button>
             </div>
@@ -679,7 +670,6 @@ export function ProfilePage() {
                 onClick={handleSave}
                 style={buttonPrimaryStyle}
               >
-                <Check size={16} />
                 Save
               </button>
               <button onClick={handleCancel} style={buttonCancelStyle}>
