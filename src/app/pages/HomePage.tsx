@@ -26,7 +26,7 @@ export function HomePage() {
           <div className="home-tile">
             <div className="home-tile__title-row">
               
-              <h2 className="home-tile__heading">Home Business</h2>
+              <h2 className="home-tile__heading">Business</h2>
             </div>
             <div className="home-tile__items">
               <a href="#" className="home-tile__item">

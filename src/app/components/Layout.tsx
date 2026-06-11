@@ -199,7 +199,7 @@ function LayoutContent() {
                 />
               </>
             )}
-            <NavDivider label="Individual" />
+            <NavDivider label="Business" />
             <NavGroup
               isExpanded={isExpanded}
               isSectionActive={isAffiliationsActive}
