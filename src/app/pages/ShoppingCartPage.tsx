@@ -5,11 +5,16 @@ interface ShoppingCartPageProps {
   activeTab: "cart" | "payment-summary";
 }
 
+const CART_TAB_LABELS: Record<ShoppingCartPageProps["activeTab"], string> = {
+  "cart": "Cart",
+  "payment-summary": "Payment Summary",
+};
+
 export function ShoppingCartPage({ activeTab }: ShoppingCartPageProps) {
   const isMobile = useIsMobile();
 
   return (
-    <PageShell title="Shopping Cart">
+    <PageShell title={`Shopping Cart - ${CART_TAB_LABELS[activeTab]}`}>
       <div
         style={{
           backgroundColor: "#FFFFFF",
@@ -30,7 +35,7 @@ function ShoppingCartContent() {
       {/* Intro text */}
       <p
         style={{
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontSize: 16,
           lineHeight: "26px",
           color: "#1B1B1B",
@@ -81,7 +86,7 @@ function ShoppingCartContent() {
         <div>
           <h3
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontWeight: 700,
               fontSize: 16,
               lineHeight: "24px",
@@ -94,7 +99,7 @@ function ShoppingCartContent() {
           </h3>
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#1B1B1B",
@@ -114,7 +119,7 @@ function ShoppingCartContent() {
       <div>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -126,7 +131,7 @@ function ShoppingCartContent() {
         </p>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -147,7 +152,7 @@ function PaymentSummaryContent() {
   return (
     <p
       style={{
-        fontFamily: "'Roboto', sans-serif",
+        fontFamily: "'Public Sans', sans-serif",
         fontSize: 16,
         lineHeight: "26px",
         color: "#71767A",

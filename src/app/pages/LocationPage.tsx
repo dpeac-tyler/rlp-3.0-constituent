@@ -60,7 +60,7 @@ const stateOptions = [
 ];
 
 const labelStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   lineHeight: "24px",
   fontWeight: 700,
@@ -70,7 +70,7 @@ const labelStyle: React.CSSProperties = {
 };
 
 const inputStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   lineHeight: "24px",
   padding: "8px 12px",
@@ -96,7 +96,7 @@ const selectStyle: React.CSSProperties = {
 };
 
 const buttonPrimaryStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   fontWeight: 700,
   lineHeight: "24px",
@@ -114,7 +114,7 @@ const buttonPrimaryStyle: React.CSSProperties = {
 };
 
 const buttonSecondaryStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   fontWeight: 700,
   lineHeight: "24px",
@@ -157,7 +157,7 @@ function ReadOnlyField({ label, value }: { label: string; value: string }) {
           fontSize: 14,
           fontWeight: 700,
           color: "#1B1B1B",
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           marginBottom: 4,
         }}
       >
@@ -168,7 +168,7 @@ function ReadOnlyField({ label, value }: { label: string; value: string }) {
           fontSize: 16,
           color: "#1B1B1B",
           lineHeight: "24px",
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
         }}
       >
         {value}
@@ -226,7 +226,7 @@ export function LocationPage() {
       {/* Intro */}
       <p
         style={{
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontSize: 16,
           lineHeight: "24px",
           color: "#1B1B1B",
@@ -271,7 +271,7 @@ export function LocationPage() {
                 }}
                 style={{
                   flex: 1,
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 16,
                   fontWeight: isActive ? 700 : 400,
                   lineHeight: "24px",
@@ -324,7 +324,7 @@ export function LocationPage() {
               >
                 <h2
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     color: "#1B1B1B",
                     margin: 0,
                   }}
@@ -375,7 +375,7 @@ export function LocationPage() {
               >
                 <h2
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     color: "#1B1B1B",
                     margin: 0,
                   }}
@@ -388,7 +388,7 @@ export function LocationPage() {
                       setEditDraft({ ...addresses.mailing });
                     }}
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       fontWeight: 700,
                       color: "#005EA2",

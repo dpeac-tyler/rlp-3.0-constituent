@@ -258,7 +258,7 @@ const controlBtnStyle: React.CSSProperties = {
 /* ── USWDS select style (longhand borders) ─────────────── */
 
 const uswdsSelectStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   lineHeight: "24px",
   color: "#1B1B1B",
@@ -445,7 +445,7 @@ export function InvoicesPage() {
         {/* Intro paragraph */}
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -461,7 +461,7 @@ export function InvoicesPage() {
             htmlFor="invoices-agency-select"
             style={{
               display: "block",
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontWeight: 700,
               fontSize: 16,
               lineHeight: "24px",
@@ -493,7 +493,7 @@ export function InvoicesPage() {
         {!selectedAgency ? (
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#71767A",
@@ -549,7 +549,7 @@ export function InvoicesPage() {
                 </svg>
                 <p
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     lineHeight: "20px",
                     color: "#1B1B1B",
@@ -593,7 +593,7 @@ export function InvoicesPage() {
                           setCurrentPage(0);
                         }}
                         style={{
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 14,
                           lineHeight: "20px",
                           fontWeight: 700,
@@ -639,7 +639,7 @@ export function InvoicesPage() {
             >
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   color: "#1B1B1B",
                 }}
@@ -650,7 +650,7 @@ export function InvoicesPage() {
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     color: "#1B1B1B",
                   }}
@@ -664,7 +664,7 @@ export function InvoicesPage() {
                     setCurrentPage(0);
                   }}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     color: "#1B1B1B",
                     height: 32,
@@ -705,7 +705,7 @@ export function InvoicesPage() {
                 style={{
                   width: "100%",
                   borderCollapse: "collapse",
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   tableLayout: "fixed",
                 }}
@@ -939,7 +939,7 @@ export function InvoicesPage() {
                             gap: 4,
                             height: 40,
                             padding: "0 12px",
-                            fontFamily: "'Roboto', sans-serif",
+                            fontFamily: "'Public Sans', sans-serif",
                             fontSize: 14,
                             color:
                               currentPage === 0 ? "#757575" : "#005EA2",
@@ -978,7 +978,7 @@ export function InvoicesPage() {
                                 justifyContent: "center",
                                 width: 40,
                                 height: 40,
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 color: "#1B1B1B",
                               }}
@@ -1004,7 +1004,7 @@ export function InvoicesPage() {
                                 justifyContent: "center",
                                 width: 40,
                                 height: 40,
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 fontWeight:
                                   currentPage === page ? 700 : 400,
@@ -1044,7 +1044,7 @@ export function InvoicesPage() {
                             gap: 4,
                             height: 40,
                             padding: "0 12px",
-                            fontFamily: "'Roboto', sans-serif",
+                            fontFamily: "'Public Sans', sans-serif",
                             fontSize: 14,
                             color:
                               currentPage >= totalPages - 1

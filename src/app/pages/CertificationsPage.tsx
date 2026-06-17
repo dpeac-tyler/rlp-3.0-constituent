@@ -369,7 +369,7 @@ export function CertificationsPage() {
         {/* Intro paragraphs */}
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -381,7 +381,7 @@ export function CertificationsPage() {
         </p>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -398,7 +398,7 @@ export function CertificationsPage() {
             htmlFor="certifications-agency-select"
             style={{
               display: "block",
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontWeight: 700,
               fontSize: 16,
               lineHeight: "24px",
@@ -417,7 +417,7 @@ export function CertificationsPage() {
             }}
             className="w-full"
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "24px",
               color: "#1B1B1B",
@@ -457,7 +457,7 @@ export function CertificationsPage() {
         {!selectedAgency ? (
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#71767A",
@@ -484,7 +484,7 @@ export function CertificationsPage() {
             >
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   color: "#1B1B1B",
                 }}
@@ -495,7 +495,7 @@ export function CertificationsPage() {
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     color: "#1B1B1B",
                   }}
@@ -509,7 +509,7 @@ export function CertificationsPage() {
                     setCurrentPage(0);
                   }}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     color: "#1B1B1B",
                     height: 32,
@@ -550,7 +550,7 @@ export function CertificationsPage() {
                 style={{
                   width: "100%",
                   borderCollapse: "collapse",
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   tableLayout: "fixed",
                 }}
@@ -652,7 +652,7 @@ export function CertificationsPage() {
                             ...cellBorder,
                           }}
                         >
-                          <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B", fontFamily: "'Roboto', sans-serif", fontSize: 14 }}>{row.status}</span>
+                          <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B", fontFamily: "'Public Sans', sans-serif", fontSize: 14 }}>{row.status}</span>
                         </td>
                         <td
                           data-label="Start Date"
@@ -750,7 +750,7 @@ export function CertificationsPage() {
                             gap: 4,
                             height: 40,
                             padding: "0 12px",
-                            fontFamily: "'Roboto', sans-serif",
+                            fontFamily: "'Public Sans', sans-serif",
                             fontSize: 14,
                             color: currentPage === 0 ? "#757575" : "#005EA2",
                             backgroundColor: "transparent",
@@ -787,7 +787,7 @@ export function CertificationsPage() {
                                 justifyContent: "center",
                                 width: 40,
                                 height: 40,
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 color: "#1B1B1B",
                               }}
@@ -809,7 +809,7 @@ export function CertificationsPage() {
                                 justifyContent: "center",
                                 width: 40,
                                 height: 40,
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 fontWeight: currentPage === page ? 700 : 400,
                                 color:
@@ -843,7 +843,7 @@ export function CertificationsPage() {
                             gap: 4,
                             height: 40,
                             padding: "0 12px",
-                            fontFamily: "'Roboto', sans-serif",
+                            fontFamily: "'Public Sans', sans-serif",
                             fontSize: 14,
                             color:
                               currentPage >= totalPages - 1

@@ -74,7 +74,7 @@ export function IconKeyAccordion({ items, sessionKey, defaultOpen = true }: Icon
           borderLeftColor: "transparent",
           padding: "12px 16px",
           cursor: "pointer",
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontWeight: 700,
           fontSize: 16,
           lineHeight: "24px",
@@ -112,7 +112,7 @@ export function IconKeyAccordion({ items, sessionKey, defaultOpen = true }: Icon
         >
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontWeight: 700,
               fontSize: 14,
               lineHeight: "20px",
@@ -156,7 +156,7 @@ export function IconKeyAccordion({ items, sessionKey, defaultOpen = true }: Icon
                 </div>
                 <span
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     lineHeight: "20px",
                     color: "#1B1B1B",

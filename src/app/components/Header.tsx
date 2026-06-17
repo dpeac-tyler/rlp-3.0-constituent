@@ -96,7 +96,7 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
             <p
               className="text-white"
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontWeight: 500,
                 fontSize: isMobile ? 14 : 20,
                 lineHeight: isMobile ? "20px" : "32px",
@@ -123,7 +123,7 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
                 href="#"
                 onClick={(e) => { e.preventDefault(); navigate(to); }}
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   fontWeight: 400,
                   color: "#FFFFFF",

@@ -93,7 +93,7 @@ function PeterSeal({ size = 40 }: { size?: number }) {
         textAnchor="middle"
         fill="#FFFFFF"
         fontSize="6"
-        fontFamily="'Roboto', sans-serif"
+        fontFamily="'Public Sans', sans-serif"
         fontWeight="500"
         letterSpacing="2.5"
         opacity="0.5"
@@ -1137,7 +1137,7 @@ export function ChatBot() {
             flexDirection: "column",
             overflow: "hidden",
             zIndex: 9999,
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             animation: "peterSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
@@ -1273,7 +1273,7 @@ export function ChatBot() {
                 fontWeight: 600,
                 color: "#D1FAE5",
                 letterSpacing: "0.5px",
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
               }}
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1549,7 +1549,7 @@ export function ChatBot() {
                             fontSize: 12,
                             fontWeight: 500,
                             cursor: "pointer",
-                            fontFamily: "'Roboto', sans-serif",
+                            fontFamily: "'Public Sans', sans-serif",
                             transition:
                               "background-color 0.15s, color 0.15s, box-shadow 0.15s",
                             letterSpacing: "0.1px",
@@ -1732,7 +1732,7 @@ export function ChatBot() {
                 borderRadius: 6,
                 fontSize: 12,
                 color: "#71767A",
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
               }}
             >
               Select an option above to continue
@@ -1793,7 +1793,7 @@ export function ChatBot() {
               style={{
                 fontSize: 10,
                 color: "#1B1B1B",
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 letterSpacing: "0.3px",
                 fontWeight: 400,
               }}

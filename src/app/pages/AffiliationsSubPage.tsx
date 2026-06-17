@@ -162,7 +162,7 @@ const controlBtnStyle: React.CSSProperties = {
 /* ── USWDS select style (longhand borders) ─────────────── */
 
 const uswdsSelectStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   lineHeight: "24px",
   color: "#1B1B1B",
@@ -191,7 +191,7 @@ const uswdsSelectStyle: React.CSSProperties = {
 };
 
 const pageSizeSelectStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 14,
   color: "#1B1B1B",
   height: 32,
@@ -359,7 +359,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
 
   const labelStyle: React.CSSProperties = {
     display: "block",
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontWeight: 700,
     fontSize: 16,
     lineHeight: "24px",
@@ -368,7 +368,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
   };
 
   return (
-    <PageShell title="Affiliations">
+    <PageShell title={`Affiliations - ${subTitle}`}>
       <div
         style={{
           backgroundColor: "#FFFFFF",
@@ -379,7 +379,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
         {/* Intro paragraphs */}
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -392,7 +392,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
         </p>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -430,7 +430,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
         {!selectedAgency ? (
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#71767A",
@@ -449,7 +449,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
             {/* Sub-page heading */}
             <h2
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 color: "#1B1B1B",
                 marginBottom: 24,
               }}
@@ -461,7 +461,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
             {sourceData.length === 0 ? (
               <p
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 16,
                   lineHeight: "26px",
                   color: "#71767A",
@@ -483,7 +483,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
                 >
                   <span
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color: "#1B1B1B",
                     }}
@@ -500,7 +500,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
                   >
                     <span
                       style={{
-                        fontFamily: "'Roboto', sans-serif",
+                        fontFamily: "'Public Sans', sans-serif",
                         fontSize: 14,
                         color: "#1B1B1B",
                       }}
@@ -529,7 +529,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
                     style={{
                       width: "100%",
                       borderCollapse: "collapse",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       tableLayout: "fixed",
                     }}
@@ -713,7 +713,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
                                 gap: 4,
                                 height: 40,
                                 padding: "0 12px",
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 color:
                                   currentPage === 0 ? "#757575" : "#005EA2",
@@ -752,7 +752,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
                                     justifyContent: "center",
                                     width: 40,
                                     height: 40,
-                                    fontFamily: "'Roboto', sans-serif",
+                                    fontFamily: "'Public Sans', sans-serif",
                                     fontSize: 14,
                                     color: "#1B1B1B",
                                   }}
@@ -776,7 +776,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
                                     justifyContent: "center",
                                     width: 40,
                                     height: 40,
-                                    fontFamily: "'Roboto', sans-serif",
+                                    fontFamily: "'Public Sans', sans-serif",
                                     fontSize: 14,
                                     color:
                                       currentPage === page
@@ -814,7 +814,7 @@ export function AffiliationsSubPage({ subTitle }: AffiliationsSubPageProps) {
                                 gap: 4,
                                 height: 40,
                                 padding: "0 12px",
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 color:
                                   currentPage >= totalPages - 1

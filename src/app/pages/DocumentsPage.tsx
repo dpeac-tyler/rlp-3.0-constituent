@@ -278,7 +278,7 @@ function ViewDocumentModal({
         >
           <h2
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 20,
               color: "#FFFFFF",
               margin: 0,
@@ -307,7 +307,7 @@ function ViewDocumentModal({
               display: "grid",
               gridTemplateColumns: "140px 1fr",
               gap: "12px 16px",
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
             }}
@@ -345,7 +345,7 @@ function ViewDocumentModal({
           <button
             onClick={onClose}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               fontWeight: 700,
               padding: "10px 20px",
@@ -427,7 +427,7 @@ function DeleteConfirmModal({
         >
           <h2
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 20,
               color: "#FFFFFF",
               margin: 0,
@@ -453,7 +453,7 @@ function DeleteConfirmModal({
         <div style={{ padding: "24px" }}>
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               color: "#1B1B1B",
               margin: 0,
@@ -477,7 +477,7 @@ function DeleteConfirmModal({
           <button
             onClick={onConfirm}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               fontWeight: 700,
               padding: "10px 20px",
@@ -493,7 +493,7 @@ function DeleteConfirmModal({
           <button
             onClick={onCancel}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               fontWeight: 700,
               lineHeight: "24px",
@@ -556,7 +556,7 @@ function UploadDocumentModal({
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 14,
     fontWeight: 700,
     color: "#1B1B1B",
@@ -565,7 +565,7 @@ function UploadDocumentModal({
   };
 
   const inputStyle: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 16,
     color: "#1B1B1B",
     width: "100%",
@@ -649,7 +649,7 @@ function UploadDocumentModal({
         >
           <h2
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 20,
               color: "#FFFFFF",
               margin: 0,
@@ -701,7 +701,7 @@ function UploadDocumentModal({
             {errors.name && (
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 12,
                   color: "#B50909",
                   marginTop: 4,
@@ -741,7 +741,7 @@ function UploadDocumentModal({
             {errors.category && (
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 12,
                   color: "#B50909",
                   marginTop: 4,
@@ -777,7 +777,7 @@ function UploadDocumentModal({
             </label>
             <p
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontSize: 12,
                 color: "#71767A",
                 margin: "0 0 8px 0",
@@ -801,7 +801,7 @@ function UploadDocumentModal({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   fontWeight: 700,
                   padding: "8px 16px",
@@ -821,7 +821,7 @@ function UploadDocumentModal({
               </button>
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   color: selectedFile ? "#1B1B1B" : "#71767A",
                 }}
@@ -832,7 +832,7 @@ function UploadDocumentModal({
             {errors.file && (
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 12,
                   color: "#B50909",
                   marginTop: 4,
@@ -857,7 +857,7 @@ function UploadDocumentModal({
           <button
             onClick={handleSubmit}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               fontWeight: 700,
               padding: "10px 20px",
@@ -873,7 +873,7 @@ function UploadDocumentModal({
           <button
             onClick={onCancel}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               fontWeight: 700,
               lineHeight: "24px",
@@ -1035,7 +1035,7 @@ export function DocumentsPage() {
       {/* Intro paragraph */}
       <p
         style={{
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontSize: 16,
           lineHeight: "24px",
           color: "#1B1B1B",
@@ -1065,7 +1065,7 @@ export function DocumentsPage() {
       >
         <span
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             color: "#1B1B1B",
           }}
@@ -1076,7 +1076,7 @@ export function DocumentsPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
             }}
@@ -1090,7 +1090,7 @@ export function DocumentsPage() {
               setCurrentPage(0);
             }}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
               height: 32,
@@ -1124,7 +1124,7 @@ export function DocumentsPage() {
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             tableLayout: "fixed",
           }}
@@ -1269,7 +1269,7 @@ export function DocumentsPage() {
                             })
                           }
                           style={{
-                            fontFamily: "'Roboto', sans-serif",
+                            fontFamily: "'Public Sans', sans-serif",
                             fontSize: 14,
                             color: "#005EA2",
                             backgroundColor: "transparent",
@@ -1388,7 +1388,7 @@ export function DocumentsPage() {
                       gap: 4,
                       height: 40,
                       padding: "0 12px",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color: currentPage === 0 ? "#757575" : "#005EA2",
                       backgroundColor: "transparent",
@@ -1425,7 +1425,7 @@ export function DocumentsPage() {
                           justifyContent: "center",
                           width: 40,
                           height: 40,
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 14,
                           color: "#1B1B1B",
                         }}
@@ -1447,7 +1447,7 @@ export function DocumentsPage() {
                           justifyContent: "center",
                           width: 40,
                           height: 40,
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 14,
                           fontWeight: currentPage === page ? 700 : 400,
                           color:
@@ -1479,7 +1479,7 @@ export function DocumentsPage() {
                       gap: 4,
                       height: 40,
                       padding: "0 12px",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color:
                         currentPage >= totalPages - 1
@@ -1521,7 +1521,7 @@ export function DocumentsPage() {
       <div style={{ marginTop: 24 }}>
         <button
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             fontWeight: 700,
             lineHeight: "24px",

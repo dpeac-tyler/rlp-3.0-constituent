@@ -83,7 +83,7 @@ export function NavItem({
         <span
           className="truncate text-left"
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontWeight: 600,
             fontSize: 14,
             lineHeight: "24px",

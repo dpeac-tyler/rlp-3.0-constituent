@@ -45,7 +45,7 @@ export function AccountPage() {
   const passwordFormValid = currentPassword.length > 0 && newPassword.length >= 8 && passwordsMatch;
 
   const inputStyle: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 16,
     lineHeight: "24px",
     padding: "8px 12px",
@@ -61,7 +61,7 @@ export function AccountPage() {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 16,
     lineHeight: "24px",
     fontWeight: 700,
@@ -71,7 +71,7 @@ export function AccountPage() {
   };
 
   const buttonPrimaryStyle: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 16,
     fontWeight: 700,
     lineHeight: "24px",
@@ -86,7 +86,7 @@ export function AccountPage() {
   };
 
   const buttonSecondaryStyle: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 16,
     fontWeight: 700,
     lineHeight: "24px",
@@ -101,7 +101,7 @@ export function AccountPage() {
   };
 
   const buttonLinkStyle: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 16,
     fontWeight: 700,
     color: "#005EA2",
@@ -120,7 +120,7 @@ export function AccountPage() {
       {/* Intro text */}
       <p
         style={{
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontSize: 16,
           lineHeight: "24px",
           color: "#1B1B1B",
@@ -141,7 +141,7 @@ export function AccountPage() {
         >
           <h2
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               color: "#1B1B1B",
               margin: "0 0 16px 0",
             }}
@@ -175,7 +175,7 @@ export function AccountPage() {
             </svg>
             <span
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontSize: 16,
                 lineHeight: "24px",
                 color: "#1B1B1B",
@@ -187,7 +187,7 @@ export function AccountPage() {
           </div>
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "20px",
               color: "#1B1B1B",
@@ -216,7 +216,7 @@ export function AccountPage() {
           >
             <h2
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 color: "#1B1B1B",
                 margin: 0,
               }}
@@ -249,7 +249,7 @@ export function AccountPage() {
               </svg>
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 16,
                   lineHeight: "24px",
                   color: "#1B1B1B",
@@ -311,7 +311,7 @@ export function AccountPage() {
           >
             <h2
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 color: "#1B1B1B",
                 margin: 0,
               }}
@@ -341,7 +341,7 @@ export function AccountPage() {
               </svg>
               <span
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 16,
                   lineHeight: "24px",
                   color: "#1B1B1B",
@@ -445,7 +445,7 @@ export function AccountPage() {
                 {newPassword.length > 0 && newPassword.length < 8 && (
                   <p
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       lineHeight: "20px",
                       color: "#B50909",
@@ -462,7 +462,7 @@ export function AccountPage() {
                 {newPassword.length >= 8 && (
                   <p
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       lineHeight: "20px",
                       color: "#00A91C",
@@ -520,7 +520,7 @@ export function AccountPage() {
                 {confirmPassword.length > 0 && !passwordsMatch && (
                   <p
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       lineHeight: "20px",
                       color: "#B50909",
@@ -537,7 +537,7 @@ export function AccountPage() {
                 {passwordsMatch && (
                   <p
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       lineHeight: "20px",
                       color: "#00A91C",

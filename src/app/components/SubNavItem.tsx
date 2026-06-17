@@ -52,7 +52,7 @@ export function SubNavItem({ label, to, isActive = false, backgroundColor = "#FF
       <span
         className="truncate"
         style={{
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontWeight: 600,
           fontSize: 14,
           lineHeight: "24px",

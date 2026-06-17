@@ -29,7 +29,7 @@ export function PacketsPage() {
         {/* Intro */}
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -44,7 +44,7 @@ export function PacketsPage() {
         </p>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -61,7 +61,7 @@ export function PacketsPage() {
             htmlFor="packets-agency-select"
             style={{
               display: "block",
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontWeight: 700,
               fontSize: 16,
               lineHeight: "24px",
@@ -77,7 +77,7 @@ export function PacketsPage() {
             value={selectedAgency}
             onChange={(e) => setSelectedAgency(e.target.value)}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "24px",
               color: "#1B1B1B",
@@ -117,7 +117,7 @@ export function PacketsPage() {
         {!selectedAgency ? (
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#71767A",
@@ -139,7 +139,7 @@ export function PacketsPage() {
             <button
               onClick={() => navigate("/packets/create")}
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontSize: 16,
                 fontWeight: 700,
                 color: "#FFFFFF",
@@ -155,7 +155,7 @@ export function PacketsPage() {
             </button>
             <h2
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 color: "#1B1B1B",
                 margin: "0 0 24px 0",
               }}

@@ -206,16 +206,16 @@ export function PacketsTable() {
           gap: 8,
         }}
       >
-        <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
+        <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
           Showing 1 - {end} of {totalEntries} Entries
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
+          <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
           <select
             value={pageSize}
             onChange={(e) => setPageSize(Number(e.target.value))}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
               height: 32,
@@ -255,7 +255,7 @@ export function PacketsTable() {
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             tableLayout: "fixed",
           }}
@@ -299,7 +299,7 @@ export function PacketsTable() {
                           border: "none",
                           padding: 0,
                           cursor: "pointer",
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 14,
                           color: "#1B1B1B",
                           display: "inline-flex",
@@ -460,7 +460,7 @@ export function PacketsTable() {
               setPackets(MOCK_DATA.map((p) => ({ ...p, children: [...p.children] })));
             }}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               fontWeight: 600,
               color: "#71767A",
@@ -503,7 +503,7 @@ export function PacketsTable() {
                 width: "100%",
                 maxWidth: 680,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
               }}
             >
               {/* Header */}
@@ -590,7 +590,7 @@ export function PacketsTable() {
                 <button
                   onClick={() => handleSend(confirmSendId)}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 15,
                     fontWeight: 700,
                     color: "#FFFFFF",
@@ -606,7 +606,7 @@ export function PacketsTable() {
                 <button
                   onClick={() => setConfirmSendId(null)}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 15,
                     fontWeight: 700,
                     color: "#FFFFFF",
@@ -649,7 +649,7 @@ export function PacketsTable() {
                 width: "100%",
                 maxWidth: 480,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
               }}
             >
               {/* Header */}
@@ -715,7 +715,7 @@ export function PacketsTable() {
                     setConfirmDeleteId(null);
                   }}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 15,
                     fontWeight: 700,
                     color: "#FFFFFF",
@@ -731,7 +731,7 @@ export function PacketsTable() {
                 <button
                   onClick={() => setConfirmDeleteId(null)}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 15,
                     fontWeight: 700,
                     color: "#FFFFFF",

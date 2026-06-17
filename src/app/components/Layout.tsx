@@ -462,7 +462,7 @@ function LayoutContent() {
         <div style={{ textAlign: "right" }}>
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               color: "#1B1B1B",
               margin: 0,
             }}
@@ -472,7 +472,7 @@ function LayoutContent() {
           <a
             href="mailto:agency@agencyname.com"
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               color: "#005EA2",
               margin: 0,
             }}

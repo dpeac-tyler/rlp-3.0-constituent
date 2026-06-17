@@ -8,7 +8,7 @@ export default function HeaderAvatar() {
         <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 40 40">
           <circle cx="20" cy="20" fill="var(--fill-0, #009688)" id="Ellipse 3" r="20" />
         </svg>
-        <p className="absolute font-['Roboto:Regular',sans-serif] font-normal inset-[17.5%_15%_12.5%_15%] leading-[28px] text-[16px] text-center text-white tracking-[0.15px] whitespace-pre-wrap" style={{ fontVariationSettings: "'wdth' 100" }}>
+        <p className="absolute font-['Public+Sans:Regular',sans-serif] font-normal inset-[17.5%_15%_12.5%_15%] leading-[28px] text-[16px] text-center text-white tracking-[0.15px] whitespace-pre-wrap" style={{ fontVariationSettings: "'wdth' 100" }}>
           LC
         </p>
       </div>

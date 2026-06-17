@@ -72,7 +72,7 @@ const MOCK_CONSTITUENTS: Constituent[] = [
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   color: "#1B1B1B",
   padding: "8px 12px",
@@ -105,7 +105,7 @@ const thStyle: React.CSSProperties = {
   borderRightWidth: 0,
   borderRightStyle: "solid",
   borderRightColor: "transparent",
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
 };
 
 const tdStyle: React.CSSProperties = {
@@ -125,12 +125,12 @@ const tdStyle: React.CSSProperties = {
   borderRightWidth: 0,
   borderRightStyle: "solid",
   borderRightColor: "transparent",
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
 };
 
 const labelStyle: React.CSSProperties = {
   display: "block",
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontWeight: 700,
   fontSize: 15,
   color: "#1B1B1B",
@@ -253,7 +253,7 @@ export function CreatePacketPage() {
   const nonPrimaryRoles = selectedPacket ? selectedPacket.roles.slice(1) : [];
 
   const sectionHeading: React.CSSProperties = {
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontSize: 19,
     fontWeight: 700,
     color: "#1B1B1B",
@@ -279,7 +279,7 @@ export function CreatePacketPage() {
               listStyle: "none",
               margin: 0,
               padding: 0,
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
             }}
           >
@@ -305,7 +305,7 @@ export function CreatePacketPage() {
         >
           <h1
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 24,
               fontWeight: 700,
               color: "#1B1B1B",
@@ -317,7 +317,7 @@ export function CreatePacketPage() {
 
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#1B1B1B",
@@ -336,7 +336,7 @@ export function CreatePacketPage() {
               htmlFor="packet-name-input"
               style={{
                 display: "block",
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontWeight: 700,
                 fontSize: 16,
                 lineHeight: "24px",
@@ -351,7 +351,7 @@ export function CreatePacketPage() {
             </label>
             <p
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontSize: 14,
                 color: "#71767A",
                 marginBottom: 6,
@@ -422,7 +422,7 @@ export function CreatePacketPage() {
                       borderBottomWidth: 1,
                       borderBottomStyle: "solid",
                       borderBottomColor: "#DFE1E2",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#E8F0F8")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#FFFFFF")}
@@ -457,7 +457,7 @@ export function CreatePacketPage() {
                   borderLeftStyle: "solid",
                   borderLeftColor: "#565C65",
                   padding: "14px",
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   color: "#71767A",
                 }}
@@ -485,7 +485,7 @@ export function CreatePacketPage() {
                   style={{
                     width: "100%",
                     borderCollapse: "collapse",
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     tableLayout: "fixed",
                   }}
@@ -573,7 +573,7 @@ export function CreatePacketPage() {
                   <button
                     onClick={openModal}
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 15,
                       fontWeight: 700,
                       color: "#1b1b1b",
@@ -604,7 +604,7 @@ export function CreatePacketPage() {
                       navigate("/packets");
                     }}
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 16,
                       fontWeight: 700,
                       color: "#FFFFFF",
@@ -620,7 +620,7 @@ export function CreatePacketPage() {
                   <button
                     onClick={() => navigate("/packets")}
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 16,
                       fontWeight: 700,
                       color: "#FFFFFF",
@@ -680,7 +680,7 @@ export function CreatePacketPage() {
             >
               <h2
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 20,
                   fontWeight: 700,
                   color: "#FFFFFF",
@@ -761,7 +761,7 @@ export function CreatePacketPage() {
                         alignItems: "center",
                         gap: 6,
                         cursor: "pointer",
-                        fontFamily: "'Roboto', sans-serif",
+                        fontFamily: "'Public Sans', sans-serif",
                         fontSize: 15,
                         color: "#1B1B1B",
                       }}
@@ -833,7 +833,7 @@ export function CreatePacketPage() {
                 <button
                   onClick={handleSearch}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 15,
                     fontWeight: 700,
                     color: "#FFFFFF",
@@ -849,7 +849,7 @@ export function CreatePacketPage() {
                 <button
                   onClick={resetSearch}
                   style={{
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 15,
                     fontWeight: 400,
                     color: "#005EA2",
@@ -872,7 +872,7 @@ export function CreatePacketPage() {
                   {searchResults.length === 0 ? (
                     <p
                       style={{
-                        fontFamily: "'Roboto', sans-serif",
+                        fontFamily: "'Public Sans', sans-serif",
                         fontSize: 14,
                         color: "#71767A",
                         fontStyle: "italic",
@@ -888,7 +888,7 @@ export function CreatePacketPage() {
                         style={{
                           width: "100%",
                           borderCollapse: "collapse",
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 13,
                           tableLayout: "fixed",
                         }}
@@ -964,7 +964,7 @@ export function CreatePacketPage() {
                 onClick={handleAddSelected}
                 disabled={!selectedResult || !modalRole}
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 15,
                   fontWeight: 700,
                   color: "#FFFFFF",
@@ -981,7 +981,7 @@ export function CreatePacketPage() {
               <button
                 onClick={closeModal}
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 15,
                   fontWeight: 700,
                   color: "#FFFFFF",

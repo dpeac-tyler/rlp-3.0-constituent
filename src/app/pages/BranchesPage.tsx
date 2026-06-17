@@ -172,7 +172,7 @@ export function BranchesPage() {
       {/* Intro paragraph */}
       <p
         style={{
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontSize: 16,
           lineHeight: "24px",
           color: "#1B1B1B",
@@ -202,7 +202,7 @@ export function BranchesPage() {
       >
         <span
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             color: "#1B1B1B",
           }}
@@ -213,7 +213,7 @@ export function BranchesPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
             }}
@@ -227,7 +227,7 @@ export function BranchesPage() {
               setCurrentPage(0);
             }}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
               height: 32,
@@ -268,7 +268,7 @@ export function BranchesPage() {
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             tableLayout: "fixed",
           }}
@@ -528,7 +528,7 @@ export function BranchesPage() {
                       gap: 4,
                       height: 40,
                       padding: "0 12px",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color: currentPage === 0 ? "#757575" : "#005EA2",
                       backgroundColor: "transparent",
@@ -565,7 +565,7 @@ export function BranchesPage() {
                           justifyContent: "center",
                           width: 40,
                           height: 40,
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 14,
                           color: "#1B1B1B",
                         }}
@@ -587,7 +587,7 @@ export function BranchesPage() {
                           justifyContent: "center",
                           width: 40,
                           height: 40,
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 14,
                           fontWeight: currentPage === page ? 700 : 400,
                           color:
@@ -619,7 +619,7 @@ export function BranchesPage() {
                       gap: 4,
                       height: 40,
                       padding: "0 12px",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color:
                         currentPage >= totalPages - 1
@@ -661,7 +661,7 @@ export function BranchesPage() {
       <div style={{ marginTop: 24 }}>
         <button
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             fontWeight: 700,
             lineHeight: "24px",

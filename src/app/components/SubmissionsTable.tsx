@@ -299,7 +299,7 @@ export function SubmissionsTable() {
       >
         <span
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             color: "#1B1B1B",
           }}
@@ -310,7 +310,7 @@ export function SubmissionsTable() {
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
             }}
@@ -324,7 +324,7 @@ export function SubmissionsTable() {
               setCurrentPage(0);
             }}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 14,
               color: "#1B1B1B",
               height: 32,
@@ -365,7 +365,7 @@ export function SubmissionsTable() {
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             tableLayout: "fixed",
           }}
@@ -498,7 +498,7 @@ export function SubmissionsTable() {
                           border: "none",
                           padding: 0,
                           cursor: "pointer",
-                          fontFamily: "'Roboto', sans-serif",
+                          fontFamily: "'Public Sans', sans-serif",
                           fontSize: 14,
                           color: "#1B1B1B",
                           display: "inline-flex",
@@ -822,7 +822,7 @@ export function SubmissionsTable() {
                     gap: 4,
                     height: 40,
                     padding: "0 12px",
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     color: currentPage === 0 ? "#757575" : "#005EA2",
                     backgroundColor: "transparent",
@@ -860,7 +860,7 @@ export function SubmissionsTable() {
                         justifyContent: "center",
                         width: 40,
                         height: 40,
-                        fontFamily: "'Roboto', sans-serif",
+                        fontFamily: "'Public Sans', sans-serif",
                         fontSize: 14,
                         color: "#1B1B1B",
                       }}
@@ -880,7 +880,7 @@ export function SubmissionsTable() {
                         justifyContent: "center",
                         width: 40,
                         height: 40,
-                        fontFamily: "'Roboto', sans-serif",
+                        fontFamily: "'Public Sans', sans-serif",
                         fontSize: 14,
                         fontWeight: currentPage === page ? 700 : 400,
                         color: currentPage === page ? "#FFFFFF" : "#005EA2",
@@ -920,7 +920,7 @@ export function SubmissionsTable() {
                     gap: 4,
                     height: 40,
                     padding: "0 12px",
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     fontSize: 14,
                     color: currentPage >= totalPages - 1 ? "#757575" : "#005EA2",
                     backgroundColor: "transparent",

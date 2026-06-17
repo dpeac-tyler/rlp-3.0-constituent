@@ -35,7 +35,7 @@ export function PageShell({ title, children, heroHeight = 80, titleStyle, titleR
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             color: "#1B1B1B",
             margin: 0,
             ...titleStyle,

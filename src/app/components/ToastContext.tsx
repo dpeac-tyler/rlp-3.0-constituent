@@ -142,7 +142,7 @@ function Toast({
         {/* Message text */}
         <span
           style={{
-            fontFamily: "'Public Sans', 'Roboto', sans-serif",
+            fontFamily: "'Public Sans', 'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: 1.5,
             color: "#1B1B1B",

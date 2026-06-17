@@ -139,7 +139,7 @@ export function AssetInstancePage() {
       <span style={{
         fontSize: 12,
         fontWeight: 700,
-        fontFamily: "'Roboto', sans-serif",
+        fontFamily: "'Public Sans', sans-serif",
         color: "#FFFFFF",
         backgroundColor: "#565C65",
         borderRadius: 4,
@@ -154,7 +154,7 @@ export function AssetInstancePage() {
   );
 
   const statusRight = asset?.status ? (
-    <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 16, color: "#1B1B1B" }}>
+    <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 16, color: "#1B1B1B" }}>
       Status: <strong>{asset.status}</strong>
     </span>
   ) : null;
@@ -165,7 +165,7 @@ export function AssetInstancePage() {
         <button
           onClick={() => navigate("/my-assets")}
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             color: "#005EA2",
             backgroundColor: "transparent",
@@ -180,7 +180,7 @@ export function AssetInstancePage() {
           Back to My Assets
         </button>
         {asset?.idValue && (
-          <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
+          <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
             {">"} {asset.idValue}
           </span>
         )}
@@ -213,7 +213,7 @@ export function AssetInstancePage() {
                 onClick={() => setActiveTab(tab.key)}
                 style={{
                   flex: 1,
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 16,
                   fontWeight: isActive ? 700 : 400,
                   lineHeight: "24px",
@@ -259,7 +259,7 @@ export function AssetInstancePage() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 14,
                   color: "#1B1B1B",
                   marginBottom: 32,
@@ -270,12 +270,12 @@ export function AssetInstancePage() {
               </div>
 
               {/* Attributes */}
-              <h2 style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 700, fontSize: 20, color: "#1B1B1B", margin: "0 0 16px 0" }}>
+              <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: 20, color: "#1B1B1B", margin: "0 0 16px 0" }}>
                 Attributes
               </h2>
 
               {/* Standard */}
-              <h3 style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 700, fontSize: 17, color: "#1B1B1B", margin: "0 0 12px 0" }}>
+              <h3 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: 17, color: "#1B1B1B", margin: "0 0 12px 0" }}>
                 Standard
               </h3>
               {[
@@ -295,7 +295,7 @@ export function AssetInstancePage() {
                 { label: "Mailing Address State", value: "CA" },
                 { label: "Mailing Address Zip Code", value: "90250" },
               ].map(({ label, value }) => (
-                <p key={label} style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#565C65", margin: "0 0 8px 0" }}>
+                <p key={label} style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#565C65", margin: "0 0 8px 0" }}>
                   {label}: {value ? <strong style={{ color: "#1B1B1B" }}>{value}</strong> : null}
                 </p>
               ))}
@@ -304,7 +304,7 @@ export function AssetInstancePage() {
               <hr style={{ border: "none", borderTop: "1px solid #DFE1E2", margin: "28px 0" }} />
 
               {/* Custom */}
-              <h3 style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 700, fontSize: 17, color: "#1B1B1B", margin: "0 0 12px 0" }}>
+              <h3 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: 17, color: "#1B1B1B", margin: "0 0 12px 0" }}>
                 Custom
               </h3>
               {[
@@ -321,7 +321,7 @@ export function AssetInstancePage() {
                 { label: "Installer Phone #", value: "" },
                 { label: "Installer Email", value: "" },
               ].map(({ label, value }) => (
-                <p key={label} style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#565C65", margin: "0 0 8px 0" }}>
+                <p key={label} style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#565C65", margin: "0 0 8px 0" }}>
                   {label}: {value ? <strong style={{ color: "#1B1B1B" }}>{value}</strong> : null}
                 </p>
               ))}
@@ -335,19 +335,19 @@ export function AssetInstancePage() {
               />
 
               {/* Table title + controls */}
-              <h2 style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 700, fontSize: 18, color: "#1B1B1B", margin: "0 0 12px 0" }}>
+              <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: 18, color: "#1B1B1B", margin: "0 0 12px 0" }}>
                 Submissions
               </h2>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
+                <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
                   Showing 1 - {MOCK_SUBMISSIONS.length} of {MOCK_SUBMISSIONS.length} Entries
                 </span>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
+                  <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
                   <select
                     defaultValue={10}
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color: "#1B1B1B",
                       height: 32,
@@ -372,7 +372,7 @@ export function AssetInstancePage() {
 
               {/* Table */}
               <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Roboto', sans-serif", fontSize: 14 }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Public Sans', sans-serif", fontSize: 14 }}>
                   <thead>
                     <tr>
                       {["License Type", "Application Name", "Submission Number", "Constituent Name", "Status", "Last Updated", "Controls"].map((h) => (
@@ -392,7 +392,7 @@ export function AssetInstancePage() {
                           <td style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>{row.submissionNumber}</td>
                           <td style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>{row.constituentName}</td>
                           <td style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
-                            <span style={{ color: STATUS_COLORS[row.status] ?? "#1B1B1B", fontFamily: "'Roboto', sans-serif", fontSize: 14 }}>{row.status}</span>
+                            <span style={{ color: STATUS_COLORS[row.status] ?? "#1B1B1B", fontFamily: "'Public Sans', sans-serif", fontSize: 14 }}>{row.status}</span>
                           </td>
                           <td style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>{row.lastUpdated}</td>
                           <td style={{ padding: "10px 12px", backgroundColor: bg, whiteSpace: "nowrap", ...cellBorder }}>
@@ -420,19 +420,19 @@ export function AssetInstancePage() {
               />
 
               {/* Table title + controls */}
-              <h2 style={{ fontFamily: "'Roboto', sans-serif", fontWeight: 700, fontSize: 18, color: "#1B1B1B", margin: "0 0 12px 0" }}>
+              <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: 18, color: "#1B1B1B", margin: "0 0 12px 0" }}>
                 Certifications
               </h2>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
+                <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
                   Showing 1 - {MOCK_CERTIFICATIONS.length} of {MOCK_CERTIFICATIONS.length} Entries
                 </span>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontFamily: "'Roboto', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
+                  <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
                   <select
                     defaultValue={10}
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color: "#1B1B1B",
                       height: 32,
@@ -457,7 +457,7 @@ export function AssetInstancePage() {
 
               {/* Table */}
               <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Roboto', sans-serif", fontSize: 14 }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Public Sans', sans-serif", fontSize: 14 }}>
                   <thead>
                     <tr>
                       {["Identifier", "License Type", "License Number", "Application Type", "Status", "Start Date", "Expiration Date", "Controls"].map((h) => (
@@ -477,7 +477,7 @@ export function AssetInstancePage() {
                           <td style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>{row.licenseNumber}</td>
                           <td style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>{row.applicationType}</td>
                           <td style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
-                            <span style={{ color: STATUS_COLORS[row.status] ?? "#1B1B1B", fontFamily: "'Roboto', sans-serif", fontSize: 14 }}>{row.status}</span>
+                            <span style={{ color: STATUS_COLORS[row.status] ?? "#1B1B1B", fontFamily: "'Public Sans', sans-serif", fontSize: 14 }}>{row.status}</span>
                           </td>
                           <td style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>{row.startDate}</td>
                           <td style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>{row.expirationDate}</td>

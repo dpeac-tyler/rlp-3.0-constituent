@@ -16,12 +16,17 @@ interface SubmissionsPageProps {
   activeTab: "my-submissions" | "payment-requests";
 }
 
+const SUBMISSIONS_TAB_LABELS: Record<SubmissionsPageProps["activeTab"], string> = {
+  "my-submissions": "My Submissions",
+  "payment-requests": "Payment Requests",
+};
+
 export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
   const isMobile = useIsMobile();
   const { selectedAgency, setSelectedAgency } = useAgency();
 
   return (
-    <PageShell title="Submissions">
+    <PageShell title={`Submissions - ${SUBMISSIONS_TAB_LABELS[activeTab]}`}>
       <div
         style={{
           backgroundColor: "#FFFFFF",
@@ -32,7 +37,7 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
         {/* Intro paragraphs */}
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -48,7 +53,7 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
         </p>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -63,7 +68,7 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
         </p>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -80,7 +85,7 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
             htmlFor="submissions-agency-select"
             style={{
               display: "block",
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontWeight: 700,
               fontSize: 16,
               lineHeight: "24px",
@@ -96,7 +101,7 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
             value={selectedAgency}
             onChange={(e) => setSelectedAgency(e.target.value)}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "24px",
               color: "#1B1B1B",
@@ -136,7 +141,7 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
         {!selectedAgency ? (
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#71767A",
@@ -152,7 +157,7 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
             {/* Sub-page heading */}
             <h2
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 color: "#1B1B1B",
                 marginBottom: 24,
               }}

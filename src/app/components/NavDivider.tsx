@@ -8,7 +8,7 @@ export function NavDivider({ label }: NavDividerProps) {
       <span
         className="truncate"
         style={{
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontWeight: 400,
           fontSize: 14,
           lineHeight: "24px",

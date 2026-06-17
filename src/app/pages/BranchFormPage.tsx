@@ -310,7 +310,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
       <PageShell title="Branch Not Found">
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             color: "#1B1B1B",
             margin: 0,
@@ -325,7 +325,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
             alignItems: "center",
             gap: 6,
             marginTop: 16,
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 14,
             color: "#005EA2",
             backgroundColor: "transparent",
@@ -351,7 +351,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
           display: "inline-flex",
           alignItems: "center",
           gap: 6,
-          fontFamily: "'Roboto', sans-serif",
+          fontFamily: "'Public Sans', sans-serif",
           fontSize: 14,
           color: "#005EA2",
           backgroundColor: "transparent",
@@ -390,7 +390,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
                   fontSize: 14,
                   fontWeight: 700,
                   color: "#1B1B1B",
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   marginBottom: 4,
                 }}
               >
@@ -401,7 +401,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
                   fontSize: 16,
                   color: "#1B1B1B",
                   lineHeight: "24px",
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                 }}
               >
                 {form[f.key] || "—"}
@@ -428,7 +428,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
                     fontSize: 14,
                     fontWeight: 700,
                     color: "#1B1B1B",
-                    fontFamily: "'Roboto', sans-serif",
+                    fontFamily: "'Public Sans', sans-serif",
                     marginBottom: 6,
                   }}
                 >
@@ -450,7 +450,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
                       backgroundColor: "#FFFFFF",
                       borderRadius: 0,
                       boxSizing: "border-box",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       outline: "none",
                       ...(hasError ? errorInputBorder : inputBorder),
                     }}
@@ -487,7 +487,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
                       backgroundColor: "#FFFFFF",
                       borderRadius: 0,
                       boxSizing: "border-box",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       outline: "none",
                       ...(hasError ? errorInputBorder : inputBorder),
                     }}
@@ -499,7 +499,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
                       display: "block",
                       fontSize: 13,
                       color: "#D54309",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       marginTop: 4,
                     }}
                   >
@@ -524,7 +524,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
           <button
             onClick={() => navigate("/account/branches")}
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               fontWeight: 700,
               lineHeight: "24px",
@@ -543,7 +543,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
             <button
               onClick={handleSave}
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontSize: 16,
                 fontWeight: 700,
                 lineHeight: "24px",
@@ -560,7 +560,7 @@ export function BranchFormPage({ mode }: BranchFormPageProps) {
             <button
               onClick={() => navigate("/account/branches")}
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontSize: 16,
                 fontWeight: 700,
                 lineHeight: "24px",

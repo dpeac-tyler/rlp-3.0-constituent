@@ -8,7 +8,7 @@ export function AddressContainer() {
       className="flex flex-col bg-white"
       style={{
         padding: "16px 16px 16px 5px",
-        fontFamily: "'Roboto', sans-serif",
+        fontFamily: "'Public Sans', sans-serif",
         fontSize: 14,
         letterSpacing: "0.16px",
         color: "#000000",

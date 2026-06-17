@@ -100,7 +100,7 @@ export function NavGroup({
             <div
               style={{
                 padding: "10px 16px 6px 16px",
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 fontWeight: 600,
                 fontSize: 14,
                 lineHeight: "24px",

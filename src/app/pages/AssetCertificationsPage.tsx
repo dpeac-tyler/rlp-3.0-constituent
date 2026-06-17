@@ -143,7 +143,7 @@ const controlBtnStyle: React.CSSProperties = {
 /* ── USWDS select style (longhand borders) ─────────────── */
 
 const uswdsSelectStyle: React.CSSProperties = {
-  fontFamily: "'Roboto', sans-serif",
+  fontFamily: "'Public Sans', sans-serif",
   fontSize: 16,
   lineHeight: "24px",
   color: "#1B1B1B",
@@ -315,7 +315,7 @@ export function AssetCertificationsPage({
 
   const labelStyle: React.CSSProperties = {
     display: "block",
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'Public Sans', sans-serif",
     fontWeight: 700,
     fontSize: 16,
     lineHeight: "24px",
@@ -329,7 +329,7 @@ export function AssetCertificationsPage({
       : "Sponsored Certifications";
 
   return (
-    <PageShell title="Certifications">
+    <PageShell title={`Certifications - ${tabLabel}`}>
       <div
         style={{
           backgroundColor: "#FFFFFF",
@@ -340,7 +340,7 @@ export function AssetCertificationsPage({
         {/* Intro paragraphs */}
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -352,7 +352,7 @@ export function AssetCertificationsPage({
         </p>
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             fontSize: 16,
             lineHeight: "26px",
             color: "#1B1B1B",
@@ -390,7 +390,7 @@ export function AssetCertificationsPage({
         {!selectedAgency ? (
           <p
             style={{
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Public Sans', sans-serif",
               fontSize: 16,
               lineHeight: "26px",
               color: "#71767A",
@@ -409,7 +409,7 @@ export function AssetCertificationsPage({
             {/* Sub-page heading */}
             <h2
               style={{
-                fontFamily: "'Roboto', sans-serif",
+                fontFamily: "'Public Sans', sans-serif",
                 color: "#1B1B1B",
                 marginBottom: 24,
               }}
@@ -430,7 +430,7 @@ export function AssetCertificationsPage({
                 >
                   <span
                     style={{
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       color: "#1B1B1B",
                     }}
@@ -447,7 +447,7 @@ export function AssetCertificationsPage({
                   >
                     <span
                       style={{
-                        fontFamily: "'Roboto', sans-serif",
+                        fontFamily: "'Public Sans', sans-serif",
                         fontSize: 14,
                         color: "#1B1B1B",
                       }}
@@ -461,7 +461,7 @@ export function AssetCertificationsPage({
                         setCurrentPage(0);
                       }}
                       style={{
-                        fontFamily: "'Roboto', sans-serif",
+                        fontFamily: "'Public Sans', sans-serif",
                         fontSize: 14,
                         color: "#1B1B1B",
                         height: 32,
@@ -502,7 +502,7 @@ export function AssetCertificationsPage({
                     style={{
                       width: "100%",
                       borderCollapse: "collapse",
-                      fontFamily: "'Roboto', sans-serif",
+                      fontFamily: "'Public Sans', sans-serif",
                       fontSize: 14,
                       tableLayout: "fixed",
                     }}
@@ -727,7 +727,7 @@ export function AssetCertificationsPage({
                                 gap: 4,
                                 height: 40,
                                 padding: "0 12px",
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 color:
                                   currentPage === 0
@@ -772,7 +772,7 @@ export function AssetCertificationsPage({
                                     justifyContent: "center",
                                     width: 40,
                                     height: 40,
-                                    fontFamily: "'Roboto', sans-serif",
+                                    fontFamily: "'Public Sans', sans-serif",
                                     fontSize: 14,
                                     color: "#1B1B1B",
                                   }}
@@ -800,7 +800,7 @@ export function AssetCertificationsPage({
                                     justifyContent: "center",
                                     width: 40,
                                     height: 40,
-                                    fontFamily: "'Roboto', sans-serif",
+                                    fontFamily: "'Public Sans', sans-serif",
                                     fontSize: 14,
                                     fontWeight:
                                       currentPage === page ? 700 : 400,
@@ -840,7 +840,7 @@ export function AssetCertificationsPage({
                                 gap: 4,
                                 height: 40,
                                 padding: "0 12px",
-                                fontFamily: "'Roboto', sans-serif",
+                                fontFamily: "'Public Sans', sans-serif",
                                 fontSize: 14,
                                 color:
                                   currentPage >= totalPages - 1
@@ -883,7 +883,7 @@ export function AssetCertificationsPage({
             {activeTab === "sponsored-certifications" && (
               <p
                 style={{
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Public Sans', sans-serif",
                   fontSize: 16,
                   lineHeight: "26px",
                   color: "#71767A",

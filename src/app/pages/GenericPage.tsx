@@ -19,7 +19,7 @@ export function GenericPage({ title }: GenericPageProps) {
       >
         <p
           style={{
-            fontFamily: "'Roboto', sans-serif",
+            fontFamily: "'Public Sans', sans-serif",
             color: "#1B1B1B",
             margin: 0,
           }}
