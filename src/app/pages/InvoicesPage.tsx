@@ -562,70 +562,67 @@ export function InvoicesPage() {
               </div>
             </div>
 
-            {/* Invoice Status button group — right-aligned */}
+            {/* Invoice Status tabs */}
             <div
               style={{
                 display: "flex",
-                justifyContent: "flex-end",
-                marginBottom: 16,
+                borderBottomWidth: 2,
+                borderBottomStyle: "solid",
+                borderBottomColor: "#DFE1E2",
+                borderTopWidth: 0,
+                borderTopStyle: "solid",
+                borderTopColor: "transparent",
+                borderLeftWidth: 0,
+                borderLeftStyle: "solid",
+                borderLeftColor: "transparent",
+                borderRightWidth: 0,
+                borderRightStyle: "solid",
+                borderRightColor: "transparent",
+                marginBottom: 24,
               }}
             >
-              <ul
-                style={{
-                  display: "flex",
-                  listStyle: "none",
-                  margin: 0,
-                  padding: 0,
-                }}
-                role="group"
-                aria-label="Invoice Status"
-              >
-                {INVOICE_STATUSES.map((label, idx, arr) => {
-                  const isActive = statusFilter === label;
-                  const isFirst = idx === 0;
-                  const isLast = idx === arr.length - 1;
-                  return (
-                    <li key={label} style={{ margin: 0 }}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setStatusFilter(label);
-                          setCurrentPage(0);
-                        }}
-                        style={{
-                          fontFamily: "'Public Sans', sans-serif",
-                          fontSize: 14,
-                          lineHeight: "20px",
-                          fontWeight: 700,
-                          padding: "8px 16px",
-                          cursor: "pointer",
-                          backgroundColor: isActive ? "#005EA2" : "#FFFFFF",
-                          color: isActive ? "#FFFFFF" : "#005EA2",
-                          borderTopWidth: 1,
-                          borderTopStyle: "solid",
-                          borderTopColor: "#005EA2",
-                          borderBottomWidth: 1,
-                          borderBottomStyle: "solid",
-                          borderBottomColor: "#005EA2",
-                          borderLeftWidth: isFirst ? 1 : 0,
-                          borderLeftStyle: "solid",
-                          borderLeftColor: "#005EA2",
-                          borderRightWidth: 1,
-                          borderRightStyle: "solid",
-                          borderRightColor: "#005EA2",
-                          borderTopLeftRadius: isFirst ? 4 : 0,
-                          borderBottomLeftRadius: isFirst ? 4 : 0,
-                          borderTopRightRadius: isLast ? 4 : 0,
-                          borderBottomRightRadius: isLast ? 4 : 0,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {label}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+              {INVOICE_STATUSES.map((label) => {
+                const isActive = statusFilter === label;
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => {
+                      setStatusFilter(label);
+                      setCurrentPage(0);
+                    }}
+                    style={{
+                      flex: 1,
+                      fontFamily: "'Public Sans', sans-serif",
+                      fontSize: 16,
+                      fontWeight: isActive ? 700 : 400,
+                      lineHeight: "24px",
+                      padding: "12px 20px",
+                      backgroundColor: "transparent",
+                      color: isActive ? "#005EA2" : "#71767A",
+                      borderTopWidth: 0,
+                      borderTopStyle: "solid",
+                      borderTopColor: "transparent",
+                      borderLeftWidth: 0,
+                      borderLeftStyle: "solid",
+                      borderLeftColor: "transparent",
+                      borderRightWidth: 0,
+                      borderRightStyle: "solid",
+                      borderRightColor: "transparent",
+                      borderBottomWidth: 4,
+                      borderBottomStyle: "solid",
+                      borderBottomColor: isActive ? "#005EA2" : "transparent",
+                      cursor: "pointer",
+                      marginBottom: -2,
+                      transition: "color 0.15s ease, border-bottom-color 0.15s ease",
+                      textAlign: "center",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Top bar: Showing X-Y of Z | Show dropdown */}

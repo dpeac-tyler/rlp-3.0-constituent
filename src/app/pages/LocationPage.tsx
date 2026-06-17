@@ -3,6 +3,7 @@ import { PageShell } from "../components/PageShell";
 import { X } from "lucide-react";
 import { useProfile } from "../components/ProfileContext";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { useToast } from "../components/ToastContext";
 
 interface Address {
   line1: string;
@@ -184,6 +185,7 @@ export function LocationPage() {
   const [editDraft, setEditDraft] = useState<Address | null>(null);
   const { setMailingAddress } = useProfile();
   const isMobile = useIsMobile();
+  const { showToast } = useToast();
 
   const currentAddress = addresses[activeTab];
 
@@ -203,8 +205,10 @@ export function LocationPage() {
           zip: editDraft.zip,
         });
       }
+      const tabLabel = tabs.find((t) => t.key === editingTab)?.label ?? "Address";
       setEditingTab(null);
       setEditDraft(null);
+      showToast(`${tabLabel} has been updated successfully.`);
     }
   };
 
