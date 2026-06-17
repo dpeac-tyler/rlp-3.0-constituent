@@ -366,6 +366,71 @@ export function CertificationsPage() {
           padding: isMobile ? 16 : 24,
         }}
       >
+        {/* USWDS Error Alert */}
+        <div
+          style={{
+            backgroundColor: "#F4E3DB",
+            borderLeftWidth: 4,
+            borderLeftStyle: "solid",
+            borderLeftColor: "#D54309",
+            borderTopWidth: 0,
+            borderTopStyle: "solid",
+            borderTopColor: "#F4E3DB",
+            borderRightWidth: 0,
+            borderRightStyle: "solid",
+            borderRightColor: "#F4E3DB",
+            borderBottomWidth: 0,
+            borderBottomStyle: "solid",
+            borderBottomColor: "#F4E3DB",
+            padding: "16px 20px",
+            marginBottom: 24,
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 12,
+          }}
+        >
+          {/* Error icon */}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ flexShrink: 0, marginTop: 2 }}
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+              fill="#D54309"
+            />
+          </svg>
+          <div>
+            <h3
+              style={{
+                fontFamily: "'Public Sans', sans-serif",
+                fontWeight: 700,
+                fontSize: 16,
+                lineHeight: "24px",
+                color: "#1B1B1B",
+                margin: 0,
+                marginBottom: 4,
+              }}
+            >
+              Error
+            </h3>
+            <p
+              style={{
+                fontFamily: "'Public Sans', sans-serif",
+                fontSize: 16,
+                lineHeight: "26px",
+                color: "#1B1B1B",
+                margin: 0,
+              }}
+            >
+              There was a problem loading your certifications. Please try again or contact your agency if the issue persists.
+            </p>
+          </div>
+        </div>
+
         {/* Intro paragraphs */}
         <p
           style={{
