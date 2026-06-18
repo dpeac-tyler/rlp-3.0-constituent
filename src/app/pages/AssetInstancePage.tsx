@@ -155,7 +155,7 @@ export function AssetInstancePage() {
 
   const statusRight = asset?.status ? (
     <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 16, color: "#1B1B1B" }}>
-      Status: <strong>{asset.status}</strong>
+      Status: <strong style={{ color: STATUS_COLORS[asset.status] ?? "#1B1B1B" }}>{asset.status}</strong>
     </span>
   ) : null;
 
