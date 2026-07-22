@@ -113,7 +113,7 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
                 textOverflow: "ellipsis",
               }}
             >
-              Name of Tenant
+              State of Illinois
             </p>
           </div>
         </div>
