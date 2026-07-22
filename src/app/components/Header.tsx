@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router";
+import { ExternalLink, User, LogOut } from "lucide-react";
 import menuSvgPaths from "../../imports/svg-653nymfya0";
 import logoSvgPaths from "../../imports/svg-hjn6k2buyk";
 import { useIsMobile } from "../hooks/useIsMobile";
+
+const NAV_LINKS = [
+  { label: "State Portal", to: "/", icon: ExternalLink },
+  { label: "Account", to: "/account", icon: User },
+  { label: "Logout", to: "/", icon: LogOut },
+];
 
 interface HeaderProps {
   isAddressVisible: boolean;
@@ -19,7 +26,7 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
     >
       <div className="flex items-center justify-between w-full h-full">
         {/* Left side: Menu, Logo, Agency Name */}
-        <div className="flex items-center h-full">
+        <div className="flex items-center h-full" style={{ minWidth: 0, flex: "1 1 auto" }}>
           {/* Menu - toggles address container */}
           <button
             onClick={onToggleAddress}
@@ -92,7 +99,7 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
           </div>
 
           {/* Agency Name */}
-          <div className="flex items-center h-full">
+          <div className="flex items-center h-full" style={{ minWidth: 0, flex: "1 1 auto" }}>
             <p
               className="text-white"
               style={{
@@ -101,6 +108,9 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
                 fontSize: isMobile ? 14 : 20,
                 lineHeight: isMobile ? "20px" : "32px",
                 letterSpacing: "0.25px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
             >
               Name of Tenant
@@ -109,34 +119,45 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
         </div>
 
         {/* Right side: nav links */}
-        <div className="flex items-center h-full" style={{ gap: 0, marginRight: 20 }}>
-          {[
-            { label: "State Portal", to: "/" },
-            { label: "Account", to: "/account" },
-            { label: "Logout", to: "/" },
-          ].map(({ label, to }, i) => (
-            <div key={label} className="flex items-center">
-              {i > 0 && (
-                <span style={{ color: "rgba(255,255,255,0.5)", margin: "0 12px", fontSize: 14 }}>|</span>
-              )}
-              <a
-                href="#"
-                onClick={(e) => { e.preventDefault(); navigate(to); }}
-                style={{
-                  fontFamily: "'Public Sans', sans-serif",
-                  fontSize: 14,
-                  fontWeight: 400,
-                  color: "#FFFFFF",
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
-                onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
-              >
-                {label}
-              </a>
-            </div>
-          ))}
+        <div
+          className="flex items-center h-full"
+          style={{ gap: 0, marginRight: isMobile ? 8 : 20, flexShrink: 0 }}
+        >
+          {isMobile
+            ? NAV_LINKS.map(({ label, to, icon: Icon }) => (
+                <button
+                  key={label}
+                  onClick={() => navigate(to)}
+                  aria-label={label}
+                  className="flex items-center justify-center cursor-pointer border-none bg-transparent"
+                  style={{ width: 36, height: 36 }}
+                >
+                  <Icon size={18} color="#FFFFFF" />
+                </button>
+              ))
+            : NAV_LINKS.map(({ label, to }, i) => (
+                <div key={label} className="flex items-center">
+                  {i > 0 && (
+                    <span style={{ color: "rgba(255,255,255,0.5)", margin: "0 12px", fontSize: 14 }}>|</span>
+                  )}
+                  <a
+                    href="#"
+                    onClick={(e) => { e.preventDefault(); navigate(to); }}
+                    style={{
+                      fontFamily: "'Public Sans', sans-serif",
+                      fontSize: 14,
+                      fontWeight: 400,
+                      color: "#FFFFFF",
+                      textDecoration: "none",
+                      whiteSpace: "nowrap",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                    onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+                  >
+                    {label}
+                  </a>
+                </div>
+              ))}
         </div>
       </div>
     </header>
