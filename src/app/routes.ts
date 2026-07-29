@@ -9,8 +9,9 @@ import { LocationPage } from "./pages/LocationPage";
 import { BranchesPage } from "./pages/BranchesPage";
 import { BranchFormPage } from "./pages/BranchFormPage";
 import { DocumentsPage } from "./pages/DocumentsPage";
-import { InspectionsPage } from "./pages/InspectionsPage";
-import { AssetInspectionsPage } from "./pages/AssetInspectionsPage";
+import { InspectionsPage, INITIAL_INSPECTIONS as BUSINESS_INSPECTIONS, STATUS_COLOR as INSPECTIONS_STATUS_COLOR, OUTCOME_COLOR as INSPECTIONS_OUTCOME_COLOR } from "./pages/InspectionsPage";
+import { AssetInspectionsPage, INITIAL_INSPECTIONS as ASSET_INSPECTIONS, STATUS_COLOR as ASSET_INSPECTIONS_STATUS_COLOR, OUTCOME_COLOR as ASSET_INSPECTIONS_OUTCOME_COLOR } from "./pages/AssetInspectionsPage";
+import { InspectionDetailPage } from "./pages/InspectionDetailPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { CertificationsPage } from "./pages/CertificationsPage";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
@@ -113,6 +114,16 @@ export const router = createBrowserRouter([
         Component: InspectionsPage,
       },
       {
+        path: "inspections/:id",
+        Component: () =>
+          InspectionDetailPage({
+            inspections: BUSINESS_INSPECTIONS,
+            basePath: "/inspections",
+            statusColor: INSPECTIONS_STATUS_COLOR,
+            outcomeColor: INSPECTIONS_OUTCOME_COLOR,
+          }),
+      },
+      {
         path: "invoices",
         Component: InvoicesPage,
       },
@@ -163,6 +174,16 @@ export const router = createBrowserRouter([
       {
         path: "asset-inspections",
         Component: AssetInspectionsPage,
+      },
+      {
+        path: "asset-inspections/:id",
+        Component: () =>
+          InspectionDetailPage({
+            inspections: ASSET_INSPECTIONS,
+            basePath: "/asset-inspections",
+            statusColor: ASSET_INSPECTIONS_STATUS_COLOR,
+            outcomeColor: ASSET_INSPECTIONS_OUTCOME_COLOR,
+          }),
       },
       {
         path: "my-assets",

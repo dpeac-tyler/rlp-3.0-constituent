@@ -1,12 +1,13 @@
 import { useState, useMemo } from "react";
-import { Eye, X } from "lucide-react";
+import { useNavigate } from "react-router";
+import { Eye } from "lucide-react";
 import { PageShell } from "../components/PageShell";
 import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useIsMobile } from "../hooks/useIsMobile";
 
 /* ── Types ─────────────────────────────────────────────── */
 
-interface InspectionItem {
+export interface InspectionItem {
   id: string;
   type: string;
   outcome: string;
@@ -15,11 +16,18 @@ interface InspectionItem {
   subject: string;
   inspector: string;
   status: string;
+  source: string;
+  sourceType: string;
+  siteAddress: string;
+  scheduledDate: string;
+  startDate: string;
+  requestedDate: string;
+  assignedTeam: string;
 }
 
 /* ── Mock data ─────────────────────────────────────────── */
 
-const INITIAL_INSPECTIONS: InspectionItem[] = [
+export const INITIAL_INSPECTIONS: InspectionItem[] = [
   {
     id: "INS-2026-005",
     type: "Elevator",
@@ -29,6 +37,13 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Elevator Unit #4 – Main St Garage",
     inspector: "Robert Nguyen",
     status: "Completed",
+    source: "Recurring Schedule",
+    sourceType: "Scheduled Inspection",
+    siteAddress: "210 Main St Garage, Springfield, IL 62701",
+    scheduledDate: "02/18/2026",
+    startDate: "02/18/2026",
+    requestedDate: "01/30/2026",
+    assignedTeam: "Elevator Safety Team",
   },
   {
     id: "INS-2026-009",
@@ -39,6 +54,13 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Elevator Unit #4 – Main St Garage",
     inspector: "Robert Nguyen",
     status: "In Progress",
+    source: "Recurring Schedule",
+    sourceType: "Scheduled Inspection",
+    siteAddress: "210 Main St Garage, Springfield, IL 62701",
+    scheduledDate: "03/01/2026",
+    startDate: "03/01/2026",
+    requestedDate: "02/12/2026",
+    assignedTeam: "Elevator Safety Team",
   },
   {
     id: "INS-2025-091",
@@ -49,6 +71,13 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Boiler Unit B-2",
     inspector: "Linda Foster",
     status: "Completed",
+    source: "Recurring Schedule",
+    sourceType: "Scheduled Inspection",
+    siteAddress: "88 Foundry Rd, Springfield, IL 62703",
+    scheduledDate: "12/05/2025",
+    startDate: "12/05/2025",
+    requestedDate: "11/18/2025",
+    assignedTeam: "Boiler Safety Team",
   },
   {
     id: "INS-2025-095",
@@ -59,6 +88,13 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Boiler Unit B-2",
     inspector: "Linda Foster",
     status: "Scheduled",
+    source: "Follow-Up to INS-2025-091",
+    sourceType: "Follow-Up Inspection",
+    siteAddress: "88 Foundry Rd, Springfield, IL 62703",
+    scheduledDate: "12/19/2025",
+    startDate: "—",
+    requestedDate: "12/06/2025",
+    assignedTeam: "Boiler Safety Team",
   },
   {
     id: "INS-2025-088",
@@ -69,6 +105,13 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Sprinkler System – Building C",
     inspector: "Michael Torres",
     status: "Completed",
+    source: "Recurring Schedule",
+    sourceType: "Scheduled Inspection",
+    siteAddress: "1500 Corporate Center Dr, Building C, Springfield, IL 62704",
+    scheduledDate: "10/29/2025",
+    startDate: "10/29/2025",
+    requestedDate: "10/10/2025",
+    assignedTeam: "Fire Safety Team",
   },
   {
     id: "INS-2025-070",
@@ -79,6 +122,13 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Fleet Vehicle #12",
     inspector: "Linda Foster",
     status: "Completed",
+    source: "Recurring Schedule",
+    sourceType: "Scheduled Inspection",
+    siteAddress: "4900 Industrial Pkwy, Springfield, IL 62704",
+    scheduledDate: "08/03/2025",
+    startDate: "08/03/2025",
+    requestedDate: "07/18/2025",
+    assignedTeam: "Vehicle Safety Team",
   },
   {
     id: "INS-2025-042",
@@ -89,6 +139,13 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Fleet Vehicle #12",
     inspector: "Michael Torres",
     status: "Cancelled",
+    source: "Recurring Schedule",
+    sourceType: "Scheduled Inspection",
+    siteAddress: "4900 Industrial Pkwy, Springfield, IL 62704",
+    scheduledDate: "05/14/2025",
+    startDate: "—",
+    requestedDate: "04/29/2025",
+    assignedTeam: "Vehicle Safety Team",
   },
   {
     id: "INS-2025-058",
@@ -99,19 +156,26 @@ const INITIAL_INSPECTIONS: InspectionItem[] = [
     subject: "Sky Wheel #1",
     inspector: "Robert Nguyen",
     status: "Completed",
+    source: "Recurring Schedule",
+    sourceType: "Scheduled Inspection",
+    siteAddress: "700 Riverfront Plaza, Springfield, IL 62701",
+    scheduledDate: "06/21/2025",
+    startDate: "06/21/2025",
+    requestedDate: "06/01/2025",
+    assignedTeam: "Amusement Ride Safety Team",
   },
 ];
 
 /* ── Status / outcome colors ───────────────────────────── */
 
-const STATUS_COLOR: Record<string, string> = {
+export const STATUS_COLOR: Record<string, string> = {
   Scheduled: "#13669A",
   "In Progress": "#205493",
   Completed: "#417505",
   Cancelled: "#CD2026",
 };
 
-const OUTCOME_COLOR: Record<string, string> = {
+export const OUTCOME_COLOR: Record<string, string> = {
   Pass: "#417505",
   Fail: "#CD2026",
   "Pass with Conditions": "#A34900",
@@ -228,174 +292,14 @@ const parseDateForSort = (d: string) => {
 
 const DATE_KEYS: SortKey[] = ["dueDate", "completionDate"];
 
-/* ── View Inspection Modal ─────────────────────────────── */
-
-function ViewInspectionModal({
-  inspection,
-  onClose,
-}: {
-  inspection: InspectionItem;
-  onClose: () => void;
-}) {
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        zIndex: 8000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderRadius: 4,
-          width: 560,
-          maxWidth: "90vw",
-          ...noBorder,
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "16px 24px",
-            backgroundColor: "#122E51",
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
-            borderBottomWidth: 1,
-            borderBottomStyle: "solid",
-            borderBottomColor: "#DFE1E2",
-            borderTopWidth: 0,
-            borderTopStyle: "solid",
-            borderTopColor: "transparent",
-            borderLeftWidth: 0,
-            borderLeftStyle: "solid",
-            borderLeftColor: "transparent",
-            borderRightWidth: 0,
-            borderRightStyle: "solid",
-            borderRightColor: "transparent",
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 20,
-              color: "#FFFFFF",
-              margin: 0,
-            }}
-          >
-            Inspection Details
-          </h2>
-          <button
-            onClick={onClose}
-            style={{
-              cursor: "pointer",
-              backgroundColor: "transparent",
-              padding: 4,
-              display: "inline-flex",
-              ...noBorder,
-            }}
-          >
-            <X size={20} color="#FFFFFF" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div style={{ padding: "24px" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "140px 1fr",
-              gap: "12px 16px",
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 14,
-              color: "#1B1B1B",
-            }}
-          >
-            <span style={{ fontWeight: 700 }}>ID</span>
-            <span>{inspection.id}</span>
-
-            <span style={{ fontWeight: 700 }}>Type</span>
-            <span>{inspection.type}</span>
-
-            <span style={{ fontWeight: 700 }}>Subject</span>
-            <span>{inspection.subject}</span>
-
-            <span style={{ fontWeight: 700 }}>Inspector</span>
-            <span>{inspection.inspector}</span>
-
-            <span style={{ fontWeight: 700 }}>Due Date</span>
-            <span>{inspection.dueDate}</span>
-
-            <span style={{ fontWeight: 700 }}>Completion Date</span>
-            <span>{inspection.completionDate}</span>
-
-            <span style={{ fontWeight: 700 }}>Status</span>
-            <span style={{ color: STATUS_COLOR[inspection.status] ?? "#1B1B1B" }}>
-              {inspection.status}
-            </span>
-
-            <span style={{ fontWeight: 700 }}>Outcome</span>
-            <span style={{ color: OUTCOME_COLOR[inspection.outcome] ?? "#1B1B1B" }}>
-              {inspection.outcome}
-            </span>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div style={{ padding: "16px 24px", display: "flex", justifyContent: "flex-start" }}>
-          <button
-            onClick={onClose}
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 16,
-              fontWeight: 700,
-              padding: "10px 20px",
-              backgroundColor: "#FFFFFF",
-              color: "#005EA2",
-              borderRadius: 4,
-              cursor: "pointer",
-              borderTopWidth: 1,
-              borderTopStyle: "solid",
-              borderTopColor: "#005EA2",
-              borderRightWidth: 1,
-              borderRightStyle: "solid",
-              borderRightColor: "#005EA2",
-              borderBottomWidth: 1,
-              borderBottomStyle: "solid",
-              borderBottomColor: "#005EA2",
-              borderLeftWidth: 1,
-              borderLeftStyle: "solid",
-              borderLeftColor: "#005EA2",
-            }}
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── Page ──────────────────────────────────────────────── */
 
 export function AssetInspectionsPage() {
+  const navigate = useNavigate();
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>(null);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(0);
-  const [viewingInspection, setViewingInspection] = useState<InspectionItem | null>(null);
   const isMobile = useIsMobile();
 
   const handleSort = (key: SortKey) => {
@@ -605,7 +509,7 @@ export function AssetInspectionsPage() {
                     </td>
                     <td data-label="Controls" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
                       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                        <button title="View Inspection" style={controlBtnStyle} onClick={() => setViewingInspection(row)}>
+                        <button title="View Inspection" style={controlBtnStyle} onClick={() => navigate(`/asset-inspections/${row.id}`)}>
                           <Eye size={16} color="#FFFFFF" />
                         </button>
                       </div>
@@ -717,11 +621,6 @@ export function AssetInspectionsPage() {
               </nav>
             );
           })()}
-
-        {/* View modal */}
-        {viewingInspection && (
-          <ViewInspectionModal inspection={viewingInspection} onClose={() => setViewingInspection(null)} />
-        )}
       </div>
     </PageShell>
   );
