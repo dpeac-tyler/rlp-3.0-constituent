@@ -9,6 +9,8 @@ import { LocationPage } from "./pages/LocationPage";
 import { BranchesPage } from "./pages/BranchesPage";
 import { BranchFormPage } from "./pages/BranchFormPage";
 import { DocumentsPage } from "./pages/DocumentsPage";
+import { InspectionsPage } from "./pages/InspectionsPage";
+import { AssetInspectionsPage } from "./pages/AssetInspectionsPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { CertificationsPage } from "./pages/CertificationsPage";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
@@ -107,6 +109,10 @@ export const router = createBrowserRouter([
         Component: DocumentsPage,
       },
       {
+        path: "inspections",
+        Component: InspectionsPage,
+      },
+      {
         path: "invoices",
         Component: InvoicesPage,
       },
@@ -153,6 +159,10 @@ export const router = createBrowserRouter([
       {
         path: "asset-certifications/sponsored-certifications",
         Component: () => AssetCertificationsPage({ activeTab: "sponsored-certifications" }),
+      },
+      {
+        path: "asset-inspections",
+        Component: AssetInspectionsPage,
       },
       {
         path: "my-assets",
