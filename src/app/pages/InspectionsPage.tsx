@@ -9,80 +9,123 @@ import { useIsMobile } from "../hooks/useIsMobile";
 interface InspectionItem {
   id: string;
   type: string;
+  outcome: string;
+  dueDate: string;
+  completionDate: string;
+  subject: string;
   inspector: string;
-  date: string;
-  notes: string;
-  result: string;
+  status: string;
 }
 
 /* ── Mock data ─────────────────────────────────────────── */
 
 const INITIAL_INSPECTIONS: InspectionItem[] = [
   {
-    id: "i1",
-    type: "Annual Compliance Inspection",
+    id: "INS-2026-021",
+    type: "Annual Compliance",
+    outcome: "Pass",
+    dueDate: "03/12/2026",
+    completionDate: "03/12/2026",
+    subject: "BoringCompany",
     inspector: "Maria Gutierrez",
-    date: "03/12/2026",
-    notes: "Routine annual review of licensed business operations, recordkeeping, and posted signage. No violations noted; all required documentation was current and available upon request.",
-    result: "Passed",
+    status: "Completed",
   },
   {
-    id: "i2",
-    type: "Fire Safety Inspection",
+    id: "INS-2026-014",
+    type: "Fire Safety",
+    outcome: "Pass",
+    dueDate: "01/22/2026",
+    completionDate: "01/22/2026",
+    subject: "BoringCompany",
     inspector: "James Ortiz",
-    date: "01/22/2026",
-    notes: "Inspection of fire extinguishers, emergency exits, and evacuation signage per state fire code.",
-    result: "Passed",
+    status: "Completed",
   },
   {
-    id: "i3",
-    type: "Workplace Safety Inspection",
-    inspector: "Angela Wu",
-    date: "11/08/2025",
-    notes: "OSHA-aligned review of workplace safety practices, PPE availability, and hazard communication postings. Minor corrective action required for an updated SDS binder.",
-    result: "Passed with Conditions",
+    id: "INS-2026-027",
+    type: "Fire Safety",
+    outcome: "—",
+    dueDate: "04/18/2026",
+    completionDate: "—",
+    subject: "BoringCompany",
+    inspector: "James Ortiz",
+    status: "In Progress",
   },
   {
-    id: "i4",
-    type: "Environmental Compliance Inspection",
-    inspector: "David Chen",
-    date: "09/30/2025",
-    notes: "Review of waste disposal and storage practices found improper storage of hazardous materials near a public drainage area.",
-    result: "Failed",
-  },
-  {
-    id: "i5",
-    type: "Follow-Up Inspection",
-    inspector: "David Chen",
-    date: "10/15/2025",
-    notes: "Follow-up to the 09/30/2025 environmental compliance inspection to confirm corrective actions were completed.",
-    result: "Passed",
-  },
-  {
-    id: "i6",
-    type: "Health & Sanitation Inspection",
-    inspector: "Sarah Kim",
-    date: "07/14/2025",
-    notes: "Routine sanitation inspection covering restroom facilities, break areas, and general cleanliness standards.",
-    result: "Passed",
-  },
-  {
-    id: "i7",
-    type: "Accessibility Compliance Inspection",
+    id: "INS-2026-032",
+    type: "Accessibility Compliance",
+    outcome: "—",
+    dueDate: "05/02/2026",
+    completionDate: "—",
+    subject: "BoringCompany",
     inspector: "Priya Patel",
-    date: "05/02/2025",
-    notes: "ADA accessibility review of entrances, parking, and posted signage, scheduled at the request of the licensee.",
-    result: "Scheduled",
+    status: "Scheduled",
+  },
+  {
+    id: "INS-2025-098",
+    type: "Workplace Safety",
+    outcome: "Pass with Conditions",
+    dueDate: "11/08/2025",
+    completionDate: "11/08/2025",
+    subject: "BoringCompany",
+    inspector: "Angela Wu",
+    status: "Completed",
+  },
+  {
+    id: "INS-2025-083",
+    type: "Follow-Up",
+    outcome: "Pass",
+    dueDate: "10/15/2025",
+    completionDate: "10/15/2025",
+    subject: "BoringCompany",
+    inspector: "David Chen",
+    status: "Completed",
+  },
+  {
+    id: "INS-2025-076",
+    type: "Environmental Compliance",
+    outcome: "Fail",
+    dueDate: "09/30/2025",
+    completionDate: "09/30/2025",
+    subject: "BoringCompany",
+    inspector: "David Chen",
+    status: "Completed",
+  },
+  {
+    id: "INS-2025-061",
+    type: "Health & Sanitation",
+    outcome: "Pass",
+    dueDate: "07/14/2025",
+    completionDate: "07/14/2025",
+    subject: "BoringCompany",
+    inspector: "Sarah Kim",
+    status: "Completed",
+  },
+  {
+    id: "INS-2025-054",
+    type: "Workplace Safety",
+    outcome: "—",
+    dueDate: "06/10/2025",
+    completionDate: "—",
+    subject: "BoringCompany",
+    inspector: "Angela Wu",
+    status: "Cancelled",
   },
 ];
 
-/* ── Status colors ─────────────────────────────────────── */
+/* ── Status / outcome colors ───────────────────────────── */
 
 const STATUS_COLOR: Record<string, string> = {
-  Passed: "#417505",
-  "Passed with Conditions": "#A34900",
-  Failed: "#CD2026",
   Scheduled: "#13669A",
+  "In Progress": "#205493",
+  Completed: "#417505",
+  Cancelled: "#CD2026",
+};
+
+const OUTCOME_COLOR: Record<string, string> = {
+  Pass: "#417505",
+  Fail: "#CD2026",
+  "Pass with Conditions": "#A34900",
+  "—": "#5C5F66",
 };
 
 /* ── Icon key items ────────────────────────────────────── */
@@ -93,10 +136,21 @@ const INSPECTION_ICON_ITEMS = [
 
 /* ── Column config ─────────────────────────────────────── */
 
-type SortKey = "type" | "inspector" | "date" | "result";
+type SortKey = "id" | "type" | "outcome" | "dueDate" | "completionDate" | "subject" | "inspector" | "status";
 type SortDir = "asc" | "desc" | null;
 
-const COL_WIDTHS = ["20%", "15%", "28%", "12%", "13%", "12%"];
+const COLUMNS: { key: SortKey; label: string }[] = [
+  { key: "id", label: "ID" },
+  { key: "type", label: "Type" },
+  { key: "outcome", label: "Outcome" },
+  { key: "dueDate", label: "Due Date" },
+  { key: "completionDate", label: "Completion Date" },
+  { key: "subject", label: "Subject" },
+  { key: "inspector", label: "Inspector" },
+  { key: "status", label: "Status" },
+];
+
+const COL_WIDTHS = ["9%", "12%", "8%", "9%", "10%", "18%", "12%", "10%", "12%"];
 
 /* ── Reusable border objects (longhand only) ───────────── */
 
@@ -177,11 +231,12 @@ const inputBorder: React.CSSProperties = {
 /* ── Helpers ───────────────────────────────────────────── */
 
 const parseDateForSort = (d: string) => {
+  if (d === "—") return Infinity;
   const [mm, dd, yyyy] = d.split("/");
   return new Date(`${yyyy}-${mm}-${dd}`).getTime();
 };
 
-const DESC_LIMIT = 100;
+const DATE_KEYS: SortKey[] = ["dueDate", "completionDate"];
 
 /* ── View Inspection Modal ─────────────────────────────── */
 
@@ -278,22 +333,33 @@ function ViewInspectionModal({
               color: "#1B1B1B",
             }}
           >
-            <span style={{ fontWeight: 700 }}>Inspection Type</span>
+            <span style={{ fontWeight: 700 }}>ID</span>
+            <span>{inspection.id}</span>
+
+            <span style={{ fontWeight: 700 }}>Type</span>
             <span>{inspection.type}</span>
+
+            <span style={{ fontWeight: 700 }}>Subject</span>
+            <span>{inspection.subject}</span>
 
             <span style={{ fontWeight: 700 }}>Inspector</span>
             <span>{inspection.inspector}</span>
 
-            <span style={{ fontWeight: 700 }}>Inspection Date</span>
-            <span>{inspection.date}</span>
+            <span style={{ fontWeight: 700 }}>Due Date</span>
+            <span>{inspection.dueDate}</span>
 
-            <span style={{ fontWeight: 700 }}>Result</span>
-            <span style={{ color: STATUS_COLOR[inspection.result] ?? "#1B1B1B" }}>
-              {inspection.result}
+            <span style={{ fontWeight: 700 }}>Completion Date</span>
+            <span>{inspection.completionDate}</span>
+
+            <span style={{ fontWeight: 700 }}>Status</span>
+            <span style={{ color: STATUS_COLOR[inspection.status] ?? "#1B1B1B" }}>
+              {inspection.status}
             </span>
 
-            <span style={{ fontWeight: 700 }}>Notes</span>
-            <span>{inspection.notes}</span>
+            <span style={{ fontWeight: 700 }}>Outcome</span>
+            <span style={{ color: OUTCOME_COLOR[inspection.outcome] ?? "#1B1B1B" }}>
+              {inspection.outcome}
+            </span>
           </div>
         </div>
 
@@ -340,7 +406,6 @@ export function InspectionsPage() {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(0);
   const [viewingInspection, setViewingInspection] = useState<InspectionItem | null>(null);
-  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const isMobile = useIsMobile();
 
   const handleSort = (key: SortKey) => {
@@ -360,8 +425,8 @@ export function InspectionsPage() {
   const sortedData = useMemo(() => {
     if (!sortKey || !sortDir) return INITIAL_INSPECTIONS;
     return [...INITIAL_INSPECTIONS].sort((a, b) => {
-      if (sortKey === "date") {
-        const cmp = parseDateForSort(a.date) - parseDateForSort(b.date);
+      if (DATE_KEYS.includes(sortKey)) {
+        const cmp = parseDateForSort(a[sortKey]) - parseDateForSort(b[sortKey]);
         return sortDir === "asc" ? cmp : -cmp;
       }
       const cmp = a[sortKey].localeCompare(b[sortKey]);
@@ -433,7 +498,7 @@ export function InspectionsPage() {
         {/* Intro paragraph */}
         <p style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 16, lineHeight: "24px", color: "#1B1B1B", margin: 0 }}>
           Review inspections conducted on your business by the regulatory agency, including
-          compliance, safety, and follow-up inspections along with their results.
+          compliance, safety, and follow-up inspections along with their status and outcome.
         </p>
 
         {/* Icon Key */}
@@ -494,25 +559,7 @@ export function InspectionsPage() {
             </colgroup>
             <thead>
               <tr>
-                {renderSortableTh("type", "Inspection Type")}
-                {renderSortableTh("inspector", "Inspector")}
-                <th
-                  style={{
-                    backgroundColor: "#F0F0F0",
-                    color: "#1B1B1B",
-                    fontWeight: 700,
-                    fontSize: 13,
-                    lineHeight: "20px",
-                    padding: "12px 12px",
-                    textAlign: "left",
-                    whiteSpace: "nowrap",
-                    ...thBorder,
-                  }}
-                >
-                  Notes
-                </th>
-                {renderSortableTh("date", "Inspection Date")}
-                {renderSortableTh("result", "Result")}
+                {COLUMNS.map((col) => renderSortableTh(col.key, col.label))}
                 <th
                   style={{
                     backgroundColor: "#F0F0F0",
@@ -533,59 +580,38 @@ export function InspectionsPage() {
             <tbody>
               {paginatedData.length === 0 && (
                 <tr>
-                  <td colSpan={6} style={{ padding: "24px 12px", textAlign: "center", color: "#71767A", fontStyle: "italic", ...cellBorder }}>
+                  <td colSpan={9} style={{ padding: "24px 12px", textAlign: "center", color: "#71767A", fontStyle: "italic", ...cellBorder }}>
                     No inspections found.
                   </td>
                 </tr>
               )}
               {paginatedData.map((row, idx) => {
                 const bg = idx % 2 === 1 ? "#F0F0F0" : "#FFFFFF";
-                const isExpanded = expandedNotes.has(row.id);
-                const needsTruncation = row.notes.length > DESC_LIMIT;
                 return (
                   <tr key={row.id}>
-                    <td data-label="Inspection Type" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
+                    <td data-label="ID" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", whiteSpace: "nowrap", ...cellBorder }}>
+                      {row.id}
+                    </td>
+                    <td data-label="Type" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
                       {row.type}
+                    </td>
+                    <td data-label="Outcome" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
+                      <span style={{ color: OUTCOME_COLOR[row.outcome] ?? "#1B1B1B" }}>{row.outcome}</span>
+                    </td>
+                    <td data-label="Due Date" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>
+                      {row.dueDate}
+                    </td>
+                    <td data-label="Completion Date" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>
+                      {row.completionDate}
+                    </td>
+                    <td data-label="Subject" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
+                      {row.subject}
                     </td>
                     <td data-label="Inspector" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
                       {row.inspector}
                     </td>
-                    <td data-label="Notes" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", verticalAlign: "top", ...cellBorder }}>
-                      {needsTruncation && !isExpanded ? (
-                        <span>
-                          {row.notes.slice(0, DESC_LIMIT)}
-                          <button
-                            onClick={() =>
-                              setExpandedNotes((prev) => {
-                                const next = new Set(prev);
-                                next.add(row.id);
-                                return next;
-                              })
-                            }
-                            style={{
-                              fontFamily: "'Public Sans', sans-serif",
-                              fontSize: 14,
-                              color: "#005EA2",
-                              backgroundColor: "transparent",
-                              cursor: "pointer",
-                              padding: 0,
-                              textDecoration: "underline",
-                              ...noBorder,
-                            }}
-                            aria-label="Show full notes"
-                          >
-                            ...
-                          </button>
-                        </span>
-                      ) : (
-                        <span>{row.notes}</span>
-                      )}
-                    </td>
-                    <td data-label="Inspection Date" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>
-                      {row.date}
-                    </td>
-                    <td data-label="Result" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
-                      <span style={{ color: STATUS_COLOR[row.result] ?? "#1B1B1B" }}>{row.result}</span>
+                    <td data-label="Status" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
+                      <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B" }}>{row.status}</span>
                     </td>
                     <td data-label="Controls" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
                       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
