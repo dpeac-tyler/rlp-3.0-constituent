@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Eye } from "lucide-react";
 import { PageShell } from "../components/PageShell";
 import { IconKeyAccordion } from "../components/IconKeyAccordion";
+import { useAgency } from "../components/AgencyContext";
 import { useIsMobile } from "../hooks/useIsMobile";
 
 /* ── Types ─────────────────────────────────────────────── */
@@ -209,21 +210,20 @@ const INSPECTION_ICON_ITEMS = [
 
 /* ── Column config ─────────────────────────────────────── */
 
-type SortKey = "id" | "type" | "outcome" | "dueDate" | "completionDate" | "subject" | "inspector" | "status";
+type SortKey = "id" | "type" | "subject" | "status" | "outcome" | "dueDate" | "completionDate";
 type SortDir = "asc" | "desc" | null;
 
 const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "id", label: "ID" },
   { key: "type", label: "Type" },
+  { key: "subject", label: "Subject" },
+  { key: "status", label: "Status" },
   { key: "outcome", label: "Outcome" },
   { key: "dueDate", label: "Due Date" },
   { key: "completionDate", label: "Completion Date" },
-  { key: "subject", label: "Subject" },
-  { key: "inspector", label: "Inspector" },
-  { key: "status", label: "Status" },
 ];
 
-const COL_WIDTHS = ["9%", "12%", "8%", "9%", "10%", "18%", "12%", "10%", "12%"];
+const COL_WIDTHS = ["10%", "13%", "24%", "11%", "9%", "10%", "11%", "12%"];
 
 /* ── Reusable border objects (longhand only) ───────────── */
 
@@ -301,6 +301,45 @@ const inputBorder: React.CSSProperties = {
   borderLeftColor: "#565C65",
 };
 
+/* ── Agencies ──────────────────────────────────────────── */
+
+const agencies = [
+  { value: "", label: "- Please Select -" },
+  { value: "agency-1", label: "Department of Professional & Financial Regulation" },
+  { value: "agency-2", label: "Bureau of Consumer Credit Protection" },
+];
+
+/* ── USWDS select style (longhand borders) ─────────────── */
+
+const uswdsSelectStyle: React.CSSProperties = {
+  fontFamily: "'Public Sans', sans-serif",
+  fontSize: 16,
+  lineHeight: "24px",
+  color: "#1B1B1B",
+  height: 40,
+  padding: "0 32px 0 8px",
+  borderTopWidth: 1,
+  borderTopStyle: "solid",
+  borderTopColor: "#565C65",
+  borderRightWidth: 1,
+  borderRightStyle: "solid",
+  borderRightColor: "#565C65",
+  borderBottomWidth: 1,
+  borderBottomStyle: "solid",
+  borderBottomColor: "#565C65",
+  borderLeftWidth: 1,
+  borderLeftStyle: "solid",
+  borderLeftColor: "#565C65",
+  borderRadius: 0,
+  backgroundColor: "#FFFFFF",
+  appearance: "none" as const,
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5H7z' fill='%231B1B1B'/%3E%3C/svg%3E")`,
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "right 8px center",
+  backgroundSize: "20px",
+  cursor: "pointer",
+};
+
 /* ── Helpers ───────────────────────────────────────────── */
 
 const parseDateForSort = (d: string) => {
@@ -315,6 +354,7 @@ const DATE_KEYS: SortKey[] = ["dueDate", "completionDate"];
 
 export function InspectionsPage() {
   const navigate = useNavigate();
+  const { selectedAgency, setSelectedAgency } = useAgency();
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>(null);
   const [pageSize, setPageSize] = useState(10);
@@ -405,15 +445,55 @@ export function InspectionsPage() {
     </th>
   );
 
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    fontFamily: "'Public Sans', sans-serif",
+    fontWeight: 700,
+    fontSize: 16,
+    lineHeight: "24px",
+    color: "#1B1B1B",
+    marginBottom: 4,
+  };
+
   return (
     <PageShell title="Inspections">
       <div style={{ backgroundColor: "#FFFFFF", borderRadius: 4, padding: isMobile ? 16 : 24 }}>
         {/* Intro paragraph */}
-        <p style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 16, lineHeight: "24px", color: "#1B1B1B", margin: 0 }}>
+        <p style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 16, lineHeight: "24px", color: "#1B1B1B", marginBottom: 32 }}>
           Review inspections conducted on your business by the regulatory agency, including
           compliance, safety, and follow-up inspections along with their status and outcome.
         </p>
 
+        {/* USWDS-style Select Agency */}
+        <div className="w-full" style={{ marginBottom: 32 }}>
+          <label htmlFor="inspections-agency-select" style={labelStyle}>
+            Select Agency
+          </label>
+          <select
+            id="inspections-agency-select"
+            value={selectedAgency}
+            onChange={(e) => {
+              setSelectedAgency(e.target.value);
+              setCurrentPage(0);
+            }}
+            className="w-full"
+            style={uswdsSelectStyle}
+          >
+            {agencies.map((agency) => (
+              <option key={agency.value} value={agency.value}>
+                {agency.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Content: gated by agency selection */}
+        {!selectedAgency ? (
+          <p style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 16, lineHeight: "26px", color: "#71767A" }}>
+            No Inspections available.
+          </p>
+        ) : (
+          <>
         {/* Icon Key */}
         <IconKeyAccordion items={INSPECTION_ICON_ITEMS} sessionKey="icon-key-inspections-open" />
 
@@ -493,7 +573,7 @@ export function InspectionsPage() {
             <tbody>
               {paginatedData.length === 0 && (
                 <tr>
-                  <td colSpan={9} style={{ padding: "24px 12px", textAlign: "center", color: "#71767A", fontStyle: "italic", ...cellBorder }}>
+                  <td colSpan={8} style={{ padding: "24px 12px", textAlign: "center", color: "#71767A", fontStyle: "italic", ...cellBorder }}>
                     No inspections found.
                   </td>
                 </tr>
@@ -508,6 +588,12 @@ export function InspectionsPage() {
                     <td data-label="Type" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
                       {row.type}
                     </td>
+                    <td data-label="Subject" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
+                      {row.subject}
+                    </td>
+                    <td data-label="Status" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
+                      <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B" }}>{row.status}</span>
+                    </td>
                     <td data-label="Outcome" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
                       <span style={{ color: OUTCOME_COLOR[row.outcome] ?? "#1B1B1B" }}>{row.outcome}</span>
                     </td>
@@ -516,15 +602,6 @@ export function InspectionsPage() {
                     </td>
                     <td data-label="Completion Date" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", ...cellBorder }}>
                       {row.completionDate}
-                    </td>
-                    <td data-label="Subject" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
-                      {row.subject}
-                    </td>
-                    <td data-label="Inspector" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
-                      {row.inspector}
-                    </td>
-                    <td data-label="Status" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
-                      <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B" }}>{row.status}</span>
                     </td>
                     <td data-label="Controls" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
                       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -640,6 +717,8 @@ export function InspectionsPage() {
               </nav>
             );
           })()}
+          </>
+        )}
       </div>
     </PageShell>
   );

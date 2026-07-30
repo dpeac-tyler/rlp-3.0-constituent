@@ -173,8 +173,8 @@ export function InspectionDetailPage({ inspections, basePath, statusColor, outco
                 }
                 right={
                   <>
-                    <Field label="Source" value={inspection.source} />
-                    <Field label="Source Type" value={inspection.sourceType} />
+                    <Field label="Source Type" value={inspection.source} />
+                    <Field label="Source Reference" value={inspection.sourceType} />
                     <Field label="Subject Name" value={inspection.subject} />
                     <Field label="Site Address" value={inspection.siteAddress} />
                   </>
@@ -185,27 +185,8 @@ export function InspectionDetailPage({ inspections, basePath, statusColor, outco
                 title="Scheduling Information"
                 className="inspection-detail-section--scheduling"
                 isMobile={isMobile}
-                left={
-                  <>
-                    <Field label="Due Date" value={inspection.dueDate} />
-                    <Field label="Scheduled Date" value={inspection.scheduledDate} />
-                    <Field label="Start Date" value={inspection.startDate} />
-                  </>
-                }
-                right={
-                  <>
-                    <Field label="Completion Date" value={inspection.completionDate} />
-                    <Field label="Requested Date" value={inspection.requestedDate} />
-                  </>
-                }
-              />
-
-              <Section
-                title="Assignment Information"
-                className="inspection-detail-section--assignment"
-                isMobile={isMobile}
-                left={<Field label="Assigned Inspector" value={inspection.inspector} />}
-                right={<Field label="Assigned Team" value={inspection.assignedTeam} />}
+                left={<Field label="Due Date" value={inspection.dueDate} />}
+                right={<Field label="Completion Date" value={inspection.completionDate} />}
               />
             </div>
           </div>
