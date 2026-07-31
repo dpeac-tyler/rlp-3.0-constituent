@@ -15,6 +15,7 @@ export interface InspectionItem {
   dueDate: string;
   completionDate: string;
   subject: string;
+  sourceRecord: string;
   inspector: string;
   status: string;
   source: string;
@@ -32,12 +33,13 @@ const SITE_ADDRESS = "4900 Industrial Pkwy, Springfield, IL 62704";
 
 export const INITIAL_INSPECTIONS: InspectionItem[] = [
   {
-    id: "INS-2026-021",
+    id: "INS-2026-00000021",
     type: "Annual Compliance",
     outcome: "Pass",
     dueDate: "03/12/2026",
     completionDate: "03/12/2026",
     subject: "BoringCompany",
+    sourceRecord: "License - JE-00042891",
     inspector: "Maria Gutierrez",
     status: "Completed",
     source: "Recurring Schedule",
@@ -49,12 +51,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Compliance Team",
   },
   {
-    id: "INS-2026-014",
+    id: "INS-2026-00000014",
     type: "Fire Safety",
     outcome: "Pass",
     dueDate: "01/22/2026",
     completionDate: "01/22/2026",
     subject: "BoringCompany",
+    sourceRecord: "License - MP-00018764",
     inspector: "James Ortiz",
     status: "Completed",
     source: "Recurring Schedule",
@@ -66,12 +69,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Fire Safety Team",
   },
   {
-    id: "INS-2026-027",
+    id: "INS-2026-00000027",
     type: "Fire Safety",
     outcome: "—",
     dueDate: "04/18/2026",
     completionDate: "—",
     subject: "BoringCompany",
+    sourceRecord: "License - MP-00018764",
     inspector: "James Ortiz",
     status: "In Progress",
     source: "Recurring Schedule",
@@ -83,12 +87,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Fire Safety Team",
   },
   {
-    id: "INS-2026-032",
+    id: "INS-2026-00000032",
     type: "Accessibility Compliance",
     outcome: "—",
     dueDate: "05/02/2026",
     completionDate: "—",
     subject: "BoringCompany",
+    sourceRecord: "Submission - 700024503",
     inspector: "Priya Patel",
     status: "Scheduled",
     source: "License Renewal Application",
@@ -100,12 +105,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Accessibility Compliance Team",
   },
   {
-    id: "INS-2025-098",
+    id: "INS-2025-00000098",
     type: "Workplace Safety",
     outcome: "Pass with Conditions",
     dueDate: "11/08/2025",
     completionDate: "11/08/2025",
     subject: "BoringCompany",
+    sourceRecord: "License - FS-00005617",
     inspector: "Angela Wu",
     status: "Completed",
     source: "Recurring Schedule",
@@ -117,15 +123,16 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Workplace Safety Team",
   },
   {
-    id: "INS-2025-083",
+    id: "INS-2025-00000083",
     type: "Follow-Up",
     outcome: "Pass",
     dueDate: "10/15/2025",
     completionDate: "10/15/2025",
     subject: "BoringCompany",
+    sourceRecord: "License - JE-00053240",
     inspector: "David Chen",
     status: "Completed",
-    source: "Follow-Up to INS-2025-076",
+    source: "Follow-Up to INS-2025-00000076",
     sourceType: "Follow-Up Inspection",
     siteAddress: SITE_ADDRESS,
     scheduledDate: "10/15/2025",
@@ -134,12 +141,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Environmental Compliance Team",
   },
   {
-    id: "INS-2025-076",
+    id: "INS-2025-00000076",
     type: "Environmental Compliance",
     outcome: "Fail",
     dueDate: "09/30/2025",
     completionDate: "09/30/2025",
     subject: "BoringCompany",
+    sourceRecord: "Submission - 700024099",
     inspector: "David Chen",
     status: "Completed",
     source: "Complaint #C-2025-341",
@@ -151,12 +159,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Environmental Compliance Team",
   },
   {
-    id: "INS-2025-061",
+    id: "INS-2025-00000061",
     type: "Health & Sanitation",
     outcome: "Pass",
     dueDate: "07/14/2025",
     completionDate: "07/14/2025",
     subject: "BoringCompany",
+    sourceRecord: "License - HV-00091203",
     inspector: "Sarah Kim",
     status: "Completed",
     source: "Recurring Schedule",
@@ -168,12 +177,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Health & Sanitation Team",
   },
   {
-    id: "INS-2025-054",
+    id: "INS-2025-00000054",
     type: "Workplace Safety",
     outcome: "—",
     dueDate: "06/10/2025",
     completionDate: "—",
     subject: "BoringCompany",
+    sourceRecord: "License - FS-00005617",
     inspector: "Angela Wu",
     status: "Cancelled",
     source: "Recurring Schedule",
@@ -210,20 +220,20 @@ const INSPECTION_ICON_ITEMS = [
 
 /* ── Column config ─────────────────────────────────────── */
 
-type SortKey = "id" | "type" | "subject" | "status" | "outcome" | "dueDate" | "completionDate";
+type SortKey = "id" | "type" | "sourceRecord" | "status" | "outcome" | "dueDate" | "completionDate";
 type SortDir = "asc" | "desc" | null;
 
 const COLUMNS: { key: SortKey; label: string }[] = [
-  { key: "id", label: "ID" },
+  { key: "id", label: "Inspection Number" },
   { key: "type", label: "Type" },
-  { key: "subject", label: "Subject" },
+  { key: "sourceRecord", label: "Source" },
   { key: "status", label: "Status" },
   { key: "outcome", label: "Outcome" },
   { key: "dueDate", label: "Due Date" },
   { key: "completionDate", label: "Completion Date" },
 ];
 
-const COL_WIDTHS = ["10%", "13%", "24%", "11%", "9%", "10%", "11%", "12%"];
+const COL_WIDTHS = ["13%", "13%", "21%", "11%", "9%", "10%", "11%", "12%"];
 
 /* ── Reusable border objects (longhand only) ───────────── */
 
@@ -582,14 +592,14 @@ export function InspectionsPage() {
                 const bg = idx % 2 === 1 ? "#F0F0F0" : "#FFFFFF";
                 return (
                   <tr key={row.id}>
-                    <td data-label="ID" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", whiteSpace: "nowrap", ...cellBorder }}>
+                    <td data-label="Inspection Number" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", whiteSpace: "nowrap", ...cellBorder }}>
                       {row.id}
                     </td>
                     <td data-label="Type" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
                       {row.type}
                     </td>
-                    <td data-label="Subject" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
-                      {row.subject}
+                    <td data-label="Source" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
+                      {row.sourceRecord}
                     </td>
                     <td data-label="Status" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
                       <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B" }}>{row.status}</span>

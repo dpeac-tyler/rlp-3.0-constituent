@@ -15,6 +15,7 @@ export interface InspectionItem {
   dueDate: string;
   completionDate: string;
   subject: string;
+  sourceRecord: string;
   inspector: string;
   status: string;
   source: string;
@@ -30,12 +31,13 @@ export interface InspectionItem {
 
 export const INITIAL_INSPECTIONS: InspectionItem[] = [
   {
-    id: "INS-2026-005",
+    id: "INS-2026-00000005",
     type: "Elevator",
     outcome: "Pass",
     dueDate: "02/18/2026",
     completionDate: "02/18/2026",
     subject: "Elevator Unit #4 – Main St Garage",
+    sourceRecord: "License - EL-00048213",
     inspector: "Robert Nguyen",
     status: "Completed",
     source: "Recurring Schedule",
@@ -47,12 +49,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Elevator Safety Team",
   },
   {
-    id: "INS-2026-009",
+    id: "INS-2026-00000009",
     type: "Elevator",
     outcome: "—",
     dueDate: "03/01/2026",
     completionDate: "—",
     subject: "Elevator Unit #4 – Main St Garage",
+    sourceRecord: "License - EL-00048213",
     inspector: "Robert Nguyen",
     status: "In Progress",
     source: "Recurring Schedule",
@@ -64,12 +67,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Elevator Safety Team",
   },
   {
-    id: "INS-2025-091",
+    id: "INS-2025-00000091",
     type: "Boiler Safety",
     outcome: "Pass",
     dueDate: "12/05/2025",
     completionDate: "12/05/2025",
     subject: "Boiler Unit B-2",
+    sourceRecord: "License - BL-00027659",
     inspector: "Linda Foster",
     status: "Completed",
     source: "Recurring Schedule",
@@ -81,15 +85,16 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Boiler Safety Team",
   },
   {
-    id: "INS-2025-095",
+    id: "INS-2025-00000095",
     type: "Boiler Safety",
     outcome: "—",
     dueDate: "12/19/2025",
     completionDate: "—",
     subject: "Boiler Unit B-2",
+    sourceRecord: "License - BL-00027659",
     inspector: "Linda Foster",
     status: "Scheduled",
-    source: "Follow-Up to INS-2025-091",
+    source: "Follow-Up to INS-2025-00000091",
     sourceType: "Follow-Up Inspection",
     siteAddress: "88 Foundry Rd, Springfield, IL 62703",
     scheduledDate: "12/19/2025",
@@ -98,12 +103,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Boiler Safety Team",
   },
   {
-    id: "INS-2025-088",
+    id: "INS-2025-00000088",
     type: "Fire Suppression",
     outcome: "Pass with Conditions",
     dueDate: "10/29/2025",
     completionDate: "10/29/2025",
     subject: "Sprinkler System – Building C",
+    sourceRecord: "License - FS-00061204",
     inspector: "Michael Torres",
     status: "Completed",
     source: "Recurring Schedule",
@@ -115,12 +121,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Fire Safety Team",
   },
   {
-    id: "INS-2025-070",
+    id: "INS-2025-00000070",
     type: "Vehicle Safety",
     outcome: "Fail",
     dueDate: "08/03/2025",
     completionDate: "08/03/2025",
     subject: "Fleet Vehicle #12",
+    sourceRecord: "License - VS-00039817",
     inspector: "Linda Foster",
     status: "Completed",
     source: "Recurring Schedule",
@@ -132,12 +139,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Vehicle Safety Team",
   },
   {
-    id: "INS-2025-042",
+    id: "INS-2025-00000042",
     type: "Vehicle Safety",
     outcome: "—",
     dueDate: "05/14/2025",
     completionDate: "—",
     subject: "Fleet Vehicle #12",
+    sourceRecord: "Submission - 700023455",
     inspector: "Michael Torres",
     status: "Cancelled",
     source: "Recurring Schedule",
@@ -149,12 +157,13 @@ export const INITIAL_INSPECTIONS: InspectionItem[] = [
     assignedTeam: "Vehicle Safety Team",
   },
   {
-    id: "INS-2025-058",
+    id: "INS-2025-00000058",
     type: "Amusement Ride",
     outcome: "Pass",
     dueDate: "06/21/2025",
     completionDate: "06/21/2025",
     subject: "Sky Wheel #1",
+    sourceRecord: "License - AR-00074502",
     inspector: "Robert Nguyen",
     status: "Completed",
     source: "Recurring Schedule",
@@ -191,20 +200,20 @@ const INSPECTION_ICON_ITEMS = [
 
 /* ── Column config ─────────────────────────────────────── */
 
-type SortKey = "id" | "type" | "subject" | "status" | "outcome" | "dueDate" | "completionDate";
+type SortKey = "id" | "type" | "sourceRecord" | "status" | "outcome" | "dueDate" | "completionDate";
 type SortDir = "asc" | "desc" | null;
 
 const COLUMNS: { key: SortKey; label: string }[] = [
-  { key: "id", label: "ID" },
+  { key: "id", label: "Inspection Number" },
   { key: "type", label: "Type" },
-  { key: "subject", label: "Subject" },
+  { key: "sourceRecord", label: "Source" },
   { key: "status", label: "Status" },
   { key: "outcome", label: "Outcome" },
   { key: "dueDate", label: "Due Date" },
   { key: "completionDate", label: "Completion Date" },
 ];
 
-const COL_WIDTHS = ["10%", "13%", "24%", "11%", "9%", "10%", "11%", "12%"];
+const COL_WIDTHS = ["13%", "13%", "21%", "11%", "9%", "10%", "11%", "12%"];
 
 /* ── Reusable border objects (longhand only) ───────────── */
 
@@ -563,14 +572,14 @@ export function AssetInspectionsPage() {
                 const bg = idx % 2 === 1 ? "#F0F0F0" : "#FFFFFF";
                 return (
                   <tr key={row.id}>
-                    <td data-label="ID" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", whiteSpace: "nowrap", ...cellBorder }}>
+                    <td data-label="Inspection Number" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", whiteSpace: "nowrap", ...cellBorder }}>
                       {row.id}
                     </td>
                     <td data-label="Type" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
                       {row.type}
                     </td>
-                    <td data-label="Subject" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
-                      {row.subject}
+                    <td data-label="Source" style={{ padding: "14px 12px", backgroundColor: bg, color: "#1B1B1B", lineHeight: "22px", wordWrap: "break-word", overflowWrap: "break-word", ...cellBorder }}>
+                      {row.sourceRecord}
                     </td>
                     <td data-label="Status" style={{ padding: "14px 12px", backgroundColor: bg, lineHeight: "22px", ...cellBorder }}>
                       <span style={{ color: STATUS_COLOR[row.status] ?? "#1B1B1B" }}>{row.status}</span>

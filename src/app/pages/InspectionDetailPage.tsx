@@ -165,7 +165,7 @@ export function InspectionDetailPage({ inspections, basePath, statusColor, outco
                 isMobile={isMobile}
                 left={
                   <>
-                    <Field label="Inspection ID" value={inspection.id} />
+                    <Field label="Inspection Number" value={inspection.id} />
                     <Field label="Inspection Type" value={inspection.type} />
                     <Field label="Status" value={inspection.status} color={statusColor[inspection.status]} />
                     <Field label="Outcome" value={inspection.outcome} color={outcomeColor[inspection.outcome]} />
