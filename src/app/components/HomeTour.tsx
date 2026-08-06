@@ -35,12 +35,12 @@ function buildHomeTourSteps({ isMobile, openSidebar, closeSidebar }: SidebarCont
   return [
     {
       selector: "#tour-nav-home",
-      content: "1. This is your main navigation — jump between Home, your account, and all your business services from here.",
+      content: "1. This is your main navigation — jump between Home, your account, and all your services from here.",
       action: () => { if (isMobile) openSidebar(); },
     },
     {
       selector: "#tour-nav-services",
-      content: "2. All of your business and asset services — Affiliations, Certifications, Submissions, and more — live in this section.",
+      content: "2. All of your services — Affiliations, Certifications, Submissions, and more — live in this section.",
       action: () => { if (isMobile) openSidebar(); },
     },
     {
@@ -55,7 +55,7 @@ function buildHomeTourSteps({ isMobile, openSidebar, closeSidebar }: SidebarCont
     },
     {
       selector: "#tour-tile-business",
-      content: "5. Quick links to your business account info, submissions, and certifications.",
+      content: "5. Quick links to your account info, submissions, and certifications.",
       action: () => { if (isMobile) closeSidebar(); },
     },
     {
