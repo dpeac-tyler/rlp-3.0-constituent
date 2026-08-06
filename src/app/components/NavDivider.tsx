@@ -1,10 +1,11 @@
 interface NavDividerProps {
   label: string;
+  id?: string;
 }
 
-export function NavDivider({ label }: NavDividerProps) {
+export function NavDivider({ label, id }: NavDividerProps) {
   return (
-    <div className="flex flex-col bg-white" style={{ padding: "0 0 0 5px" }}>
+    <div id={id} className="flex flex-col bg-white" style={{ padding: "0 0 0 5px" }}>
       <span
         className="truncate"
         style={{

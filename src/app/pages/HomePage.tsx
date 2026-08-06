@@ -1,4 +1,5 @@
 import { PageShell } from "../components/PageShell";
+import { useHomeTourAutoStart, useStartHomeTour } from "../components/HomeTour";
 import "./HomePage.css";
 
 function getGreeting() {
@@ -9,10 +10,34 @@ function getGreeting() {
 }
 
 export function HomePage() {
+  useHomeTourAutoStart();
+  const startTour = useStartHomeTour();
+
   return (
-    <PageShell title={getGreeting()} titleStyle={{ fontSize: "3rem" }} heroHeight={205}>
+    <PageShell
+      title={getGreeting()}
+      titleStyle={{ fontSize: "3rem" }}
+      heroHeight={205}
+      titleRight={
+        <button
+          onClick={startTour}
+          className="cursor-pointer border-none"
+          style={{
+            backgroundColor: "transparent",
+            color: "#005EA2",
+            fontFamily: "'Public Sans', sans-serif",
+            fontSize: "1.4rem",
+            fontWeight: 600,
+            textDecoration: "underline",
+            padding: 0,
+          }}
+        >
+          Take a tour
+        </button>
+      }
+    >
       <div className="home-content">
-        <div className="slim-banner">
+        <div id="tour-banner" className="slim-banner">
           <div className="slim-banner__bar" />
           <div className="slim-banner__body">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="slim-banner__icon">
@@ -23,9 +48,9 @@ export function HomePage() {
         </div>
 
         <div className="home-tiles">
-          <div className="home-tile">
+          <div id="tour-tile-business" className="home-tile">
             <div className="home-tile__title-row">
-              
+
               <h2 className="home-tile__heading">Business</h2>
             </div>
             <div className="home-tile__items">
@@ -62,9 +87,9 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="home-tile">
+          <div id="tour-tile-asset" className="home-tile">
             <div className="home-tile__title-row">
-              
+
               <h2 className="home-tile__heading">Asset License</h2>
             </div>
             <div className="home-tile__items">

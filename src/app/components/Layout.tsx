@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { BranchProvider } from "./BranchContext";
 import { ToastProvider } from "./ToastContext";
 import { ProfileProvider } from "./ProfileContext";
@@ -12,6 +12,7 @@ import { NavDivider } from "./NavDivider";
 import { SubNavItem } from "./SubNavItem";
 import { NavGroup } from "./NavGroup";
 import { ChatBot } from "./ChatBot";
+import { HomeTourProvider, SidebarControlProvider } from "./HomeTour";
 import certificateSvgPaths from "../../imports/svg-klqb4f8snr";
 import { useIsMobile } from "../hooks/useIsMobile";
 
@@ -47,6 +48,22 @@ function LayoutContent() {
     if (isMobile) setIsExpanded(false);
   }, [location.pathname, isMobile]);
 
+  // Nudges the tour library to re-measure its target once the drawer's slide transition settles.
+  const nudgeTourReposition = useCallback(() => {
+    requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+    setTimeout(() => window.dispatchEvent(new Event("resize")), 320);
+  }, []);
+
+  const openSidebar = useCallback(() => {
+    setIsExpanded(true);
+    nudgeTourReposition();
+  }, [nudgeTourReposition]);
+
+  const closeSidebar = useCallback(() => {
+    setIsExpanded(false);
+    nudgeTourReposition();
+  }, [nudgeTourReposition]);
+
   const isActive = (path: string) => location.pathname === path;
   const isAffiliationsActive = location.pathname.startsWith("/affiliations");
   const isSubmissionsActive = location.pathname.startsWith("/submissions/") || location.pathname === "/submissions";
@@ -61,6 +78,8 @@ function LayoutContent() {
   const highlightAccountNav = isAccountActive && showOnboarding;
 
   return (
+    <SidebarControlProvider isMobile={isMobile} openSidebar={openSidebar} closeSidebar={closeSidebar}>
+    <HomeTourProvider>
     <div className="flex flex-col w-full min-h-screen">
       {/* Header - full width */}
       <Header
@@ -135,7 +154,7 @@ function LayoutContent() {
 
           {/* Navigation items */}
           <nav className="flex flex-col">
-            <NavItem label="Home" isActive={isActive("/")} isExpanded={isExpanded} to="/" />
+            <NavItem id="tour-nav-home" label="Home" isActive={isActive("/")} isExpanded={isExpanded} to="/" />
             {isAccountActive && (
               <>
                 <NavDivider label="Account" />
@@ -201,6 +220,7 @@ function LayoutContent() {
                 />
               </>
             )}
+            <div id="tour-nav-services">
             <NavDivider label="Business" />
             <NavGroup
               isExpanded={isExpanded}
@@ -447,6 +467,7 @@ function LayoutContent() {
                 </svg>
               }
             />
+            </div>
           </nav>
         </div>
 
@@ -510,5 +531,7 @@ function LayoutContent() {
       {/* Chatbot */}
       <ChatBot />
     </div>
+    </HomeTourProvider>
+    </SidebarControlProvider>
   );
 }

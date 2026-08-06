@@ -127,6 +127,7 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
             ? NAV_LINKS.map(({ label, to, icon: Icon }) => (
                 <button
                   key={label}
+                  id={label === "Account" ? "tour-header-account" : undefined}
                   onClick={() => navigate(to)}
                   aria-label={label}
                   className="flex items-center justify-center cursor-pointer border-none bg-transparent"
@@ -136,7 +137,7 @@ export function Header({ isAddressVisible, onToggleAddress }: HeaderProps) {
                 </button>
               ))
             : NAV_LINKS.map(({ label, to }, i) => (
-                <div key={label} className="flex items-center">
+                <div key={label} id={label === "Account" ? "tour-header-account" : undefined} className="flex items-center">
                   {i > 0 && (
                     <span style={{ color: "rgba(255,255,255,0.5)", margin: "0 12px", fontSize: 14 }}>|</span>
                   )}

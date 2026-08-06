@@ -13,6 +13,7 @@ interface NavItemProps {
   to?: string;
   /** Show a small indicator that this item has sub-navigation */
   hasSubNav?: boolean;
+  id?: string;
 }
 
 export function NavItem({
@@ -25,6 +26,7 @@ export function NavItem({
   highlighted = false,
   to,
   hasSubNav = false,
+  id,
 }: NavItemProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -101,6 +103,7 @@ export function NavItem({
   if (to) {
     return (
       <Link
+        id={id}
         to={to}
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -123,6 +126,7 @@ export function NavItem({
 
   return (
     <button
+      id={id}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
