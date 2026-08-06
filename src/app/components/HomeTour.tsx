@@ -94,6 +94,28 @@ export function HomeTourProvider({ children }: { children: ReactNode }) {
     <TourProvider
       steps={steps}
       showBadge={false}
+      nextButton={({ Button, currentStep, stepsLength, setIsOpen }) => {
+        if (currentStep === stepsLength - 1) {
+          return (
+            <button
+              onClick={() => setIsOpen(false)}
+              style={{
+                fontFamily: "'Public Sans', sans-serif",
+                fontSize: 14,
+                fontWeight: 600,
+                color: "#005EA2",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "4px 8px",
+              }}
+            >
+              Close
+            </button>
+          );
+        }
+        return <Button kind="next" />;
+      }}
       padding={{ mask: 6, popover: [12, 12] }}
       styles={{
         popover: (base) => ({
