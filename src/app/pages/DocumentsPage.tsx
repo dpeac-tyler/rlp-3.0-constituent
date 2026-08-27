@@ -1,5 +1,5 @@
-import { useState, useMemo, useRef } from "react";
-import { Eye, Trash2, Upload, X } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Download } from "lucide-react";
 import { PageShell } from "../components/PageShell";
 import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useToast } from "../components/ToastContext";
@@ -9,12 +9,13 @@ import { useIsMobile } from "../hooks/useIsMobile";
 
 interface DocumentItem {
   id: string;
-  name: string;
-  category: string;
-  description: string;
-  uploadedDate: string;
+  title: string;
+  docType: string;
+  subType: string;
+  record: string;
   fileName: string;
-  fileSize: string;
+  uploadedDate: string;
+  uploadedBy: string;
 }
 
 /* ── Mock data ─────────────────────────────────────────── */
@@ -22,109 +23,68 @@ interface DocumentItem {
 const INITIAL_DOCUMENTS: DocumentItem[] = [
   {
     id: "d1",
-    name: "Driver's License (Front)",
-    category: "Identification",
-    description: "Front of state-issued driver's license used for identity verification purposes. This document must be current and not expired. Please ensure the image is clear, well-lit, and all text is legible including the license number, date of birth, and expiration date.",
+    title: "Signed License Application",
+    docType: "Business License",
+    subType: "Application",
+    record: "Submission: SUB-100234",
+    fileName: "license_application_signed.pdf",
     uploadedDate: "01/15/2026",
-    fileName: "dl_front.jpg",
-    fileSize: "1.2 MB",
+    uploadedBy: "You",
   },
   {
     id: "d2",
-    name: "Driver's License (Back)",
-    category: "Identification",
-    description: "Back of state-issued driver's license",
-    uploadedDate: "01/15/2026",
-    fileName: "dl_back.jpg",
-    fileSize: "980 KB",
+    title: "Proof of Address",
+    docType: "Identification",
+    subType: "Utility Bill",
+    record: "Submission: SUB-100234",
+    fileName: "utility_bill_jan2026.pdf",
+    uploadedDate: "01/28/2026",
+    uploadedBy: "You",
   },
   {
     id: "d3",
-    name: "Business License",
-    category: "Licenses & Permits",
-    description: "Current business license for BoringCompany issued by the state regulatory authority. This license authorizes the company to conduct operations within the designated jurisdiction and must be renewed annually before the expiration date listed on the document.",
-    uploadedDate: "02/03/2026",
-    fileName: "business_license_2026.pdf",
-    fileSize: "245 KB",
+    title: "Certificate of Insurance",
+    docType: "Insurance",
+    subType: "Certificate",
+    record: "License: BL-2026-0192",
+    fileName: "certificate_of_insurance.pdf",
+    uploadedDate: "01/18/2026",
+    uploadedBy: "Agency Admin",
   },
   {
     id: "d4",
-    name: "Certificate of Insurance",
-    category: "Insurance",
-    description: "General liability insurance certificate providing coverage for property damage, bodily injury, and related claims. This certificate is required for all active contracts and must be maintained with minimum coverage amounts as specified in the contractual agreement terms.",
-    uploadedDate: "02/10/2026",
-    fileName: "insurance_cert.pdf",
-    fileSize: "312 KB",
+    title: "Approved Business License",
+    docType: "Business License",
+    subType: "Approval Letter",
+    record: "License: BL-2026-0192",
+    fileName: "business_license_approved.pdf",
+    uploadedDate: "02/03/2026",
+    uploadedBy: "Agency Admin",
   },
   {
     id: "d5",
-    name: "W-9 Form",
-    category: "Tax Documents",
-    description: "Completed W-9 for tax identification",
-    uploadedDate: "12/20/2025",
-    fileName: "w9_boringcompany.pdf",
-    fileSize: "89 KB",
-  },
-  {
-    id: "d6",
-    name: "Proof of Address",
-    category: "Identification",
-    description: "Utility bill showing current business address",
-    uploadedDate: "01/28/2026",
-    fileName: "utility_bill_jan2026.pdf",
-    fileSize: "156 KB",
-  },
-  {
-    id: "d7",
-    name: "Vehicle Registration",
-    category: "Licenses & Permits",
-    description: "Company vehicle registration document",
-    uploadedDate: "11/05/2025",
-    fileName: "vehicle_reg.pdf",
-    fileSize: "201 KB",
-  },
-  {
-    id: "d8",
-    name: "Safety Inspection Report",
-    category: "Compliance",
-    description: "Annual workplace safety inspection results conducted by the Occupational Safety and Health Administration (OSHA). The report covers fire safety, electrical systems, ventilation, hazardous material storage, emergency exits, and employee safety training compliance for all company facilities.",
+    title: "Safety Inspection Report",
+    docType: "Inspection",
+    subType: "Report",
+    record: "License: BL-2026-0192",
+    fileName: "safety_inspection_report.pdf",
     uploadedDate: "02/18/2026",
-    fileName: "safety_report_2026.pdf",
-    fileSize: "478 KB",
+    uploadedBy: "Agency Admin",
   },
-];
-
-const CATEGORIES = [
-  "Please Select",
-  "Identification",
-  "Licenses & Permits",
-  "Insurance",
-  "Tax Documents",
-  "Compliance",
-  "Other",
 ];
 
 /* ── Icon key items ────────────────────────────────────── */
 
 const DOC_ICON_ITEMS = [
-  { icon: <Eye size={16} color="#FFFFFF" />, label: "View Document" },
-  { icon: <Trash2 size={16} color="#FFFFFF" />, label: "Delete Document" },
+  { icon: <Download size={16} color="#FFFFFF" />, label: "Download Document" },
 ];
 
 /* ── Column config ─────────────────────────────────────── */
 
-type SortKey = "name" | "category" | "uploadedDate";
+type SortKey = "title" | "docType" | "uploadedDate";
 type SortDir = "asc" | "desc" | null;
 
-const SORTABLE_COLUMNS: { key: SortKey; label: string }[] = [
-  { key: "name", label: "Document Name" },
-  { key: "category", label: "Category" },
-  { key: "uploadedDate", label: "Uploaded Date" },
-];
-
-const DESC_LIMIT = 100;
-
-const COL_WIDTHS = ["22%", "13%", "27%", "13%", "14%", "11%"];
+const COL_WIDTHS = ["20%", "18%", "16%", "16%", "12%", "12%", "6%"];
 
 /* ── Reusable border objects (longhand only) ───────────── */
 
@@ -209,707 +169,25 @@ const parseDateForSort = (d: string) => {
   return new Date(`${yyyy}-${mm}-${dd}`).getTime();
 };
 
-const formatDateToday = () => {
-  const d = new Date();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const yyyy = d.getFullYear();
-  return `${mm}/${dd}/${yyyy}`;
-};
-
-/* ── View Document Modal ───────────────────────────────── */
-
-function ViewDocumentModal({
-  doc,
-  onClose,
-}: {
-  doc: DocumentItem;
-  onClose: () => void;
-}) {
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        zIndex: 8000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderRadius: 4,
-          width: 560,
-          maxWidth: "90vw",
-          ...noBorder,
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "16px 24px",
-            backgroundColor: "#122E51",
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
-            borderBottomWidth: 1,
-            borderBottomStyle: "solid",
-            borderBottomColor: "#DFE1E2",
-            borderTopWidth: 0,
-            borderTopStyle: "solid",
-            borderTopColor: "transparent",
-            borderLeftWidth: 0,
-            borderLeftStyle: "solid",
-            borderLeftColor: "transparent",
-            borderRightWidth: 0,
-            borderRightStyle: "solid",
-            borderRightColor: "transparent",
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 20,
-              color: "#FFFFFF",
-              margin: 0,
-            }}
-          >
-            Document Details
-          </h2>
-          <button
-            onClick={onClose}
-            style={{
-              cursor: "pointer",
-              backgroundColor: "transparent",
-              padding: 4,
-              display: "inline-flex",
-              ...noBorder,
-            }}
-          >
-            <X size={20} color="#FFFFFF" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div style={{ padding: "24px" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "140px 1fr",
-              gap: "12px 16px",
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 14,
-              color: "#1B1B1B",
-            }}
-          >
-            <span style={{ fontWeight: 700 }}>Document Name</span>
-            <span>{doc.name}</span>
-
-            <span style={{ fontWeight: 700 }}>Category</span>
-            <span>{doc.category}</span>
-
-            <span style={{ fontWeight: 700 }}>Description</span>
-            <span>{doc.description}</span>
-
-            <span style={{ fontWeight: 700 }}>File Name</span>
-            <span style={{ color: "#005EA2", textDecoration: "underline" }}>
-              {doc.fileName}
-            </span>
-
-            <span style={{ fontWeight: 700 }}>File Size</span>
-            <span>{doc.fileSize}</span>
-
-            <span style={{ fontWeight: 700 }}>Uploaded Date</span>
-            <span>{doc.uploadedDate}</span>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div
-          style={{
-            padding: "16px 24px",
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
-          <button
-            onClick={onClose}
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 16,
-              fontWeight: 700,
-              padding: "10px 20px",
-              backgroundColor: "#005EA2",
-              color: "#FFFFFF",
-              borderRadius: 4,
-              cursor: "pointer",
-              ...noBorder,
-            }}
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── Delete Confirm Modal ──────────────────────────────── */
-
-function DeleteConfirmModal({
-  doc,
-  onConfirm,
-  onCancel,
-}: {
-  doc: DocumentItem;
-  onConfirm: () => void;
-  onCancel: () => void;
-}) {
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        zIndex: 8000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onClick={onCancel}
-    >
-      <div
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderRadius: 4,
-          width: 480,
-          maxWidth: "90vw",
-          ...noBorder,
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "16px 24px",
-            backgroundColor: "#122E51",
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
-            borderBottomWidth: 1,
-            borderBottomStyle: "solid",
-            borderBottomColor: "#DFE1E2",
-            borderTopWidth: 0,
-            borderTopStyle: "solid",
-            borderTopColor: "transparent",
-            borderLeftWidth: 0,
-            borderLeftStyle: "solid",
-            borderLeftColor: "transparent",
-            borderRightWidth: 0,
-            borderRightStyle: "solid",
-            borderRightColor: "transparent",
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 20,
-              color: "#FFFFFF",
-              margin: 0,
-            }}
-          >
-            Delete Document
-          </h2>
-          <button
-            onClick={onCancel}
-            style={{
-              cursor: "pointer",
-              backgroundColor: "transparent",
-              padding: 4,
-              display: "inline-flex",
-              ...noBorder,
-            }}
-          >
-            <X size={20} color="#FFFFFF" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div style={{ padding: "24px" }}>
-          <p
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 16,
-              color: "#1B1B1B",
-              margin: 0,
-              lineHeight: "24px",
-            }}
-          >
-            Are you sure you want to delete{" "}
-            <strong>{doc.name}</strong>? This action cannot be undone.
-          </p>
-        </div>
-
-        {/* Footer — primary action (Delete) on left */}
-        <div
-          style={{
-            padding: "16px 24px",
-            display: "flex",
-            gap: 12,
-            alignItems: "center",
-          }}
-        >
-          <button
-            onClick={onConfirm}
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 16,
-              fontWeight: 700,
-              padding: "10px 20px",
-              backgroundColor: "#005EA2",
-              color: "#FFFFFF",
-              borderRadius: 4,
-              cursor: "pointer",
-              ...noBorder,
-            }}
-          >
-            Delete Document
-          </button>
-          <button
-            onClick={onCancel}
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 16,
-              fontWeight: 700,
-              lineHeight: "24px",
-              padding: "10px 20px",
-              backgroundColor: "#B50909",
-              color: "#FFFFFF",
-              borderWidth: 0,
-              borderStyle: "none",
-              borderColor: "transparent",
-              borderRadius: 4,
-              cursor: "pointer",
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── Upload Document Modal ─────────────────────────────── */
-
-function UploadDocumentModal({
-  onUpload,
-  onCancel,
-}: {
-  onUpload: (doc: Omit<DocumentItem, "id">) => void;
-  onCancel: () => void;
-}) {
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState("Please Select");
-  const [description, setDescription] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [errors, setErrors] = useState<Record<string, boolean>>({});
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleSubmit = () => {
-    const newErrors: Record<string, boolean> = {};
-    if (!name.trim()) newErrors.name = true;
-    if (category === "Please Select") newErrors.category = true;
-    if (!selectedFile) newErrors.file = true;
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    onUpload({
-      name: name.trim(),
-      category,
-      description: description.trim(),
-      uploadedDate: formatDateToday(),
-      fileName: selectedFile!.name,
-      fileSize:
-        selectedFile!.size > 1024 * 1024
-          ? `${(selectedFile!.size / (1024 * 1024)).toFixed(1)} MB`
-          : `${Math.round(selectedFile!.size / 1024)} KB`,
-    });
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontFamily: "'Public Sans', sans-serif",
-    fontSize: 14,
-    fontWeight: 700,
-    color: "#1B1B1B",
-    display: "block",
-    marginBottom: 4,
-  };
-
-  const inputStyle: React.CSSProperties = {
-    fontFamily: "'Public Sans', sans-serif",
-    fontSize: 16,
-    color: "#1B1B1B",
-    width: "100%",
-    height: 40,
-    padding: "0 12px",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 0,
-    boxSizing: "border-box",
-    ...inputBorder,
-  };
-
-  const selectStyle: React.CSSProperties = {
-    ...inputStyle,
-    appearance: "none",
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5H7z' fill='%231B1B1B'/%3E%3C/svg%3E")`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "right 8px center",
-    backgroundSize: "16px",
-    cursor: "pointer",
-    padding: "0 32px 0 12px",
-  };
-
-  const errorBorder: React.CSSProperties = {
-    borderTopColor: "#B50909",
-    borderRightColor: "#B50909",
-    borderBottomColor: "#B50909",
-    borderLeftColor: "#B50909",
-  };
-
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        zIndex: 8000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onClick={onCancel}
-    >
-      <div
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderRadius: 4,
-          width: 600,
-          maxWidth: "90vw",
-          maxHeight: "90vh",
-          overflowY: "auto",
-          ...noBorder,
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "16px 24px",
-            backgroundColor: "#122E51",
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
-            borderBottomWidth: 1,
-            borderBottomStyle: "solid",
-            borderBottomColor: "#DFE1E2",
-            borderTopWidth: 0,
-            borderTopStyle: "solid",
-            borderTopColor: "transparent",
-            borderLeftWidth: 0,
-            borderLeftStyle: "solid",
-            borderLeftColor: "transparent",
-            borderRightWidth: 0,
-            borderRightStyle: "solid",
-            borderRightColor: "transparent",
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 20,
-              color: "#FFFFFF",
-              margin: 0,
-            }}
-          >
-            Upload Document
-          </h2>
-          <button
-            onClick={onCancel}
-            style={{
-              cursor: "pointer",
-              backgroundColor: "transparent",
-              padding: 4,
-              display: "inline-flex",
-              ...noBorder,
-            }}
-          >
-            <X size={20} color="#FFFFFF" />
-          </button>
-        </div>
-
-        {/* Form body */}
-        <div
-          style={{
-            padding: "24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 20,
-          }}
-        >
-          {/* Document Name */}
-          <div>
-            <label style={labelStyle}>
-              Document Name <span className="required-label">Required</span>
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                if (errors.name) setErrors((p) => ({ ...p, name: false }));
-              }}
-              placeholder="e.g., Driver's License (Front)"
-              style={{
-                ...inputStyle,
-                ...(errors.name ? errorBorder : {}),
-              }}
-            />
-            {errors.name && (
-              <span
-                style={{
-                  fontFamily: "'Public Sans', sans-serif",
-                  fontSize: 12,
-                  color: "#B50909",
-                  marginTop: 4,
-                  display: "block",
-                }}
-              >
-                Document name is required
-              </span>
-            )}
-          </div>
-
-          {/* Category */}
-          <div>
-            <label style={labelStyle}>
-              Category <span className="required-label">Required</span>
-            </label>
-            <select
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                if (errors.category)
-                  setErrors((p) => ({ ...p, category: false }));
-              }}
-              style={{
-                ...selectStyle,
-                ...(errors.category ? errorBorder : {}),
-                color:
-                  category === "Please Select" ? "#71767A" : "#1B1B1B",
-              }}
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-            {errors.category && (
-              <span
-                style={{
-                  fontFamily: "'Public Sans', sans-serif",
-                  fontSize: 12,
-                  color: "#B50909",
-                  marginTop: 4,
-                  display: "block",
-                }}
-              >
-                Please select a category
-              </span>
-            )}
-          </div>
-
-          {/* Description */}
-          <div>
-            <label style={labelStyle}>Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief description of the document"
-              rows={3}
-              style={{
-                ...inputStyle,
-                height: "auto",
-                padding: "8px 12px",
-                resize: "vertical",
-              }}
-            />
-          </div>
-
-          {/* File Upload */}
-          <div>
-            <label style={labelStyle}>
-              File <span className="required-label">Required</span>
-            </label>
-            <p
-              style={{
-                fontFamily: "'Public Sans', sans-serif",
-                fontSize: 12,
-                color: "#71767A",
-                margin: "0 0 8px 0",
-              }}
-            >
-              Accepted formats: PDF, JPG, PNG, TIFF. Max file size: 10 MB.
-            </p>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const f = e.target.files?.[0] || null;
-                setSelectedFile(f);
-                if (errors.file) setErrors((p) => ({ ...p, file: false }));
-              }}
-            />
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                style={{
-                  fontFamily: "'Public Sans', sans-serif",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  padding: "8px 16px",
-                  backgroundColor: "#FFFFFF",
-                  color: "#005EA2",
-                  borderRadius: 4,
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  ...inputBorder,
-                  ...(errors.file ? errorBorder : {}),
-                }}
-              >
-                <Upload size={16} />
-                Choose File
-              </button>
-              <span
-                style={{
-                  fontFamily: "'Public Sans', sans-serif",
-                  fontSize: 14,
-                  color: selectedFile ? "#1B1B1B" : "#71767A",
-                }}
-              >
-                {selectedFile ? selectedFile.name : "No file selected"}
-              </span>
-            </div>
-            {errors.file && (
-              <span
-                style={{
-                  fontFamily: "'Public Sans', sans-serif",
-                  fontSize: 12,
-                  color: "#B50909",
-                  marginTop: 4,
-                  display: "block",
-                }}
-              >
-                Please select a file to upload
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Footer — primary action (Upload) on left */}
-        <div
-          style={{
-            padding: "16px 24px",
-            display: "flex",
-            gap: 12,
-            alignItems: "center",
-          }}
-        >
-          <button
-            onClick={handleSubmit}
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 16,
-              fontWeight: 700,
-              padding: "10px 20px",
-              backgroundColor: "#005EA2",
-              color: "#FFFFFF",
-              borderRadius: 4,
-              cursor: "pointer",
-              ...noBorder,
-            }}
-          >
-            Upload Document
-          </button>
-          <button
-            onClick={onCancel}
-            style={{
-              fontFamily: "'Public Sans', sans-serif",
-              fontSize: 16,
-              fontWeight: 700,
-              lineHeight: "24px",
-              padding: "10px 20px",
-              backgroundColor: "#B50909",
-              color: "#FFFFFF",
-              borderWidth: 0,
-              borderStyle: "none",
-              borderColor: "transparent",
-              borderRadius: 4,
-              cursor: "pointer",
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── Main Documents Page ───────────────────────────────── */
 
 export function DocumentsPage() {
   const { showToast } = useToast();
-  const [documents, setDocuments] = useState<DocumentItem[]>(INITIAL_DOCUMENTS);
+  const [documents] = useState<DocumentItem[]>(INITIAL_DOCUMENTS);
+  const [searchText, setSearchText] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>(null);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(0);
-
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [viewingDoc, setViewingDoc] = useState<DocumentItem | null>(null);
-  const [deletingDoc, setDeletingDoc] = useState<DocumentItem | null>(null);
-  const [expandedDescs, setExpandedDescs] = useState<Set<string>>(new Set());
   const isMobile = useIsMobile();
+
+  /* ── Search ───────────────────────────────────────────── */
+
+  const filteredData = useMemo(() => {
+    const query = searchText.trim().toLowerCase();
+    if (!query) return documents;
+    return documents.filter((d) => d.title.toLowerCase().includes(query));
+  }, [documents, searchText]);
 
   /* ── Sorting ──────────────────────────────────────────── */
 
@@ -928,16 +206,20 @@ export function DocumentsPage() {
   };
 
   const sortedData = useMemo(() => {
-    if (!sortKey || !sortDir) return documents;
-    return [...documents].sort((a, b) => {
+    if (!sortKey || !sortDir) return filteredData;
+    return [...filteredData].sort((a, b) => {
       if (sortKey === "uploadedDate") {
         const cmp = parseDateForSort(a.uploadedDate) - parseDateForSort(b.uploadedDate);
         return sortDir === "asc" ? cmp : -cmp;
       }
-      const cmp = a[sortKey].localeCompare(b[sortKey]);
+      if (sortKey === "docType") {
+        const cmp = `${a.docType} ${a.subType}`.localeCompare(`${b.docType} ${b.subType}`);
+        return sortDir === "asc" ? cmp : -cmp;
+      }
+      const cmp = a.title.localeCompare(b.title);
       return sortDir === "asc" ? cmp : -cmp;
     });
-  }, [sortKey, sortDir, documents]);
+  }, [sortKey, sortDir, filteredData]);
 
   /* ── Pagination ───────────────────────────────────────── */
 
@@ -968,18 +250,8 @@ export function DocumentsPage() {
 
   /* ── Handlers ─────────────────────────────────────────── */
 
-  const handleUpload = (doc: Omit<DocumentItem, "id">) => {
-    const newDoc: DocumentItem = { id: `d${Date.now()}`, ...doc };
-    setDocuments((prev) => [newDoc, ...prev]);
-    setShowUploadModal(false);
-    showToast("Document uploaded successfully");
-  };
-
-  const handleDelete = () => {
-    if (!deletingDoc) return;
-    setDocuments((prev) => prev.filter((d) => d.id !== deletingDoc.id));
-    setDeletingDoc(null);
-    showToast("Document deleted successfully");
+  const handleDownload = (doc: DocumentItem) => {
+    showToast(`Downloading ${doc.fileName}...`);
   };
 
   /* ── Render sortable th helper ────────────────────────── */
@@ -1023,6 +295,24 @@ export function DocumentsPage() {
     </th>
   );
 
+  const nonSortableTh = (label: string) => (
+    <th
+      style={{
+        backgroundColor: "#F0F0F0",
+        color: "#1B1B1B",
+        fontWeight: 700,
+        fontSize: 13,
+        lineHeight: "20px",
+        padding: "12px 12px",
+        textAlign: "left",
+        whiteSpace: "nowrap",
+        ...thBorder,
+      }}
+    >
+      {label}
+    </th>
+  );
+
   return (
     <PageShell title="Documents">
       <div
@@ -1042,10 +332,9 @@ export function DocumentsPage() {
           margin: "0 0 0 0",
         }}
       >
-        Welcome to your Document Repository. Upload, view, and manage important
-        documents such as identification, licenses, insurance certificates, and
-        other required files. Accepted file formats include PDF, JPG, PNG, and
-        TIFF.
+        View and download documents related to your submissions and licenses,
+        such as identification, licenses, insurance certificates, and
+        inspection reports.
       </p>
 
       {/* Icon Key */}
@@ -1053,6 +342,66 @@ export function DocumentsPage() {
         items={DOC_ICON_ITEMS}
         sessionKey="icon-key-documents-open"
       />
+
+      {/* Search by title */}
+      <div style={{ marginBottom: 16 }}>
+        <label
+          htmlFor="documents-search-title"
+          style={{
+            fontFamily: "'Public Sans', sans-serif",
+            fontSize: 14,
+            fontWeight: 700,
+            color: "#1B1B1B",
+            display: "block",
+            marginBottom: 4,
+          }}
+        >
+          Search
+        </label>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            id="documents-search-title"
+            type="text"
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+              setCurrentPage(0);
+            }}
+            style={{
+              fontFamily: "'Public Sans', sans-serif",
+              fontSize: 16,
+              color: "#1B1B1B",
+              width: "100%",
+              height: 40,
+              padding: "0 12px",
+              backgroundColor: "#FFFFFF",
+              borderRadius: 0,
+              boxSizing: "border-box",
+              ...inputBorder,
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => setCurrentPage(0)}
+            style={{
+              fontFamily: "'Public Sans', sans-serif",
+              fontSize: 16,
+              fontWeight: 700,
+              color: "#FFFFFF",
+              backgroundColor: "#005EA2",
+              height: 40,
+              padding: "0 24px",
+              borderRadius: 0,
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+              ...noBorder,
+            }}
+          >
+            Search
+          </button>
+        </div>
+      </div>
 
       {/* Top bar: Showing X-Y of Z  |  Show dropdown */}
       <div
@@ -1136,67 +485,20 @@ export function DocumentsPage() {
           </colgroup>
           <thead>
             <tr>
-              {/* Document Name — sortable */}
-              {renderSortableTh("name", "Document Name")}
-              {/* Category — sortable */}
-              {renderSortableTh("category", "Category")}
-              {/* Description — not sortable */}
-              <th
-                style={{
-                  backgroundColor: "#F0F0F0",
-                  color: "#1B1B1B",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  lineHeight: "20px",
-                  padding: "12px 12px",
-                  textAlign: "left",
-                  whiteSpace: "nowrap",
-                  ...thBorder,
-                }}
-              >
-                Description
-              </th>
-              {/* Uploaded Date — sortable */}
+              {renderSortableTh("title", "Title")}
+              {renderSortableTh("docType", "Document Type / Sub Type")}
+              {nonSortableTh("Record")}
+              {nonSortableTh("Filename")}
               {renderSortableTh("uploadedDate", "Uploaded Date")}
-              {/* File Name column (not sortable) */}
-              <th
-                style={{
-                  backgroundColor: "#F0F0F0",
-                  color: "#1B1B1B",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  lineHeight: "20px",
-                  padding: "12px 12px",
-                  textAlign: "left",
-                  whiteSpace: "nowrap",
-                  ...thBorder,
-                }}
-              >
-                File Name
-              </th>
-              {/* Controls header */}
-              <th
-                style={{
-                  backgroundColor: "#F0F0F0",
-                  color: "#1B1B1B",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  lineHeight: "20px",
-                  padding: "12px 12px",
-                  textAlign: "left",
-                  whiteSpace: "nowrap",
-                  ...thBorder,
-                }}
-              >
-                Controls
-              </th>
+              {nonSortableTh("Uploaded By")}
+              {nonSortableTh("Controls")}
             </tr>
           </thead>
           <tbody>
             {paginatedData.length === 0 && (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   style={{
                     padding: "24px 12px",
                     textAlign: "center",
@@ -1211,12 +513,10 @@ export function DocumentsPage() {
             )}
             {paginatedData.map((row, idx) => {
               const bg = idx % 2 === 1 ? "#F0F0F0" : "#FFFFFF";
-              const isExpanded = expandedDescs.has(row.id);
-              const needsTruncation = row.description.length > DESC_LIMIT;
               return (
                 <tr key={row.id}>
                   <td
-                    data-label="Document Name"
+                    data-label="Title"
                     style={{
                       padding: "14px 12px",
                       backgroundColor: bg,
@@ -1227,10 +527,10 @@ export function DocumentsPage() {
                       ...cellBorder,
                     }}
                   >
-                    {row.name}
+                    {row.title}
                   </td>
                   <td
-                    data-label="Category"
+                    data-label="Document Type / Sub Type"
                     style={{
                       padding: "14px 12px",
                       backgroundColor: bg,
@@ -1241,11 +541,10 @@ export function DocumentsPage() {
                       ...cellBorder,
                     }}
                   >
-                    {row.category}
+                    {row.docType} / {row.subType}
                   </td>
-                  {/* Description cell */}
                   <td
-                    data-label="Description"
+                    data-label="Record"
                     style={{
                       padding: "14px 12px",
                       backgroundColor: bg,
@@ -1253,39 +552,24 @@ export function DocumentsPage() {
                       lineHeight: "22px",
                       wordWrap: "break-word",
                       overflowWrap: "break-word",
-                      verticalAlign: "top",
                       ...cellBorder,
                     }}
                   >
-                    {needsTruncation && !isExpanded ? (
-                      <span>
-                        {row.description.slice(0, DESC_LIMIT)}
-                        <button
-                          onClick={() =>
-                            setExpandedDescs((prev) => {
-                              const next = new Set(prev);
-                              next.add(row.id);
-                              return next;
-                            })
-                          }
-                          style={{
-                            fontFamily: "'Public Sans', sans-serif",
-                            fontSize: 14,
-                            color: "#005EA2",
-                            backgroundColor: "transparent",
-                            cursor: "pointer",
-                            padding: 0,
-                            textDecoration: "underline",
-                            ...noBorder,
-                          }}
-                          aria-label="Show full description"
-                        >
-                          ...
-                        </button>
-                      </span>
-                    ) : (
-                      <span>{row.description}</span>
-                    )}
+                    {row.record}
+                  </td>
+                  <td
+                    data-label="Filename"
+                    style={{
+                      padding: "14px 12px",
+                      backgroundColor: bg,
+                      color: "#1B1B1B",
+                      lineHeight: "22px",
+                      wordWrap: "break-word",
+                      overflowWrap: "break-word",
+                      ...cellBorder,
+                    }}
+                  >
+                    {row.fileName}
                   </td>
                   <td
                     data-label="Uploaded Date"
@@ -1300,19 +584,18 @@ export function DocumentsPage() {
                     {row.uploadedDate}
                   </td>
                   <td
-                    data-label="File Name"
+                    data-label="Uploaded By"
                     style={{
                       padding: "14px 12px",
                       backgroundColor: bg,
-                      color: "#005EA2",
+                      color: "#1B1B1B",
                       lineHeight: "22px",
-                      textDecoration: "underline",
                       wordWrap: "break-word",
                       overflowWrap: "break-word",
                       ...cellBorder,
                     }}
                   >
-                    {row.fileName}
+                    {row.uploadedBy}
                   </td>
                   {/* Controls */}
                   <td
@@ -1321,31 +604,18 @@ export function DocumentsPage() {
                       padding: "14px 12px",
                       backgroundColor: bg,
                       lineHeight: "22px",
+                      whiteSpace: "nowrap",
                       ...cellBorder,
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: 8,
-                        alignItems: "center",
-                      }}
+                    <button
+                      title="Download Document"
+                      aria-label="Download Document"
+                      style={controlBtnStyle}
+                      onClick={() => handleDownload(row)}
                     >
-                      <button
-                        title="View Document"
-                        style={controlBtnStyle}
-                        onClick={() => setViewingDoc(row)}
-                      >
-                        <Eye size={16} color="#FFFFFF" />
-                      </button>
-                      <button
-                        title="Delete Document"
-                        style={controlBtnStyle}
-                        onClick={() => setDeletingDoc(row)}
-                      >
-                        <Trash2 size={16} color="#FFFFFF" />
-                      </button>
-                    </div>
+                      <Download size={16} color="#FFFFFF" />
+                    </button>
                   </td>
                 </tr>
               );
@@ -1516,52 +786,6 @@ export function DocumentsPage() {
             </nav>
           );
         })()}
-
-      {/* Upload Document button */}
-      <div style={{ marginTop: 24 }}>
-        <button
-          style={{
-            fontFamily: "'Public Sans', sans-serif",
-            fontSize: 16,
-            fontWeight: 700,
-            lineHeight: "24px",
-            padding: "10px 20px",
-            backgroundColor: "#005EA2",
-            color: "#FFFFFF",
-            borderRadius: 4,
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            ...noBorder,
-          }}
-          onClick={() => setShowUploadModal(true)}
-        >
-          <Upload size={18} />
-          Upload Document
-        </button>
-      </div>
-
-      {/* Modals */}
-      {showUploadModal && (
-        <UploadDocumentModal
-          onUpload={handleUpload}
-          onCancel={() => setShowUploadModal(false)}
-        />
-      )}
-      {viewingDoc && (
-        <ViewDocumentModal
-          doc={viewingDoc}
-          onClose={() => setViewingDoc(null)}
-        />
-      )}
-      {deletingDoc && (
-        <DeleteConfirmModal
-          doc={deletingDoc}
-          onConfirm={handleDelete}
-          onCancel={() => setDeletingDoc(null)}
-        />
-      )}
       </div>
     </PageShell>
   );
