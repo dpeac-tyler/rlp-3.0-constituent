@@ -4,6 +4,7 @@ import { PageShell } from "../components/PageShell";
 import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useToast } from "../components/ToastContext";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { useAgency } from "../components/AgencyContext";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -78,6 +79,45 @@ const INITIAL_DOCUMENTS: DocumentItem[] = [
 const DOC_ICON_ITEMS = [
   { icon: <Download size={16} color="#FFFFFF" />, label: "Download Document" },
 ];
+
+/* ── Agencies ──────────────────────────────────────────── */
+
+const agencies = [
+  { value: "", label: "- Please Select -" },
+  { value: "agency-1", label: "Department of Professional & Financial Regulation" },
+  { value: "agency-2", label: "Bureau of Consumer Credit Protection" },
+];
+
+/* ── USWDS select style (longhand borders) ─────────────── */
+
+const uswdsSelectStyle: React.CSSProperties = {
+  fontFamily: "'Public Sans', sans-serif",
+  fontSize: 16,
+  lineHeight: "24px",
+  color: "#1B1B1B",
+  height: 40,
+  padding: "0 32px 0 8px",
+  borderTopWidth: 1,
+  borderTopStyle: "solid",
+  borderTopColor: "#565C65",
+  borderRightWidth: 1,
+  borderRightStyle: "solid",
+  borderRightColor: "#565C65",
+  borderBottomWidth: 1,
+  borderBottomStyle: "solid",
+  borderBottomColor: "#565C65",
+  borderLeftWidth: 1,
+  borderLeftStyle: "solid",
+  borderLeftColor: "#565C65",
+  borderRadius: 0,
+  backgroundColor: "#FFFFFF",
+  appearance: "none" as const,
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5H7z' fill='%231B1B1B'/%3E%3C/svg%3E")`,
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "right 8px center",
+  backgroundSize: "20px",
+  cursor: "pointer",
+};
 
 /* ── Column config ─────────────────────────────────────── */
 
@@ -173,6 +213,7 @@ const parseDateForSort = (d: string) => {
 
 export function DocumentsPage() {
   const { showToast } = useToast();
+  const { selectedAgency, setSelectedAgency } = useAgency();
   const [documents] = useState<DocumentItem[]>(INITIAL_DOCUMENTS);
   const [searchText, setSearchText] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
@@ -295,6 +336,18 @@ export function DocumentsPage() {
     </th>
   );
 
+  /* ── Label style helper ──────────────────────────────── */
+
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    fontFamily: "'Public Sans', sans-serif",
+    fontWeight: 700,
+    fontSize: 16,
+    lineHeight: "24px",
+    color: "#1B1B1B",
+    marginBottom: 4,
+  };
+
   const nonSortableTh = (label: string) => (
     <th
       style={{
@@ -329,7 +382,7 @@ export function DocumentsPage() {
           fontSize: 16,
           lineHeight: "24px",
           color: "#1B1B1B",
-          margin: "0 0 0 0",
+          margin: "0 0 32px 0",
         }}
       >
         View and download documents related to your submissions and licenses,
@@ -337,6 +390,43 @@ export function DocumentsPage() {
         inspection reports.
       </p>
 
+      {/* USWDS-style Select Agency */}
+      <div className="w-full" style={{ marginBottom: 32 }}>
+        <label htmlFor="documents-agency-select" style={labelStyle}>
+          Select Agency
+        </label>
+        <select
+          id="documents-agency-select"
+          value={selectedAgency}
+          onChange={(e) => {
+            setSelectedAgency(e.target.value);
+            setCurrentPage(0);
+          }}
+          className="w-full"
+          style={uswdsSelectStyle}
+        >
+          {agencies.map((agency) => (
+            <option key={agency.value} value={agency.value}>
+              {agency.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Content: gated by agency selection */}
+      {!selectedAgency ? (
+        <p
+          style={{
+            fontFamily: "'Public Sans', sans-serif",
+            fontSize: 16,
+            lineHeight: "26px",
+            color: "#71767A",
+          }}
+        >
+          No documents available.
+        </p>
+      ) : (
+        <>
       {/* Icon Key */}
       <IconKeyAccordion
         items={DOC_ICON_ITEMS}
@@ -786,6 +876,8 @@ export function DocumentsPage() {
             </nav>
           );
         })()}
+        </>
+      )}
       </div>
     </PageShell>
   );
