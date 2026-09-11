@@ -82,9 +82,6 @@ const DOC_ICON_ITEMS = [
 
 /* ── Agencies ──────────────────────────────────────────── */
 
-/* Agency selection is hidden per product decision — flip to true to restore. */
-const SHOW_AGENCY_SELECT: boolean = false;
-
 const agencies = [
   { value: "", label: "- Please Select -" },
   { value: "agency-1", label: "Department of Professional & Financial Regulation" },
@@ -385,7 +382,7 @@ export function DocumentsPage() {
           fontSize: 16,
           lineHeight: "24px",
           color: "#1B1B1B",
-          margin: SHOW_AGENCY_SELECT ? "0 0 32px 0" : "0 0 0 0",
+          margin: "0 0 32px 0",
         }}
       >
         View and download documents related to your submissions and licenses,
@@ -393,8 +390,7 @@ export function DocumentsPage() {
         inspection reports.
       </p>
 
-      {/* USWDS-style Select Agency (hidden — see SHOW_AGENCY_SELECT) */}
-      {SHOW_AGENCY_SELECT && (
+      {/* USWDS-style Select Agency */}
       <div className="w-full" style={{ marginBottom: 32 }}>
         <label htmlFor="documents-agency-select" style={labelStyle}>
           Select Agency
@@ -416,10 +412,9 @@ export function DocumentsPage() {
           ))}
         </select>
       </div>
-      )}
 
-      {/* Content: gated by agency selection (only while the select is shown) */}
-      {SHOW_AGENCY_SELECT && !selectedAgency ? (
+      {/* Content: gated by agency selection */}
+      {!selectedAgency ? (
         <p
           style={{
             fontFamily: "'Public Sans', sans-serif",
