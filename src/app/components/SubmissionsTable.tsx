@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Download, ExternalLink, Eye, UserPen } from "lucide-react";
+import { useIconLegend } from "./IconLegend";
 
 interface ChildSubmission {
   id: string;
@@ -218,7 +219,21 @@ const childCellStyle: React.CSSProperties = {
   fontSize: 13,
 };
 
+/* ── Control icon legend items ──────────────────────────── */
+
+const SUBMISSION_ICON_ITEMS = [
+  { icon: <Eye size={16} color="#FFFFFF" />, label: "View Submission" },
+  { icon: <Download size={16} color="#FFFFFF" />, label: "Download Certificate" },
+  { icon: <ExternalLink size={16} color="#FFFFFF" />, label: "Renew Now" },
+  { icon: <UserPen size={16} color="#FFFFFF" />, label: "Reassign Applicant" },
+];
+
 export function SubmissionsTable() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: SUBMISSION_ICON_ITEMS,
+    sessionKey: "icon-legend-submissions",
+  });
+
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>(null);
   const [pageSize, setPageSize] = useState(10);
@@ -304,7 +319,7 @@ export function SubmissionsTable() {
             color: "#1B1B1B",
           }}
         >
-          Showing {start} - {end} of {totalEntries} Entries
+          Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
         </span>
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -357,6 +372,7 @@ export function SubmissionsTable() {
           </select>
         </div>
       </div>
+      {iconLegendPanel}
 
       {/* Table */}
       <div style={{ overflowX: "hidden" }}>

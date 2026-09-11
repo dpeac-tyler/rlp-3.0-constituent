@@ -2,9 +2,9 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Eye } from "lucide-react";
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useAgency } from "../components/AgencyContext";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { useIconLegend } from "../components/IconLegend";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -363,6 +363,11 @@ const DATE_KEYS: SortKey[] = ["dueDate", "completionDate"];
 /* ── Page ──────────────────────────────────────────────── */
 
 export function InspectionsPage() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: INSPECTION_ICON_ITEMS,
+    sessionKey: "icon-legend-inspections",
+  });
+
   const navigate = useNavigate();
   const { selectedAgency, setSelectedAgency } = useAgency();
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
@@ -504,13 +509,10 @@ export function InspectionsPage() {
           </p>
         ) : (
           <>
-        {/* Icon Key */}
-        <IconKeyAccordion items={INSPECTION_ICON_ITEMS} sessionKey="icon-key-inspections-open" />
-
         {/* Top bar: Showing X-Y of Z  |  Show dropdown */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
           <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
-            Showing {start} - {end} of {totalEntries} Entries
+            Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
           </span>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -548,6 +550,7 @@ export function InspectionsPage() {
             </select>
           </div>
         </div>
+        {iconLegendPanel}
 
         {/* Table */}
         <div style={{ overflowX: "auto" }}>

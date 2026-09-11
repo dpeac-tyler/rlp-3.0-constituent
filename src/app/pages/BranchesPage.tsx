@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
+import { useIconLegend } from "../components/IconLegend";
 
 /* ── Icon key items for Branches ───────────────────────── */
 
@@ -101,6 +101,11 @@ const controlBtnStyle: React.CSSProperties = {
 /* ── Component ─────────────────────────────────────────── */
 
 export function BranchesPage() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: BRANCH_ICON_ITEMS,
+    sessionKey: "icon-legend-branches",
+  });
+
   const navigate = useNavigate();
   const { branches } = useBranches();
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
@@ -183,12 +188,6 @@ export function BranchesPage() {
         delete branches on this page as needed.
       </p>
 
-      {/* Icon Key */}
-      <IconKeyAccordion
-        items={BRANCH_ICON_ITEMS}
-        sessionKey="icon-key-branches-open"
-      />
-
       {/* Top bar: Showing X-Y of Z  |  Show dropdown */}
       <div
         style={{
@@ -207,7 +206,7 @@ export function BranchesPage() {
             color: "#1B1B1B",
           }}
         >
-          Showing {start} - {end} of {totalEntries} Entries
+          Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
         </span>
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -260,6 +259,7 @@ export function BranchesPage() {
           </select>
         </div>
       </div>
+      {iconLegendPanel}
 
       {/* Table */}
       <div style={{ overflowX: "auto" }}>

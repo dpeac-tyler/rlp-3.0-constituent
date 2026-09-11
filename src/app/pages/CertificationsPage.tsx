@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { Download, Eye } from "lucide-react";
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useAgency } from "../components/AgencyContext";
+import { useIconLegend } from "../components/IconLegend";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -236,6 +236,11 @@ const parseDateForSort = (d: string) => {
 /* ── Component ─────────────────────────────────────────── */
 
 export function CertificationsPage() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: CERT_ICON_ITEMS,
+    sessionKey: "icon-legend-certifications",
+  });
+
   const { selectedAgency, setSelectedAgency } = useAgency();
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>(null);
@@ -532,12 +537,6 @@ export function CertificationsPage() {
           </p>
         ) : (
           <>
-            {/* Icon Key Accordion */}
-            <IconKeyAccordion
-              items={CERT_ICON_ITEMS}
-              sessionKey="icon-key-certifications-open"
-            />
-
             {/* Top bar: Showing X-Y of Z  |  Show dropdown */}
             <div
               style={{
@@ -554,7 +553,7 @@ export function CertificationsPage() {
                   color: "#1B1B1B",
                 }}
               >
-                Showing {start} - {end} of {totalEntries} Entries
+                Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
               </span>
 
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -607,6 +606,7 @@ export function CertificationsPage() {
                 </select>
               </div>
             </div>
+            {iconLegendPanel}
 
             {/* Table */}
             <div style={{ overflowX: "auto" }}>

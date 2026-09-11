@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Eye, Download, ExternalLink } from "lucide-react";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { useIconLegend } from "./IconLegend";
 
 /* USWDS-style Checkbox */
 function UsaCheckbox({
@@ -288,7 +289,20 @@ const VIEW_STATUS_MAP: Record<PaymentView, string> = {
   denied: "Denied",
 };
 
+/* ── Control icon legend items ──────────────────────────── */
+
+const PAYMENT_ICON_ITEMS = [
+  { icon: <Eye size={16} color="#FFFFFF" />, label: "View Request" },
+  { icon: <Download size={16} color="#FFFFFF" />, label: "Download Receipt" },
+  { icon: <ExternalLink size={16} color="#FFFFFF" />, label: "Open Details" },
+];
+
 export function PaymentRequestsTable() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: PAYMENT_ICON_ITEMS,
+    sessionKey: "icon-legend-payment-requests",
+  });
+
   const [activeView, setActiveView] = useState<PaymentView>("approved");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>(null);
@@ -538,7 +552,7 @@ export function PaymentRequestsTable() {
             color: "#1B1B1B",
           }}
         >
-          Showing {start} - {end} of {totalEntries} Entries
+          Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
         </span>
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -591,6 +605,7 @@ export function PaymentRequestsTable() {
           </select>
         </div>
       </div>
+      {iconLegendPanel}
 
       {/* Table */}
       <div style={{ overflowX: "hidden" }}>

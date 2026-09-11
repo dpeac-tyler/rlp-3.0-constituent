@@ -78,7 +78,7 @@ const controlBtnStyle: React.CSSProperties = {
   ...noBorder,
 };
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
+import { useIconLegend } from "../components/IconLegend";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useProfile } from "../components/ProfileContext";
 import { MOCK_ASSET_DATA } from "./MyAssetsPage";
@@ -126,6 +126,15 @@ const tabs = [
 ];
 
 export function AssetInstancePage() {
+  const { toggle: submissionsLegendToggle, panel: submissionsLegendPanel } = useIconLegend({
+    items: SUBMISSIONS_ICON_ITEMS,
+    sessionKey: "icon-legend-asset-instance-submissions",
+  });
+  const { toggle: certificationsLegendToggle, panel: certificationsLegendPanel } = useIconLegend({
+    items: CERTIFICATIONS_ICON_ITEMS,
+    sessionKey: "icon-legend-asset-instance-certifications",
+  });
+
   const { id } = useParams();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -329,18 +338,13 @@ export function AssetInstancePage() {
           )}
           {activeTab === "submissions" && (
             <>
-              <IconKeyAccordion
-                items={SUBMISSIONS_ICON_ITEMS}
-                sessionKey="asset-instance-submissions-icon-key"
-              />
-
               {/* Table title + controls */}
               <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: 18, color: "#1B1B1B", margin: "0 0 12px 0" }}>
                 Submissions
               </h2>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                 <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
-                  Showing 1 - {MOCK_SUBMISSIONS.length} of {MOCK_SUBMISSIONS.length} Entries
+                  Showing 1 - {MOCK_SUBMISSIONS.length} of {MOCK_SUBMISSIONS.length} Entries{submissionsLegendToggle}
                 </span>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
@@ -369,6 +373,7 @@ export function AssetInstancePage() {
                   </select>
                 </div>
               </div>
+              {submissionsLegendPanel}
 
               {/* Table */}
               <div style={{ overflowX: "auto" }}>
@@ -414,18 +419,13 @@ export function AssetInstancePage() {
           )}
           {activeTab === "certifications" && (
             <>
-              <IconKeyAccordion
-                items={CERTIFICATIONS_ICON_ITEMS}
-                sessionKey="asset-instance-certifications-icon-key"
-              />
-
               {/* Table title + controls */}
               <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: 18, color: "#1B1B1B", margin: "0 0 12px 0" }}>
                 Certifications
               </h2>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                 <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
-                  Showing 1 - {MOCK_CERTIFICATIONS.length} of {MOCK_CERTIFICATIONS.length} Entries
+                  Showing 1 - {MOCK_CERTIFICATIONS.length} of {MOCK_CERTIFICATIONS.length} Entries{certificationsLegendToggle}
                 </span>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
@@ -454,6 +454,7 @@ export function AssetInstancePage() {
                   </select>
                 </div>
               </div>
+              {certificationsLegendPanel}
 
               {/* Table */}
               <div style={{ overflowX: "auto" }}>

@@ -2,9 +2,9 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Eye } from "lucide-react";
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useAgency } from "../components/AgencyContext";
+import { useIconLegend } from "../components/IconLegend";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -215,6 +215,11 @@ const parseDateForSort = (d: string) => {
 /* ── Component ─────────────────────────────────────────── */
 
 export function MyAssetsPage() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: ASSET_ICON_ITEMS,
+    sessionKey: "icon-legend-assets",
+  });
+
   const navigate = useNavigate();
   const { selectedAgency, setSelectedAgency } = useAgency();
   const [statusFilter, setStatusFilter] = useState("In Use");
@@ -425,12 +430,6 @@ export function MyAssetsPage() {
           </p>
         ) : (
           <>
-            {/* Icon Key Accordion */}
-            <IconKeyAccordion
-              items={ASSET_ICON_ITEMS}
-              sessionKey="icon-key-assets-open"
-            />
-
             {/* Search bar — Search By select + Search text input */}
             <div
               style={{
@@ -606,7 +605,7 @@ export function MyAssetsPage() {
                   color: "#1B1B1B",
                 }}
               >
-                Showing {start} - {end} of {totalEntries} Entries
+                Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
               </span>
 
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -659,6 +658,7 @@ export function MyAssetsPage() {
                 </select>
               </div>
             </div>
+            {iconLegendPanel}
 
             {/* Table */}
             <div style={{ overflowX: "auto" }}>

@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
 import { Download } from "lucide-react";
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useToast } from "../components/ToastContext";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useAgency } from "../components/AgencyContext";
+import { useIconLegend } from "../components/IconLegend";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -212,6 +212,11 @@ const parseDateForSort = (d: string) => {
 /* ── Main Documents Page ───────────────────────────────── */
 
 export function DocumentsPage() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: DOC_ICON_ITEMS,
+    sessionKey: "icon-legend-documents",
+  });
+
   const { showToast } = useToast();
   const { selectedAgency, setSelectedAgency } = useAgency();
   const [documents] = useState<DocumentItem[]>(INITIAL_DOCUMENTS);
@@ -427,12 +432,6 @@ export function DocumentsPage() {
         </p>
       ) : (
         <>
-      {/* Icon Key */}
-      <IconKeyAccordion
-        items={DOC_ICON_ITEMS}
-        sessionKey="icon-key-documents-open"
-      />
-
       {/* Search by title */}
       <div style={{ marginBottom: 16 }}>
         <label
@@ -533,7 +532,7 @@ export function DocumentsPage() {
             color: "#1B1B1B",
           }}
         >
-          Showing {start} - {end} of {totalEntries} Entries
+          Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
         </span>
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -579,6 +578,7 @@ export function DocumentsPage() {
           </select>
         </div>
       </div>
+      {iconLegendPanel}
 
       {/* Table */}
       <div style={{ overflowX: "auto" }}>

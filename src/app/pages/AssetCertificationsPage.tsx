@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { Download, Eye, RefreshCw } from "lucide-react";
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useAgency } from "../components/AgencyContext";
+import { useIconLegend } from "../components/IconLegend";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -187,6 +187,11 @@ interface AssetCertificationsPageProps {
 export function AssetCertificationsPage({
   activeTab,
 }: AssetCertificationsPageProps) {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: CERT_ICON_ITEMS,
+    sessionKey: "icon-legend-asset-certs",
+  });
+
   const { selectedAgency, setSelectedAgency } = useAgency();
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>(null);
@@ -400,12 +405,6 @@ export function AssetCertificationsPage({
           </p>
         ) : (
           <>
-            {/* Icon Key Accordion */}
-            <IconKeyAccordion
-              items={CERT_ICON_ITEMS}
-              sessionKey="icon-key-asset-certs-open"
-            />
-
             {/* Sub-page heading */}
             <h2
               style={{
@@ -435,7 +434,7 @@ export function AssetCertificationsPage({
                       color: "#1B1B1B",
                     }}
                   >
-                    Showing {start} - {end} of {totalEntries} Entries
+                    Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
                   </span>
 
                   <div
@@ -494,6 +493,7 @@ export function AssetCertificationsPage({
                     </select>
                   </div>
                 </div>
+                {iconLegendPanel}
 
                 {/* Table */}
                 <div style={{ overflowX: "auto" }}>

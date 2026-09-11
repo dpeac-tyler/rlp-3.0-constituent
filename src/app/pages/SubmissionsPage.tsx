@@ -2,7 +2,6 @@ import { useState } from "react";
 import { PageShell } from "../components/PageShell";
 import { SubmissionsTable } from "../components/SubmissionsTable";
 import { PaymentRequestsTable } from "../components/PaymentRequestsTable";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useAgency } from "../components/AgencyContext";
 
@@ -151,9 +150,6 @@ export function SubmissionsPage({ activeTab }: SubmissionsPageProps) {
           </p>
         ) : (
           <>
-            {/* Icon Key Accordion */}
-            <IconKeyAccordion />
-
             {/* Sub-page heading */}
             <h2
               style={{

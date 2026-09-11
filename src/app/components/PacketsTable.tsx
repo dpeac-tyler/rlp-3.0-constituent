@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Eye, Pencil, SendHorizontal, Trash2, UserPen, X } from "lucide-react";
+import { useIconLegend } from "./IconLegend";
 
 interface ChildSubmission {
   id: string;
@@ -154,7 +155,22 @@ const childCellStyle: React.CSSProperties = {
   fontSize: 13,
 };
 
+/* ── Control icon legend items ──────────────────────────── */
+
+const PACKET_ICON_ITEMS = [
+  { icon: <Eye size={16} color="#FFFFFF" />, label: "View Packet" },
+  { icon: <Pencil size={16} color="#FFFFFF" />, label: "Edit Packet" },
+  { icon: <SendHorizontal size={16} color="#FFFFFF" />, label: "Send Applications" },
+  { icon: <Trash2 size={16} color="#FFFFFF" />, label: "Delete Packet" },
+  { icon: <UserPen size={16} color="#FFFFFF" />, label: "Reassign Applicant" },
+];
+
 export function PacketsTable() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: PACKET_ICON_ITEMS,
+    sessionKey: "icon-legend-packets",
+  });
+
   const [packets, setPackets] = useState<Packet[]>(MOCK_DATA);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
@@ -207,7 +223,7 @@ export function PacketsTable() {
         }}
       >
         <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>
-          Showing 1 - {end} of {totalEntries} Entries
+          Showing 1 - {end} of {totalEntries} Entries{iconLegendToggle}
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontFamily: "'Public Sans', sans-serif", fontSize: 14, color: "#1B1B1B" }}>Show</span>
@@ -248,6 +264,7 @@ export function PacketsTable() {
           </select>
         </div>
       </div>
+      {iconLegendPanel}
 
       {/* Table */}
       <div style={{ overflowX: "auto" }}>

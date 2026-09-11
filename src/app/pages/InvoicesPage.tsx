@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { CircleDollarSign, Eye, Printer, Banknote } from "lucide-react";
 import { PageShell } from "../components/PageShell";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useAgency } from "../components/AgencyContext";
+import { useIconLegend } from "../components/IconLegend";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -300,6 +300,11 @@ const parseAmountForSort = (a: string) => {
 /* ── Component ─────────────────────────────────────────── */
 
 export function InvoicesPage() {
+  const { toggle: iconLegendToggle, panel: iconLegendPanel } = useIconLegend({
+    items: INVOICE_ICON_ITEMS,
+    sessionKey: "icon-legend-invoices",
+  });
+
   const { selectedAgency, setSelectedAgency } = useAgency();
   const [statusFilter, setStatusFilter] = useState("Initiated");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
@@ -503,12 +508,6 @@ export function InvoicesPage() {
           </p>
         ) : (
           <>
-            {/* Icon Key Accordion */}
-            <IconKeyAccordion
-              items={INVOICE_ICON_ITEMS}
-              sessionKey="icon-key-invoices-open"
-            />
-
             {/* USWDS Slim Info Alert */}
             <div
               style={{
@@ -644,7 +643,7 @@ export function InvoicesPage() {
                   color: "#1B1B1B",
                 }}
               >
-                Showing {start} - {end} of {totalEntries} Entries
+                Showing {start} - {end} of {totalEntries} Entries{iconLegendToggle}
               </span>
 
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -697,6 +696,7 @@ export function InvoicesPage() {
                 </select>
               </div>
             </div>
+            {iconLegendPanel}
 
             {/* Table */}
             <div style={{ overflowX: "auto" }}>

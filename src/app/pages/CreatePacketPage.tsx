@@ -4,7 +4,7 @@ import { ChevronRight, X, Trash2 } from "lucide-react";
 import { PageShell } from "../components/PageShell";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useToast } from "../components/ToastContext";
-import { IconKeyAccordion } from "../components/IconKeyAccordion";
+import { useIconLegend } from "../components/IconLegend";
 
 interface PacketType {
   id: string;
@@ -146,6 +146,11 @@ const requiredStyle: React.CSSProperties = {
 };
 
 export function CreatePacketPage() {
+  const { toggle: participantsLegendToggle, panel: participantsLegendPanel } = useIconLegend({
+    items: [{ icon: <Trash2 size={16} color="#FFFFFF" />, label: "Remove Participant" }],
+    sessionKey: "icon-legend-packet-participants",
+  });
+
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -472,13 +477,10 @@ export function CreatePacketPage() {
             <div style={{ marginBottom: 40 }}>
               <h2 style={sectionHeading}>Add Participants</h2>
 
-              <IconKeyAccordion
-                sessionKey="packet-create-icon-key"
-                defaultOpen={false}
-                items={[
-                  { icon: <Trash2 size={16} color="#FFFFFF" />, label: "Remove Participant" },
-                ]}
-              />
+              {/* Control icon legend — no entry count on this table, so the
+                  toggle sits on its own line directly above it */}
+              <div style={{ marginBottom: 8, marginLeft: -14 }}>{participantsLegendToggle}</div>
+              {participantsLegendPanel}
 
               <div style={{ overflowX: "auto", marginBottom: 16 }}>
                 <table
