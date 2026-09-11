@@ -473,6 +473,55 @@ export function MyAssetsPage() {
                   style={{ ...uswdsInputStyle, width: "100%" }}
                 />
               </div>
+
+              {/* Search + Clear buttons */}
+              <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(0)}
+                  style={{
+                    fontFamily: "'Public Sans', sans-serif",
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#005EA2",
+                    height: 40,
+                    padding: "0 24px",
+                    borderRadius: 0,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                    ...noBorder,
+                  }}
+                >
+                  Search
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchBy("");
+                    setSearchText("");
+                    setCurrentPage(0);
+                  }}
+                  style={{
+                    fontFamily: "'Public Sans', sans-serif",
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: "#005EA2",
+                    backgroundColor: "transparent",
+                    height: 40,
+                    padding: "0 24px",
+                    borderRadius: 0,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                    boxShadow: "inset 0 0 0 2px #005EA2",
+                    ...noBorder,
+                  }}
+                >
+                  Clear
+                </button>
+              </div>
             </div>
 
             {/* Status button group — right-aligned */}
