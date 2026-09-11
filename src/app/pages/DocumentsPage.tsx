@@ -495,6 +495,30 @@ export function DocumentsPage() {
           >
             Search
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setSearchText("");
+              setCurrentPage(0);
+            }}
+            style={{
+              fontFamily: "'Public Sans', sans-serif",
+              fontSize: 16,
+              fontWeight: 700,
+              color: "#005EA2",
+              backgroundColor: "transparent",
+              height: 40,
+              padding: "0 24px",
+              borderRadius: 0,
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+              boxShadow: "inset 0 0 0 2px #005EA2",
+              ...noBorder,
+            }}
+          >
+            Clear
+          </button>
         </div>
       </div>
 
