@@ -281,7 +281,7 @@ export function LocationPage() {
                   lineHeight: "24px",
                   padding: "12px 20px",
                   backgroundColor: "transparent",
-                  color: isActive ? "#005EA2" : "#71767A",
+                  color: isActive ? "#005EA2" : "#565C65",
                   borderTopWidth: 0,
                   borderTopStyle: "solid",
                   borderTopColor: "transparent",
