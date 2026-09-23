@@ -1,15 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { Download, ExternalLink, Eye, UserPen } from "lucide-react";
+import { Download, ExternalLink, Eye } from "lucide-react";
 import { useIconLegend } from "./IconLegend";
-
-interface ChildSubmission {
-  id: string;
-  applicationName: string;
-  submissionNumber: string;
-  constituentName: string;
-  status: string;
-  lastUpdated: string;
-}
 
 interface Submission {
   id: string;
@@ -19,47 +10,9 @@ interface Submission {
   constituentName: string;
   status: string;
   lastUpdated: string;
-  isPacket?: boolean;
-  children?: ChildSubmission[];
 }
 
 const MOCK_DATA: Submission[] = [
-  {
-    id: "1",
-    licenseType: "Firearms Business License",
-    applicationName: "FBLA - Company",
-    submissionNumber: "700024500",
-    constituentName: "Boring Company 155",
-    status: "Pending",
-    lastUpdated: "07/08/2025",
-    isPacket: true,
-    children: [
-      {
-        id: "1-1",
-        applicationName: "FBLA - Owner",
-        submissionNumber: "700024501",
-        constituentName: "Jerome Tinder",
-        status: "Pending",
-        lastUpdated: "07/08/2025",
-      },
-      {
-        id: "1-2",
-        applicationName: "FBLA - Manager",
-        submissionNumber: "700024502",
-        constituentName: "Shiela Benefits",
-        status: "Pending",
-        lastUpdated: "07/08/2025",
-      },
-      {
-        id: "1-3",
-        applicationName: "FBLA - Officer",
-        submissionNumber: "700024503",
-        constituentName: "Ricky Schuler",
-        status: "Denied",
-        lastUpdated: "07/08/2025",
-      },
-    ],
-  },
   {
     id: "2",
     licenseType: "DNR Business",
@@ -197,35 +150,12 @@ function HistoryIcon() {
   );
 }
 
-const childCellStyle: React.CSSProperties = {
-  padding: "10px 12px",
-  backgroundColor: "#E8F0F8",
-  color: "#1B1B1B",
-  lineHeight: "22px",
-  borderBottomWidth: 1,
-  borderBottomStyle: "solid",
-  borderBottomColor: "#DFE1E2",
-  borderTopWidth: 0,
-  borderTopStyle: "solid",
-  borderTopColor: "transparent",
-  borderLeftWidth: 0,
-  borderLeftStyle: "solid",
-  borderLeftColor: "transparent",
-  borderRightWidth: 0,
-  borderRightStyle: "solid",
-  borderRightColor: "transparent",
-  wordWrap: "break-word",
-  overflowWrap: "break-word",
-  fontSize: 13,
-};
-
 /* ── Control icon legend items ──────────────────────────── */
 
 const SUBMISSION_ICON_ITEMS = [
   { icon: <Eye size={16} color="#FFFFFF" />, label: "View Submission" },
   { icon: <Download size={16} color="#FFFFFF" />, label: "Download Certificate" },
   { icon: <ExternalLink size={16} color="#FFFFFF" />, label: "Renew Now" },
-  { icon: <UserPen size={16} color="#FFFFFF" />, label: "Reassign Applicant" },
 ];
 
 export function SubmissionsTable() {
@@ -238,15 +168,6 @@ export function SubmissionsTable() {
   const [sortDir, setSortDir] = useState<SortDir>(null);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(0);
-  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-
-  const toggleExpand = (id: string) => {
-    setExpandedRows((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -477,9 +398,7 @@ export function SubmissionsTable() {
           <tbody>
             {paginatedData.map((row, idx) => {
               const isStripe = idx % 2 === 1;
-              const isExpanded = expandedRows.has(row.id);
               return (
-                <React.Fragment key={row.id}>
                 <tr>
                   {/* License Type — first cell */}
                   <td
@@ -505,45 +424,7 @@ export function SubmissionsTable() {
                       overflowWrap: "break-word",
                     }}
                   >
-                    {row.isPacket ? (
-                      <button
-                        onClick={() => toggleExpand(row.id)}
-                        title={isExpanded ? "Collapse" : "Expand"}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          padding: 0,
-                          cursor: "pointer",
-                          fontFamily: "'Public Sans', sans-serif",
-                          fontSize: 14,
-                          color: "#1B1B1B",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 6,
-                          textAlign: "left",
-                        }}
-                      >
-                        <span style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: 18,
-                          height: 18,
-                          borderWidth: 1,
-                          borderStyle: "solid",
-                          borderColor: "#1B1B1B",
-                          borderRadius: 2,
-                          fontSize: 14,
-                          lineHeight: 1,
-                          flexShrink: 0,
-                        }}>
-                          {isExpanded ? "−" : "+"}
-                        </span>
-                        {row.licenseType}
-                      </button>
-                    ) : (
-                      row.licenseType
-                    )}
+                    {row.licenseType}
                   </td>
                   {/* Application Name */}
                   <td
@@ -569,22 +450,7 @@ export function SubmissionsTable() {
                       overflowWrap: "break-word",
                     }}
                   >
-                    {row.isPacket ? (
-                      <span style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                        {row.applicationName}
-                        <span style={{
-                          display: "inline-block",
-                          fontSize: 11,
-                          color: "#fff",
-                          textTransform: "uppercase",
-                          backgroundColor: "#5c5c5c",
-                          borderRadius: 2,
-                          padding: "1px 6px",
-                          fontWeight: 700,
-                          letterSpacing: "0.04em",
-                        }}>Primary</span>
-                      </span>
-                    ) : row.applicationName}
+                    {row.applicationName}
                   </td>
                   {/* Submission Number */}
                   <td
@@ -731,8 +597,6 @@ export function SubmissionsTable() {
                       >
                         <Eye size={16} color="#FFFFFF" />
                       </button>
-                      {!row.isPacket && (
-                        <>
                           <button
                             title="Download Certificate"
                             style={{
@@ -769,36 +633,9 @@ export function SubmissionsTable() {
                           >
                             <ExternalLink size={16} color="#FFFFFF" />
                           </button>
-                        </>
-                      )}
                     </div>
                   </td>
                 </tr>
-
-                {/* Child rows for packet submissions */}
-                {row.isPacket && isExpanded && row.children?.map((child) => (
-                  <tr key={child.id}>
-                    <td data-label="License Type" style={{ ...childCellStyle, paddingLeft: 32 }}>—</td>
-                    <td data-label="Application Name" style={childCellStyle}>{child.applicationName}</td>
-                    <td data-label="Submission Number" style={childCellStyle}>{child.submissionNumber}</td>
-                    <td data-label="Constituent Name" style={childCellStyle}>{child.constituentName}</td>
-                    <td data-label="Status" style={{ ...childCellStyle, color: STATUS_COLOR[child.status] || "#1B1B1B" }}>{child.status}</td>
-                    <td data-label="Last Updated" style={childCellStyle}>{child.lastUpdated}</td>
-                    <td data-label="Controls" style={childCellStyle}>
-                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                        <button title="View Submission" style={{ width: 28, height: 28, minWidth: 28, backgroundColor: "#162E51", borderRadius: 4, display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0, border: "none" }}>
-                          <Eye size={16} color="#FFFFFF" />
-                        </button>
-                        {child.status === "Denied" && (
-                          <button title="Reassign Applicant" style={{ width: 28, height: 28, minWidth: 28, backgroundColor: "#162E51", borderRadius: 4, display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer", padding: 0, border: "none" }}>
-                            <UserPen size={16} color="#FFFFFF" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                </React.Fragment>
               );
             })}
           </tbody>
