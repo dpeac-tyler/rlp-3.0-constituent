@@ -136,6 +136,10 @@ export const router = createBrowserRouter([
         Component: CreatePacketPage,
       },
       {
+        path: "packets/:packetId/edit",
+        Component: CreatePacketPage,
+      },
+      {
         path: "shopping-cart",
         loader: () => redirect("/shopping-cart/cart"),
       },

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Eye, Pencil, SendHorizontal, Trash2, UserPen, X } from "lucide-react";
+import { useNavigate } from "react-router";
 import { useIconLegend } from "./IconLegend";
 
 interface ChildSubmission {
@@ -23,7 +24,7 @@ interface Packet {
   children: ChildSubmission[];
 }
 
-const MOCK_DATA: Packet[] = [
+export const MOCK_DATA: Packet[] = [
   {
     id: "1",
     packetName: "Firearms Business License Packet",
@@ -171,6 +172,7 @@ export function PacketsTable() {
     sessionKey: "icon-legend-packets",
   });
 
+  const navigate = useNavigate();
   const [packets, setPackets] = useState<Packet[]>(MOCK_DATA);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
@@ -355,6 +357,7 @@ export function PacketsTable() {
                       <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "nowrap" }}>
                         <button
                           title="Edit Packet"
+                          onClick={() => navigate(`/packets/${row.id}/edit`)}
                           style={{
                             width: 28,
                             height: 28,

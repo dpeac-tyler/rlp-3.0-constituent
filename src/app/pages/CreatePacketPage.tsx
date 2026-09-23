@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate, Link } from "react-router";
-import { ChevronRight, X, Trash2 } from "lucide-react";
+import { useNavigate, useParams, Link } from "react-router";
+import { ChevronRight, X, Trash2, Pencil } from "lucide-react";
 import { PageShell } from "../components/PageShell";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useToast } from "../components/ToastContext";
 import { useIconLegend } from "../components/IconLegend";
+import { MOCK_DATA as MOCK_PACKETS } from "../components/PacketsTable";
 
 interface PacketType {
   id: string;
@@ -147,7 +148,10 @@ const requiredStyle: React.CSSProperties = {
 
 export function CreatePacketPage() {
   const { toggle: participantsLegendToggle, panel: participantsLegendPanel } = useIconLegend({
-    items: [{ icon: <Trash2 size={16} color="#FFFFFF" />, label: "Remove Participant" }],
+    items: [
+      { icon: <Pencil size={16} color="#FFFFFF" />, label: "Edit Participant" },
+      { icon: <Trash2 size={16} color="#FFFFFF" />, label: "Remove Participant" },
+    ],
     sessionKey: "icon-legend-packet-participants",
   });
 
@@ -155,8 +159,27 @@ export function CreatePacketPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
-  const [inputValue, setInputValue] = useState("");
-  const [selectedPacket, setSelectedPacket] = useState<PacketType | null>(null);
+  /* Edit mode — /packets/:packetId/edit prefills from the saved packet */
+  const { packetId } = useParams();
+  const editingPacket = packetId ? MOCK_PACKETS.find((p) => p.id === packetId) : undefined;
+  const isEdit = !!editingPacket;
+  const initialPacketType = editingPacket
+    ? PACKET_TYPES.find((t) => t.name === editingPacket.packetName) ?? null
+    : null;
+  const initialParticipants: AssignedParticipant[] = editingPacket
+    ? editingPacket.children
+        .filter((c) => !c.isPacketOwner)
+        .map((c, idx) => ({
+          id: idx + 1,
+          role: c.role,
+          constituentName: c.constituentName,
+          email: c.email,
+          address: MOCK_CONSTITUENTS.find((m) => m.email === c.email)?.address ?? "",
+        }))
+    : [];
+
+  const [inputValue, setInputValue] = useState(initialPacketType?.name ?? "");
+  const [selectedPacket, setSelectedPacket] = useState<PacketType | null>(initialPacketType);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -168,7 +191,8 @@ export function CreatePacketPage() {
   const [searchAddress, setSearchAddress] = useState("");
   const [searchResults, setSearchResults] = useState<Constituent[] | null>(null);
   const [selectedResult, setSelectedResult] = useState<string>("");
-  const [participants, setParticipants] = useState<AssignedParticipant[]>([]);
+  const [participants, setParticipants] = useState<AssignedParticipant[]>(initialParticipants);
+  const [editingParticipantId, setEditingParticipantId] = useState<number | null>(null);
 
   const filtered = PACKET_TYPES.filter(
     (p) =>
@@ -208,6 +232,21 @@ export function CreatePacketPage() {
     setSearchAddress("");
     setSearchResults(null);
     setSelectedResult("");
+    setEditingParticipantId(null);
+    setShowModal(true);
+  };
+
+  /* Opens the same modal prefilled with the participant's current role and constituent */
+  const openEditModal = (participant: AssignedParticipant) => {
+    const match = MOCK_CONSTITUENTS.find((c) => c.email === participant.email);
+    setModalRole(participant.role);
+    setSearchCategory("name");
+    setSearchParticipantName(participant.constituentName);
+    setSearchEmail("");
+    setSearchAddress("");
+    setSearchResults(match ? [match] : null);
+    setSelectedResult(match?.id ?? "");
+    setEditingParticipantId(participant.id);
     setShowModal(true);
   };
 
@@ -243,11 +282,14 @@ export function CreatePacketPage() {
     if (!selectedResult || !modalRole) return;
     const found = MOCK_CONSTITUENTS.find((c) => c.id === selectedResult);
     if (!found) return;
-    setParticipants((prev) => [
-      ...prev,
-      { id: Date.now(), role: modalRole, constituentName: found.constituentName, email: found.email, address: found.address },
-    ]);
-    showToast(`${found.constituentName} has been added as ${modalRole}.`);
+    const updated = { role: modalRole, constituentName: found.constituentName, email: found.email, address: found.address };
+    if (editingParticipantId !== null) {
+      setParticipants((prev) => prev.map((p) => (p.id === editingParticipantId ? { ...p, ...updated } : p)));
+      showToast(`${found.constituentName} has been updated as ${modalRole}.`);
+    } else {
+      setParticipants((prev) => [...prev, { id: Date.now(), ...updated }]);
+      showToast(`${found.constituentName} has been added as ${modalRole}.`);
+    }
     closeModal();
   };
 
@@ -296,7 +338,7 @@ export function CreatePacketPage() {
             <li style={{ display: "flex", alignItems: "center", color: "#71767A" }}>
               <ChevronRight size={14} />
             </li>
-            <li style={{ color: "#1B1B1B", fontWeight: 600 }}>Create Packet</li>
+            <li style={{ color: "#1B1B1B", fontWeight: 600 }}>{isEdit ? "Edit Packet" : "Create Packet"}</li>
           </ol>
         </nav>
 
@@ -317,7 +359,7 @@ export function CreatePacketPage() {
               marginBottom: 16,
             }}
           >
-            Create Packet
+            {isEdit ? "Edit Packet" : "Create Packet"}
           </h1>
 
           <p
@@ -329,10 +371,9 @@ export function CreatePacketPage() {
               marginBottom: 32,
             }}
           >
-            To create a new packet, begin by selecting a packet name below. Packet
-            types are defined by the issuing agency and determine which roles must
-            be filled by each participant. Once you select a packet, search for and
-            assign a constituent to each required role.
+            {isEdit
+              ? `Update the participants assigned to packet #${editingPacket.packetNumber}. Use the edit control to change a participant's role or reassign it to a different constituent, or add and remove participants as needed.`
+              : "To create a new packet, begin by selecting a packet name below. Packet types are defined by the issuing agency and determine which roles must be filled by each participant. Once you select a packet, search for and assign a constituent to each required role."}
           </p>
 
           {/* Packet Name Typeahead */}
@@ -544,25 +585,47 @@ export function CreatePacketPage() {
                           <td style={{ ...tdStyle, fontSize: 13 }}>{p.email}</td>
                           <td style={{ ...tdStyle, fontSize: 13, color: "#3D4551" }}>{p.address}</td>
                           <td style={tdStyle}>
-                            <button
-                              onClick={() => handleRemoveParticipant(p.id)}
-                              title="Remove participant"
-                              style={{
-                                width: 28,
-                                height: 28,
-                                minWidth: 28,
-                                backgroundColor: "#162E51",
-                                borderRadius: 4,
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                cursor: "pointer",
-                                padding: 0,
-                                border: "none",
-                              }}
-                            >
-                              <Trash2 size={14} color="#FFFFFF" />
-                            </button>
+                            <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "nowrap" }}>
+                              <button
+                                onClick={() => openEditModal(p)}
+                                title="Edit participant"
+                                aria-label={`Edit ${p.constituentName}`}
+                                style={{
+                                  width: 28,
+                                  height: 28,
+                                  minWidth: 28,
+                                  backgroundColor: "#162E51",
+                                  borderRadius: 4,
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  cursor: "pointer",
+                                  padding: 0,
+                                  border: "none",
+                                }}
+                              >
+                                <Pencil size={14} color="#FFFFFF" />
+                              </button>
+                              <button
+                                onClick={() => handleRemoveParticipant(p.id)}
+                                title="Remove participant"
+                                style={{
+                                  width: 28,
+                                  height: 28,
+                                  minWidth: 28,
+                                  backgroundColor: "#162E51",
+                                  borderRadius: 4,
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  cursor: "pointer",
+                                  padding: 0,
+                                  border: "none",
+                                }}
+                              >
+                                <Trash2 size={14} color="#FFFFFF" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -602,7 +665,7 @@ export function CreatePacketPage() {
                 >
                   <button
                     onClick={() => {
-                      showToast("Draft saved successfully.");
+                      showToast(isEdit ? "Packet changes saved successfully." : "Draft saved successfully.");
                       navigate("/packets");
                     }}
                     style={{
@@ -617,7 +680,7 @@ export function CreatePacketPage() {
                       cursor: "pointer",
                     }}
                   >
-                    Save Draft
+                    {isEdit ? "Save Changes" : "Save Draft"}
                   </button>
                   <button
                     onClick={() => navigate("/packets")}
@@ -689,7 +752,7 @@ export function CreatePacketPage() {
                   margin: 0,
                 }}
               >
-                Add Participant
+                {editingParticipantId !== null ? "Edit Participant" : "Add Participant"}
               </h2>
               <button
                 onClick={closeModal}
@@ -978,7 +1041,7 @@ export function CreatePacketPage() {
                   opacity: selectedResult && modalRole ? 1 : 0.45,
                 }}
               >
-                Add Selected
+                {editingParticipantId !== null ? "Save Participant" : "Add Selected"}
               </button>
               <button
                 onClick={closeModal}
