@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, Pencil, SendHorizontal, Trash2, UserPen, X } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useIconLegend } from "./IconLegend";
+import { useAgency } from "./AgencyContext";
 
 interface ChildSubmission {
   id: string;
@@ -13,10 +14,13 @@ interface ChildSubmission {
   status: string;
   lastUpdated: string;
   isPacketOwner?: boolean;
+  /* Added via Edit Packet after the packet was sent — waiting to be (re)sent */
+  pendingSend?: boolean;
 }
 
-interface Packet {
+export interface Packet {
   id: string;
+  agency: string;
   packetName: string;
   packetNumber: string;
   status: string;
@@ -27,6 +31,7 @@ interface Packet {
 export const MOCK_DATA: Packet[] = [
   {
     id: "1",
+    agency: "agency-1",
     packetName: "Firearms Business License Packet",
     packetNumber: "28491",
     status: "Draft",
@@ -36,7 +41,7 @@ export const MOCK_DATA: Packet[] = [
         id: "1-0",
         applicationName: "FBLA - Company",
         role: "Company Representative",
-        submissionNumber: "700024500",
+        submissionNumber: "",
         constituentName: "Boring Company 155",
         email: "boring@boringcompany.com",
         status: "Pending",
@@ -47,7 +52,7 @@ export const MOCK_DATA: Packet[] = [
         id: "1-1",
         applicationName: "FBLA - Owner",
         role: "Owner",
-        submissionNumber: "700024501",
+        submissionNumber: "",
         constituentName: "Jerome Tinder",
         email: "j.tinder@portlandme.net",
         status: "Submitted",
@@ -57,7 +62,7 @@ export const MOCK_DATA: Packet[] = [
         id: "1-2",
         applicationName: "FBLA - Manager",
         role: "Manager",
-        submissionNumber: "700024502",
+        submissionNumber: "",
         constituentName: "Shiela Benefits",
         email: "s.benefits@gmail.com",
         status: "Awaiting Application",
@@ -67,7 +72,7 @@ export const MOCK_DATA: Packet[] = [
         id: "1-3",
         applicationName: "FBLA - Officer",
         role: "Officer",
-        submissionNumber: "700024503",
+        submissionNumber: "",
         constituentName: "Ricky Schuler",
         email: "rschulerlew@yahoo.com",
         status: "Denied",
@@ -75,7 +80,74 @@ export const MOCK_DATA: Packet[] = [
       },
     ],
   },
+  {
+    /* Submitted packet with a denied Officer — the other applications are
+       approved, so the owner edits the packet to add a replacement Officer */
+    id: "2",
+    agency: "agency-2",
+    packetName: "Consumer Lender License Packet",
+    packetNumber: "28517",
+    status: "Pending",
+    lastUpdated: "09/02/2025",
+    children: [
+      {
+        id: "2-0",
+        applicationName: "CLL - Company",
+        role: "Company Representative",
+        submissionNumber: "700025110",
+        constituentName: "Boring Company 155",
+        email: "boring@boringcompany.com",
+        status: "Approved",
+        lastUpdated: "08/14/2025",
+        isPacketOwner: true,
+      },
+      {
+        id: "2-1",
+        applicationName: "CLL - Owner",
+        role: "Owner",
+        submissionNumber: "700025111",
+        constituentName: "Marcus Delray",
+        email: "marcusdelray@outlook.com",
+        status: "Approved",
+        lastUpdated: "08/14/2025",
+      },
+      {
+        id: "2-2",
+        applicationName: "CLL - Compliance Manager",
+        role: "Compliance Manager",
+        submissionNumber: "700025112",
+        constituentName: "Tomas Reyes",
+        email: "tomreyes@watervilleme.gov",
+        status: "Approved",
+        lastUpdated: "08/19/2025",
+      },
+      {
+        id: "2-3",
+        applicationName: "CLL - Officer",
+        role: "Officer",
+        submissionNumber: "700025113",
+        constituentName: "Derek Fontaine",
+        email: "dfontaine@sacoriver.org",
+        status: "Denied",
+        lastUpdated: "09/02/2025",
+      },
+    ],
+  },
 ];
+
+/* ── Session packet store ──────────────────────────────────
+   Module-level so edits made on /packets/:id/edit survive the
+   route change back to /packets. Resets on page reload. */
+let packetStore: Packet[] = MOCK_DATA;
+export const getPackets = () => packetStore;
+export const savePacket = (packet: Packet) => {
+  packetStore = packetStore.map((p) => (p.id === packet.id ? packet : p));
+};
+
+/** A sent packet with newly added participants needs its applications resent */
+const needsResend = (p: Packet) => p.status !== "Draft" && p.children.some((c) => c.pendingSend);
+
+const today = () => new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
 
 const STATUS_COLOR: Record<string, string> = {
   Active: "#417505", Approved: "#417505", Live: "#417505", Paid: "#417505", Completed: "#417505", Sent: "#417505",
@@ -173,11 +245,33 @@ export function PacketsTable() {
   });
 
   const navigate = useNavigate();
-  const [packets, setPackets] = useState<Packet[]>(MOCK_DATA);
+  const { selectedAgency } = useAgency();
+  const [allPackets, setPackets] = useState<Packet[]>(getPackets);
+  useEffect(() => { packetStore = allPackets; }, [allPackets]);
+  const packets = allPackets.filter((p) => p.agency === selectedAgency);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [pageSize, setPageSize] = useState(10);
   const [confirmSendId, setConfirmSendId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [confirmResendId, setConfirmResendId] = useState<string | null>(null);
+
+  /* Resend only the pending applications — approved/denied ones are left alone */
+  const handleResend = (packetId: string) => {
+    setPackets((prev) =>
+      prev.map((p) =>
+        p.id === packetId
+          ? {
+              ...p,
+              lastUpdated: today(),
+              children: p.children.map((c) =>
+                c.pendingSend ? { ...c, pendingSend: false, status: "Draft", lastUpdated: today() } : c
+              ),
+            }
+          : p
+      )
+    );
+    setConfirmResendId(null);
+  };
 
   const handleSend = (packetId: string) => {
     setPackets((prev) =>
@@ -374,10 +468,10 @@ export function PacketsTable() {
                         >
                           <Pencil size={16} color="#FFFFFF" />
                         </button>
-                        {row.status === "Draft" && (
+                        {(row.status === "Draft" || needsResend(row)) && (
                           <button
                             title="Send Applications"
-                            onClick={() => setConfirmSendId(row.id)}
+                            onClick={() => (row.status === "Draft" ? setConfirmSendId(row.id) : setConfirmResendId(row.id))}
                             style={{
                               width: 28,
                               height: 28,
@@ -454,10 +548,10 @@ export function PacketsTable() {
                             </span>
                           </td>
                           <td style={childCellStyle}>{child.role}</td>
-                          <td style={childCellStyle}></td>
+                          <td style={childCellStyle}>{child.submissionNumber}</td>
                           <td style={childCellStyle}>{child.constituentName}</td>
-                          <td style={{ ...childCellStyle, color: row.status === "Awaiting Applications" ? STATUS_COLOR[child.status] || "#1B1B1B" : "#1B1B1B" }}>
-                            {row.status === "Awaiting Applications" ? child.status : ""}
+                          <td style={{ ...childCellStyle, color: row.status !== "Draft" ? STATUS_COLOR[child.status] || "#1B1B1B" : "#1B1B1B" }}>
+                            {row.status !== "Draft" ? child.status : ""}
                           </td>
                           <td style={childCellStyle}>{child.lastUpdated}</td>
                           <td style={childCellStyle}></td>
@@ -473,7 +567,7 @@ export function PacketsTable() {
       </div>
 
       {/* ── Reset Demo button ── */}
-      {packets.some((p) => p.status === "Awaiting Applications") && (
+      {JSON.stringify(allPackets) !== JSON.stringify(MOCK_DATA) && (
         <div style={{ marginTop: 24 }}>
           <button
             onClick={() => {
@@ -644,6 +738,141 @@ export function PacketsTable() {
           </div>
         );
       })()}
+      {/* ── Resend Applications confirm dialog ── */}
+      {confirmResendId && (() => {
+        const packet = packets.find((p) => p.id === confirmResendId);
+        if (!packet) return null;
+        const pending = packet.children.filter((c) => c.pendingSend);
+        const count = pending.length === 1 ? "one application" : `${pending.length} applications`;
+        return (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(0,0,0,0.55)",
+              padding: 16,
+            }}
+            onMouseDown={(e) => { if (e.target === e.currentTarget) setConfirmResendId(null); }}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="resend-dialog-title"
+              style={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: 4,
+                width: "100%",
+                maxWidth: 560,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+                fontFamily: "'Public Sans', sans-serif",
+              }}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "16px 20px",
+                  backgroundColor: "#162E51",
+                  borderRadius: "4px 4px 0 0",
+                }}
+              >
+                <h2 id="resend-dialog-title" style={{ margin: 0, fontSize: 20, fontWeight: 700, color: "#FFFFFF" }}>
+                  Send Applications
+                </h2>
+                <button
+                  onClick={() => setConfirmResendId(null)}
+                  title="Close"
+                  style={{
+                    background: "transparent",
+                    borderWidth: 2,
+                    borderStyle: "solid",
+                    borderColor: "#FFFFFF",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    width: 28,
+                    height: 28,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#FFFFFF",
+                    padding: 0,
+                    flexShrink: 0,
+                  }}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div style={{ padding: "20px 20px 0" }}>
+                <p style={{ fontSize: 15, color: "#1B1B1B", marginTop: 0, marginBottom: 12, lineHeight: "24px" }}>
+                  Only {count} in <strong>{packet.packetName}</strong> will be sent. Participants whose
+                  applications have already been approved or denied won't receive anything.
+                </p>
+                <ul style={{ margin: "0 0 20px", paddingLeft: 20, fontSize: 15, lineHeight: "24px", color: "#1B1B1B" }}>
+                  {pending.map((c) => (
+                    <li key={c.id}>
+                      <strong>{c.constituentName}</strong> ({c.role}) &nbsp;·&nbsp; {c.email}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Footer */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  padding: "16px 20px",
+                  borderTopWidth: 1,
+                  borderTopStyle: "solid",
+                  borderTopColor: "#DFE1E2",
+                }}
+              >
+                <button
+                  onClick={() => handleResend(packet.id)}
+                  style={{
+                    fontFamily: "'Public Sans', sans-serif",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#005EA2",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "9px 18px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {pending.length === 1 ? "Send Application" : "Send Applications"}
+                </button>
+                <button
+                  onClick={() => setConfirmResendId(null)}
+                  style={{
+                    fontFamily: "'Public Sans', sans-serif",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#B50909",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "9px 18px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* ── Delete Packet confirm dialog ── */}
       {confirmDeleteId && (() => {
         const packet = packets.find((p) => p.id === confirmDeleteId);

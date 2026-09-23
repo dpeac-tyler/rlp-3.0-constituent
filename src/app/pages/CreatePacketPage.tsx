@@ -5,7 +5,7 @@ import { PageShell } from "../components/PageShell";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useToast } from "../components/ToastContext";
 import { useIconLegend } from "../components/IconLegend";
-import { MOCK_DATA as MOCK_PACKETS } from "../components/PacketsTable";
+import { getPackets, savePacket } from "../components/PacketsTable";
 
 interface PacketType {
   id: string;
@@ -30,7 +30,20 @@ interface AssignedParticipant {
   constituentName: string;
   email: string;
   address: string;
+  status?: string;
+  /* Set when the participant came from the saved packet being edited */
+  childId?: string;
 }
+
+/* Approved and Denied applications stay on the packet as history — they can't be edited or removed */
+const isLocked = (p: AssignedParticipant) => p.status === "Approved" || p.status === "Denied";
+
+const PARTICIPANT_STATUS_COLOR: Record<string, string> = {
+  Approved: "#417505",
+  Submitted: "#205493",
+  Pending: "#8F5800",
+  Denied: "#CD2026",
+};
 
 const CURRENT_USER = {
   name: "Boring Company 155",
@@ -57,6 +70,12 @@ const PACKET_TYPES: PacketType[] = [
     name: "Food Handler Permit Packet",
     agency: "Bureau of Consumer Credit Protection",
     roles: ["Business Owner", "Food Safety Manager"],
+  },
+  {
+    id: "cll",
+    name: "Consumer Lender License Packet",
+    agency: "Bureau of Consumer Credit Protection",
+    roles: ["Company Representative", "Owner", "Compliance Manager", "Officer"],
   },
 ];
 
@@ -161,7 +180,7 @@ export function CreatePacketPage() {
 
   /* Edit mode — /packets/:packetId/edit prefills from the saved packet */
   const { packetId } = useParams();
-  const editingPacket = packetId ? MOCK_PACKETS.find((p) => p.id === packetId) : undefined;
+  const editingPacket = packetId ? getPackets().find((p) => p.id === packetId) : undefined;
   const isEdit = !!editingPacket;
   const initialPacketType = editingPacket
     ? PACKET_TYPES.find((t) => t.name === editingPacket.packetName) ?? null
@@ -175,8 +194,21 @@ export function CreatePacketPage() {
           constituentName: c.constituentName,
           email: c.email,
           address: MOCK_CONSTITUENTS.find((m) => m.email === c.email)?.address ?? "",
+          status: editingPacket.status === "Draft" || c.pendingSend ? undefined : c.status,
+          childId: c.id,
         }))
     : [];
+  const ownerStatus = editingPacket && editingPacket.status !== "Draft"
+    ? editingPacket.children.find((c) => c.isPacketOwner)?.status
+    : undefined;
+  /* Status column only appears when editing a packet that's already been sent */
+  const showStatus = isEdit && editingPacket.status !== "Draft";
+
+  const statusCell = (status?: string) => (
+    <td style={{ ...tdStyle, color: status ? PARTICIPANT_STATUS_COLOR[status] ?? "#1B1B1B" : "#1B1B1B" }}>
+      {status ?? "—"}
+    </td>
+  );
 
   const [inputValue, setInputValue] = useState(initialPacketType?.name ?? "");
   const [selectedPacket, setSelectedPacket] = useState<PacketType | null>(initialPacketType);
@@ -291,6 +323,32 @@ export function CreatePacketPage() {
       showToast(`${found.constituentName} has been added as ${modalRole}.`);
     }
     closeModal();
+  };
+
+  /* Writes participant changes back to the packet. On a packet that's already been
+     sent, new or changed participants are flagged so the table offers a resend. */
+  const saveEdits = () => {
+    if (!editingPacket) return;
+    const sent = editingPacket.status !== "Draft";
+    const prefix = editingPacket.children[0]?.applicationName.split(" - ")[0] ?? "";
+    const lastUpdated = new Date().toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+    const owner = editingPacket.children.filter((c) => c.isPacketOwner);
+    const children = participants.map((p) => {
+      const orig = editingPacket.children.find((c) => c.id === p.childId);
+      if (orig && orig.role === p.role && orig.email === p.email) return orig;
+      return {
+        id: orig?.id ?? `${editingPacket.id}-${p.id}`,
+        applicationName: `${prefix} - ${p.role}`,
+        role: p.role,
+        submissionNumber: "",
+        constituentName: p.constituentName,
+        email: p.email,
+        status: sent ? "" : "Awaiting Application",
+        lastUpdated,
+        pendingSend: sent || undefined,
+      };
+    });
+    savePacket({ ...editingPacket, children: [...owner, ...children] });
   };
 
   const handleRemoveParticipant = (id: number) => {
@@ -533,19 +591,31 @@ export function CreatePacketPage() {
                     tableLayout: "fixed",
                   }}
                 >
-                  <colgroup>
-                    <col style={{ width: "18%" }} />
-                    <col style={{ width: "20%" }} />
-                    <col style={{ width: "24%" }} />
-                    <col style={{ width: "28%" }} />
-                    <col style={{ width: "10%" }} />
-                  </colgroup>
+                  {showStatus ? (
+                    <colgroup>
+                      <col style={{ width: "17%" }} />
+                      <col style={{ width: "18%" }} />
+                      <col style={{ width: "21%" }} />
+                      <col style={{ width: "22%" }} />
+                      <col style={{ width: "11%" }} />
+                      <col style={{ width: "11%" }} />
+                    </colgroup>
+                  ) : (
+                    <colgroup>
+                      <col style={{ width: "18%" }} />
+                      <col style={{ width: "20%" }} />
+                      <col style={{ width: "24%" }} />
+                      <col style={{ width: "28%" }} />
+                      <col style={{ width: "10%" }} />
+                    </colgroup>
+                  )}
                   <thead>
                     <tr>
                       <th style={thStyle}>Role</th>
                       <th style={thStyle}>Participant Name</th>
                       <th style={thStyle}>Email Address</th>
                       <th style={thStyle}>Address</th>
+                      {showStatus && <th style={thStyle}>Status</th>}
                       <th style={thStyle}>Controls</th>
                     </tr>
                   </thead>
@@ -574,6 +644,7 @@ export function CreatePacketPage() {
                       <td style={tdStyle}>{CURRENT_USER.name}</td>
                       <td style={{ ...tdStyle, fontSize: 13 }}>{CURRENT_USER.email}</td>
                       <td style={{ ...tdStyle, fontSize: 13, color: "#3D4551" }}>{CURRENT_USER.address}</td>
+                      {showStatus && statusCell(ownerStatus)}
                       <td style={tdStyle}>—</td>
                     </tr>
 
@@ -584,7 +655,9 @@ export function CreatePacketPage() {
                           <td style={tdStyle}>{p.constituentName}</td>
                           <td style={{ ...tdStyle, fontSize: 13 }}>{p.email}</td>
                           <td style={{ ...tdStyle, fontSize: 13, color: "#3D4551" }}>{p.address}</td>
+                          {showStatus && statusCell(p.status)}
                           <td style={tdStyle}>
+                            {isLocked(p) ? "—" : (
                             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "nowrap" }}>
                               <button
                                 onClick={() => openEditModal(p)}
@@ -626,12 +699,28 @@ export function CreatePacketPage() {
                                 <Trash2 size={14} color="#FFFFFF" />
                               </button>
                             </div>
+                            )}
                           </td>
                         </tr>
                       ))}
                   </tbody>
                 </table>
               </div>
+
+              {participants.some(isLocked) && (
+                <p
+                  style={{
+                    fontFamily: "'Public Sans', sans-serif",
+                    fontSize: 14,
+                    lineHeight: "22px",
+                    color: "#71767A",
+                    marginTop: 0,
+                    marginBottom: 16,
+                  }}
+                >
+                  Approved and denied participants can't be edited or removed. They stay on the packet as part of its application history. To replace a denied participant, add a new participant for that role.
+                </p>
+              )}
 
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <div>
@@ -665,6 +754,7 @@ export function CreatePacketPage() {
                 >
                   <button
                     onClick={() => {
+                      if (isEdit) saveEdits();
                       showToast(isEdit ? "Packet changes saved successfully." : "Draft saved successfully.");
                       navigate("/packets");
                     }}
